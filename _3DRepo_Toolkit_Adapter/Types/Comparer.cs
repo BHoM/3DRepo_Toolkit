@@ -29,9 +29,9 @@ using BH.oM.Structure.SurfaceProperties;
 using System;
 using System.Collections.Generic;
 
-namespace BH.Adapter._3DRepo_Toolkit
+namespace BH.Adapter.ThreeDRepo
 {
-    public partial class _3DRepo_ToolkitAdapter
+    public partial class RepoAdapter
     {
         /***************************************************/
         /**** BHoM Adapter Interface                    ****/

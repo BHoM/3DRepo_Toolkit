@@ -31,9 +31,9 @@ using BH.oM.Structure.Elements;
 using BH.oM.Common.Materials;
 using BH.oM.Structure.SectionProperties;
 
-namespace BH.Adapter._3DRepo_Toolkit
+namespace BH.Adapter.ThreeDRepo
 {
-    public partial class _3DRepo_ToolkitAdapter
+    public partial class RepoAdapter
     {
         /***************************************************/
         /**** Adapter overload method                   ****/
