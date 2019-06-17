@@ -21,11 +21,13 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.oM.Structure.Properties.Section;
+using BH.oM.Structure.Elements;
+
 using BH.oM.Common.Materials;
 
 namespace BH.Adapter._3DRepo_Toolkit
@@ -37,19 +39,18 @@ namespace BH.Adapter._3DRepo_Toolkit
         /**** Private methods                           ****/
         /***************************************************/
 
-        private bool CreateCollection(IEnumerable<ISectionProperty> sectionProperties)
+        //The List<string> in the methods below can be changed to a list of any type of identification more suitable for the toolkit
+        //If no ids are provided, the convention is to return all elements of the type
+
+        private List<Bar> ReadBars(List<string> ids = null)
         {
-            //Code for creating a collection of section properties in the software
+            //Tip: If the software stores depending types such as Nodes and SectionProperties in separate object tables,
+            //it might be a massive preformance boost to read in and store these properties before reading in the bars 
+            //and referenced these stored objects instead of reading them in each time.
+            //For example, a case where 1000 bars share 5 total number of different SectionProperties you want, if possible,
+            //to only read in the section properties 5 times, not 1000. This might of course vary from software to software.
 
-            foreach (ISectionProperty sectionProperty in sectionProperties)
-            {
-                //Tip: if the NextId method has been implemented you can get the id to be used for the creation out as (cast into applicable type used by the software):
-                object secPropId = sectionProperty.CustomData[AdapterId];
-                //If also the default implmentation for the DependencyTypes is used,
-                //one can from here get the id's of the subobjects by calling (cast into applicable type used by the software): 
-                object materialId = sectionProperty.Material.CustomData[AdapterId];
-            }
-
+            //Implement code for reading bars
             throw new NotImplementedException();
         }
 

@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Analytical_oM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BHoM\Build\Analytical_oM.dll</HintPath>
+    </Reference>
     <Reference Include="BHoM">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BHoM\Build\BHoM.dll</HintPath>
@@ -57,6 +61,10 @@
     <Reference Include="Geometry_oM">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BHoM\Build\Geometry_oM.dll</HintPath>
+    </Reference>
+    <Reference Include="Physical_oM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BHoM\Build\Physical_oM.dll</HintPath>
     </Reference>
     <Reference Include="Reflection_Engine">
       <SpecificVersion>False</SpecificVersion>
@@ -95,6 +103,7 @@
     <Compile Include="Read\Node.cs" />
     <Compile Include="Read\SectionProperty.cs" />
     <Compile Include="Read\_Read.cs" />
+    <Compile Include="Types\PanelPlanar.cs" />
     <Compile Include="Update\_UpdateObjects.cs" />
     <Compile Include="_3DRepo_ToolkitAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -105,13 +114,6 @@
     <ProjectReference Include="..\_3DRepo_Toolkit_Engine\_3DRepo_Toolkit_Engine.csproj">
       <Project>{625C4A3B-A0AB-4B29-B289-4C439B565EFF}</Project>
       <Name>_3DRepo_Toolkit_Engine</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\_3DRepo_Toolkit_oM\_3DRepo_Toolkit_oM.csproj">
-      <Project>{f55cc8a5-44cb-4333-bc8a-a0eb6775b1a8}</Project>
-      <Name>_3DRepo_Toolkit_oM</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

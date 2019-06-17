@@ -20,58 +20,42 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using BH.Engine.Base.Objects;
-using BH.oM.Common.Materials;
-using BH.oM.Structure.Elements;
-using BH.oM.Structure.Properties.Section;
-using BH.oM.Structure.Properties.Surface;
-using BH.oM.Structure.Properties.Constraint;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BH.oM.Base;
+using BH.oM.Structure.Elements;
+using BH.oM.Common.Materials;
+using BH.oM.Structure.SectionProperties;
 
 namespace BH.Adapter._3DRepo_Toolkit
 {
     public partial class _3DRepo_ToolkitAdapter
     {
         /***************************************************/
-        /**** BHoM Adapter Interface                    ****/
+        /**** Adapter overload method                   ****/
         /***************************************************/
 
-        //Standard implementation of the comparer class.
-        //Compares nodes by distance (down to 3 decimal places -> mm)
-        //Compares Materials, SectionProprties, LinkConstraints, and Property2D by name
-        //Add/remove any type in the dictionary below that you want (or not) a specific comparison method for
-
-        protected override IEqualityComparer<T> Comparer<T>()
+        protected override IEnumerable<IBHoMObject> Read(Type type, IList ids)
         {
-            Type type = typeof(T);
+            //Main dispatcher method.
+            //Choose what to pull out depending on the type.
+            if (type == typeof(Node))
+                return ReadNodes(ids as dynamic);
+            else if (type == typeof(Bar))
+                return ReadBars(ids as dynamic);
+            else if (type == typeof(ISectionProperty) || type.GetInterfaces().Contains(typeof(ISectionProperty)))
+                return ReadSectionProperties(ids as dynamic);
+            else if (type == typeof(Material))
+                return ReadMaterials(ids as dynamic);
 
-            if (m_Comparers.ContainsKey(type))
-            {
-                return m_Comparers[type] as IEqualityComparer<T>;
-            }
-            else
-            {
-                return EqualityComparer<T>.Default;
-            }
-
+            return new List<IBHoMObject>();
         }
 
-
-        /***************************************************/
-        /**** Private Fields                            ****/
         /***************************************************/
 
-        private static Dictionary<Type, object> m_Comparers = new Dictionary<Type, object>
-        {
-            {typeof(Node), new BH.Engine.Structure.NodeDistanceComparer(3) },   //The 3 in here sets how many decimal places to look at for node merging. 3 decimal places gives mm precision
-            {typeof(ISectionProperty), new BHoMObjectNameOrToStringComparer() },
-            {typeof(Material), new BHoMObjectNameComparer() },
-            {typeof(LinkConstraint), new BHoMObjectNameComparer() },
-            {typeof(ISurfaceProperty), new BHoMObjectNameComparer() },
-        };
-
-
-        /***************************************************/
     }
 }
