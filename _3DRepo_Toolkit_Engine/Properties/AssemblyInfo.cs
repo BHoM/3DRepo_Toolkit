@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("_3DRepo_Toolkit_Adapter")]
+[assembly: AssemblyTitle("_3DRepo_Toolkit_Engine")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Buro Happold")]
-[assembly: AssemblyProduct("_3DRepo_Toolkit_Adapter")]
+[assembly: AssemblyProduct("_3DRepo_Toolkit_Engine")]
 [assembly: AssemblyCopyright("Copyright © Buro Happold 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("eb854153-ae88-4ea7-8b11-ea0face3ea93")]
+[assembly: Guid("9f46c55d-0705-4860-8ef9-c15ee92bd6ff")]
 
 // Version information for an assembly consists of the following four values:
 //

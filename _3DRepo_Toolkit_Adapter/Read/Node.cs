@@ -21,14 +21,13 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BH.oM.Base;
 using BH.oM.Structure.Elements;
-using BH.oM.Structure.Properties;
-using BH.oM.Structure.Properties.Section;
-using BH.oM.Structure.Properties.Constraint;
 
 namespace BH.Adapter._3DRepo_Toolkit
 {
@@ -39,22 +38,12 @@ namespace BH.Adapter._3DRepo_Toolkit
         /**** Private methods                           ****/
         /***************************************************/
 
-        private bool CreateCollection(IEnumerable<Bar> bars)
+        //The List<string> in the methods below can be changed to a list of any type of identification more suitable for the toolkit
+        //If no ids are provided, the convention is to return all elements of the type
+
+        private List<Node> ReadNodes(List<string> ids = null)
         {
-            //Code for creating a collection of bars in the software
-
-            foreach (Bar bar in bars)
-            {
-                //Tip: if the NextId method has been implemented you can get the id to be used for the creation out as (cast into applicable type used by the software):
-                object barId = bar.CustomData[AdapterId];
-                //If also the default implmentation for the DependencyTypes is used,
-                //one can from here get the id's of the subobjects by calling (cast into applicable type used by the software): 
-                object startNodeId = bar.StartNode.CustomData[AdapterId];
-                object endNodeId = bar.EndNode.CustomData[AdapterId];
-                object SecPropId = bar.SectionProperty.CustomData[AdapterId];
-            }
-
-
+            //Implement code for reading nodes
             throw new NotImplementedException();
         }
 

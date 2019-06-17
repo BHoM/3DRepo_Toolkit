@@ -20,42 +20,58 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BH.oM.Structure.Elements;
-using BH.oM.Structure.Properties.Section;
-using BH.oM.Structure.Properties.Constraint;
+using BH.Engine.Base.Objects;
 using BH.oM.Common.Materials;
+using BH.oM.Structure.Constraints;
+using BH.oM.Structure.Elements;
+using BH.oM.Structure.SectionProperties;
+using BH.oM.Structure.SurfaceProperties;
+using System;
+using System.Collections.Generic;
 
 namespace BH.Adapter._3DRepo_Toolkit
 {
     public partial class _3DRepo_ToolkitAdapter
     {
-
         /***************************************************/
-        /**** Private methods                           ****/
+        /**** BHoM Adapter Interface                    ****/
         /***************************************************/
 
-        //The List<string> in the methods below can be changed to a list of any type of identification more suitable for the toolkit
-        //If no ids are provided, the convention is to return all elements of the type
+        //Standard implementation of the comparer class.
+        //Compares nodes by distance (down to 3 decimal places -> mm)
+        //Compares Materials, SectionProprties, LinkConstraints, and Property2D by name
+        //Add/remove any type in the dictionary below that you want (or not) a specific comparison method for
 
-        private List<Bar> ReadBars(List<string> ids = null)
+        protected override IEqualityComparer<T> Comparer<T>()
         {
-            //Tip: If the software stores depending types such as Nodes and SectionProperties in separate object tables,
-            //it might be a massive preformance boost to read in and store these properties before reading in the bars 
-            //and referenced these stored objects instead of reading them in each time.
-            //For example, a case where 1000 bars share 5 total number of different SectionProperties you want, if possible,
-            //to only read in the section properties 5 times, not 1000. This might of course vary from software to software.
+            Type type = typeof(T);
 
-            //Implement code for reading bars
-            throw new NotImplementedException();
+            if (m_Comparers.ContainsKey(type))
+            {
+                return m_Comparers[type] as IEqualityComparer<T>;
+            }
+            else
+            {
+                return EqualityComparer<T>.Default;
+            }
+
         }
 
+
+        /***************************************************/
+        /**** Private Fields                            ****/
         /***************************************************/
 
+        private static Dictionary<Type, object> m_Comparers = new Dictionary<Type, object>
+        {
+            {typeof(Node), new BH.Engine.Structure.NodeDistanceComparer(3) },   //The 3 in here sets how many decimal places to look at for node merging. 3 decimal places gives mm precision
+            {typeof(ISectionProperty), new BHoMObjectNameOrToStringComparer() },
+            {typeof(Material), new BHoMObjectNameComparer() },
+            {typeof(LinkConstraint), new BHoMObjectNameComparer() },
+            {typeof(ISurfaceProperty), new BHoMObjectNameComparer() },
+        };
+
+
+        /***************************************************/
     }
 }

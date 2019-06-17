@@ -21,14 +21,11 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.oM.Base;
 using BH.oM.Structure.Elements;
-using BH.oM.Structure.Properties.Constraint;
 
 namespace BH.Adapter._3DRepo_Toolkit
 {
@@ -39,16 +36,19 @@ namespace BH.Adapter._3DRepo_Toolkit
         /**** Private methods                           ****/
         /***************************************************/
 
-        //The List<string> in the methods below can be changed to a list of any type of identification more suitable for the toolkit
-        //If no ids are provided, the convention is to return all elements of the type
-
-        private List<Node> ReadNodes(List<string> ids = null)
+        private bool CreateCollection(IEnumerable<Node> nodes)
         {
-            //Implement code for reading nodes
+            //Code for creating a collection of nodes in the software
+
+            foreach (Node node in nodes)
+            {
+                //Tip: if the NextId method has been implemented you can get the id to be used for the creation out as (cast into applicable type used by the software):
+                object nodeId = node.CustomData[AdapterId];
+            }
+
             throw new NotImplementedException();
         }
 
         /***************************************************/
-
     }
 }

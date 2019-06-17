@@ -21,14 +21,11 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.oM.Base;
 using BH.oM.Structure.Elements;
-using BH.oM.Structure.Properties.Section;
 using BH.oM.Common.Materials;
 
 namespace BH.Adapter._3DRepo_Toolkit
@@ -39,23 +36,20 @@ namespace BH.Adapter._3DRepo_Toolkit
         /**** Adapter overload method                   ****/
         /***************************************************/
 
-        protected override IEnumerable<IBHoMObject> Read(Type type, IList ids)
+        protected override bool Create<T>(IEnumerable<T> objects, bool replaceAll = false)
         {
-            //Main dispatcher method.
-            //Choose what to pull out depending on the type.
-            if (type == typeof(Node))
-                return ReadNodes(ids as dynamic);
-            else if (type == typeof(Bar))
-                return ReadBars(ids as dynamic);
-            else if (type == typeof(ISectionProperty) || type.GetInterfaces().Contains(typeof(ISectionProperty)))
-                return ReadSectionProperties(ids as dynamic);
-            else if (type == typeof(Material))
-                return ReadMaterials(ids as dynamic);
+            //This is the main dispatcher method, calling the specific implementation methods for the other toolkits.
 
-            return new List<IBHoMObject>();
+            bool success = true;        //boolean returning if the creation was successfull or not
+
+            success = CreateCollection(objects as dynamic); //Calls the correct CreateCollection method based on dynamic casting
+
+            //UpdateViews()             //If there exists a command for updating the views is the software call it now:
+
+            return success;             //Finally return if the creation was successful or not
+
         }
 
         /***************************************************/
-
     }
 }

@@ -90,13 +90,6 @@
     <Folder Include="Modify\" />
     <Folder Include="Query\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\_3DRepo_Toolkit_oM\_3DRepo_Toolkit_oM.csproj">
-      <Project>{f55cc8a5-44cb-4333-bc8a-a0eb6775b1a8}</Project>
-      <Name>_3DRepo_Toolkit_oM</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -21,36 +21,34 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.oM.Structure.Elements;
-using BH.oM.Structure.Properties;
+using BH.oM.Base;
 using BH.oM.Common.Materials;
+using BH.oM.Structure.SectionProperties;
 
 namespace BH.Adapter._3DRepo_Toolkit
 {
     public partial class _3DRepo_ToolkitAdapter
     {
+
         /***************************************************/
-        /**** Adapter overload method                   ****/
+        /**** Private methods                           ****/
         /***************************************************/
 
-        protected override bool Create<T>(IEnumerable<T> objects, bool replaceAll = false)
+        //The List<string> in the methods below can be changed to a list of any type of identification more suitable for the toolkit
+        //If no ids are provided, the convention is to return all elements of the type
+
+        private List<ISectionProperty> ReadSectionProperties(List<string> ids = null)
         {
-            //This is the main dispatcher method, calling the specific implementation methods for the other toolkits.
-
-            bool success = true;        //boolean returning if the creation was successfull or not
-
-            success = CreateCollection(objects as dynamic); //Calls the correct CreateCollection method based on dynamic casting
-
-            //UpdateViews()             //If there exists a command for updating the views is the software call it now:
-
-            return success;             //Finally return if the creation was successful or not
-
+            //Implement code for reading section properties
+            throw new NotImplementedException();
         }
 
         /***************************************************/
+
     }
 }
