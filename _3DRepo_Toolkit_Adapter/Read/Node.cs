@@ -29,9 +29,9 @@ using System.Threading.Tasks;
 using BH.oM.Base;
 using BH.oM.Structure.Elements;
 
-namespace BH.Adapter._3DRepo_Toolkit
+namespace BH.Adapter.ThreeDRepo
 {
-    public partial class _3DRepo_ToolkitAdapter
+    public partial class RepoAdapter
     {
 
         /***************************************************/

@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using BH.Adapter;
 using BH.Engine._3DRepo_Toolkit;
+using ThreeDRepo;
 
-namespace BH.Adapter._3DRepo_Toolkit
+namespace BH.Adapter.ThreeDRepo
 {
-    public partial class _3DRepo_ToolkitAdapter : BHoMAdapter
+    public partial class RepoAdapter : BHoMAdapter
     {
 
         /***************************************************/
@@ -16,8 +17,10 @@ namespace BH.Adapter._3DRepo_Toolkit
         /***************************************************/
 
         //Add any applicable constructors here, such as linking to a specific file or anything else as well as linking to that file through the (if existing) com link via the API
-        public _3DRepo_ToolkitAdapter()
+        public RepoAdapter(string apiKey, string url = "https://api1.www.3drepo.io/api")
         {
+            controller = new RepoController(url, apiKey);
+
             AdapterId = BH.Engine._3DRepo_Toolkit.Convert.AdapterId;   //Set the "AdapterId" to "SoftwareName_id". Generally stored as a constant string in the convert class in the SoftwareName_Engine
 
             Config.SeparateProperties = true;   //Set to true to push dependant properties of objects before the main objects are being pushed. Example: push nodes before pushing bars
@@ -36,7 +39,7 @@ namespace BH.Adapter._3DRepo_Toolkit
 
         //Add any comlink object as a private field here, example named:
 
-        //private SoftwareComLink m_softwareNameCom;
+        private RepoController controller;
 
 
         /***************************************************/

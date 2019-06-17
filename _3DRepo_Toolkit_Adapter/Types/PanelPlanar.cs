@@ -1,4 +1,4 @@
-﻿namespace BH.Adapter._3DRepo_Toolkit
+﻿namespace BH.Adapter.ThreeDRepo
 {
     internal class PanelPlanar
     {

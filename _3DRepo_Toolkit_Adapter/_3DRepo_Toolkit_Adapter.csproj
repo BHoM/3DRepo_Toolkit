@@ -111,6 +111,10 @@
     <Compile Include="Types\DependencyTypes.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RepoClient\RepoClient.csproj">
+      <Project>{a70835f4-6498-4f3b-b7ba-5bc87f36ab4c}</Project>
+      <Name>RepoClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\_3DRepo_Toolkit_Engine\_3DRepo_Toolkit_Engine.csproj">
       <Project>{625C4A3B-A0AB-4B29-B289-4C439B565EFF}</Project>
       <Name>_3DRepo_Toolkit_Engine</Name>

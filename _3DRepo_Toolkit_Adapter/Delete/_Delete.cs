@@ -26,9 +26,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BH.Adapter._3DRepo_Toolkit
+namespace BH.Adapter.ThreeDRepo
 {
-    public partial class _3DRepo_ToolkitAdapter
+    public partial class RepoAdapter
     {
         /***************************************************/
         /**** Adapter overload method                   ****/
