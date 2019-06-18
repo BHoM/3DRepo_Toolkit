@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BH.oM.Structure.Elements;
+using BH.oM.Geometry;
 
 namespace BH.Engine._3DRepo_Toolkit
 {
@@ -13,12 +14,18 @@ namespace BH.Engine._3DRepo_Toolkit
         /**** Public Methods                            ****/
         /***************************************************/
 
-        //Add methods for converting From BHoM to the specific software types, if possible to do without any BHoM calls
-        //Example:
-        //public static _3DRepo_ToolkitNode To_3DRepo_Toolkit(this Node node)
-        //{
-        //    //Insert code for convertion
-        //}
+        public static ThreeDRepo.Mesh To3DRepo(Mesh mesh)
+        {
+            var faces = mesh.Faces.Select(face =>
+                new ThreeDRepo.Face(new int[]{ face.A, face.B, face.C, face.D })
+            );
+
+            var points = mesh.Vertices.Select(vertex =>
+                new ThreeDRepo.Point(vertex.X, vertex.Y, vertex.Z)
+            );
+
+            return new ThreeDRepo.Mesh(mesh.ToString(), points.ToArray(), faces.ToArray());
+        }
 
         /***************************************************/
     }

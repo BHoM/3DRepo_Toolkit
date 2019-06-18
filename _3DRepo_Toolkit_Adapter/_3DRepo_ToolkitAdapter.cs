@@ -17,9 +17,9 @@ namespace BH.Adapter.ThreeDRepo
         /***************************************************/
 
         //Add any applicable constructors here, such as linking to a specific file or anything else as well as linking to that file through the (if existing) com link via the API
-        public RepoAdapter(string apiKey, string url = "https://api1.www.3drepo.io/api")
+        public RepoAdapter(string teamspace, string modelId, string apiKey, string url = "https://api1.www.3drepo.io/api")
         {
-            controller = new RepoController(url, apiKey);
+            controller = new RepoController(url, apiKey, teamspace, modelId);
 
             AdapterId = BH.Engine._3DRepo_Toolkit.Convert.AdapterId;   //Set the "AdapterId" to "SoftwareName_id". Generally stored as a constant string in the convert class in the SoftwareName_Engine
 
@@ -29,9 +29,6 @@ namespace BH.Adapter.ThreeDRepo
             Config.CloneBeforePush = true;      //Set to true to clone the objects before they are being pushed through the software. Required if any modifications at all, as adding a software ID is done to the objects
             Config.UseAdapterId = true;         //Tag objects with a software specific id in the CustomData. Requires the NextIndex method to be overridden and implemented
         }
-
-
-
 
         /***************************************************/
         /**** Private  Fields                           ****/

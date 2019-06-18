@@ -22,10 +22,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BH.oM.Structure.Elements;
+using BH.oM.Geometry;
 
 namespace BH.Adapter.ThreeDRepo
 {
@@ -36,26 +33,19 @@ namespace BH.Adapter.ThreeDRepo
         /**** Private methods                           ****/
         /***************************************************/
 
-        private bool CreateCollection(IEnumerable<Bar> bars)
+        private bool CreateCollection(IEnumerable<Mesh> meshes)
         {
-            //Code for creating a collection of bars in the software
+            //Code for creating a collection of materials in the software
 
-            foreach (Bar bar in bars)
+            foreach (Mesh mesh in meshes)
             {
-                //Tip: if the NextId method has been implemented you can get the id to be used for the creation out as (cast into applicable type used by the software):
-                object barId = bar.CustomData[AdapterId];
-                //If also the default implmentation for the DependencyTypes is used,
-                //one can from here get the id's of the subobjects by calling (cast into applicable type used by the software): 
-                object startNodeId = bar.StartNode.CustomData[AdapterId];
-                object endNodeId = bar.EndNode.CustomData[AdapterId];
-                object SecPropId = bar.SectionProperty.CustomData[AdapterId];
+                controller.AddToScene(Engine._3DRepo_Toolkit.Convert.To3DRepo(mesh));
             }
 
-
-            throw new NotImplementedException();
+            return true;
         }
 
-        /***************************************************/
 
+        /***************************************************/
     }
 }
