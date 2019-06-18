@@ -44,7 +44,7 @@ namespace BH.Adapter.ThreeDRepo
 
             success = CreateCollection(objects as dynamic); //Calls the correct CreateCollection method based on dynamic casting
 
-            //UpdateViews()             //If there exists a command for updating the views is the software call it now:
+            controller.commit();
 
             return success;             //Finally return if the creation was successful or not
 
