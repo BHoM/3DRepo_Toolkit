@@ -40,9 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MultipartForm.cs" />
     <Compile Include="RepoController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepoObjects.cs" />
+    <Compile Include="SceneCreator.cs" />
+    <Compile Include="Connector.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

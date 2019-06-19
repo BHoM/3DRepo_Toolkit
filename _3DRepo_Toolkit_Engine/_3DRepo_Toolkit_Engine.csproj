@@ -91,9 +91,9 @@
     <Folder Include="Query\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RepoClient\RepoClient.csproj">
+    <ProjectReference Include="..\RepoClient\ThreeDRepo.csproj">
       <Project>{a70835f4-6498-4f3b-b7ba-5bc87f36ab4c}</Project>
-      <Name>RepoClient</Name>
+      <Name>ThreeDRepo</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

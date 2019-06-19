@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_3DRepo_Toolkit_Adapter", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_3DRepo_Toolkit_Engine", "_3DRepo_Toolkit_Engine\_3DRepo_Toolkit_Engine.csproj", "{625C4A3B-A0AB-4B29-B289-4C439B565EFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepoClient", "RepoClient\RepoClient.csproj", "{A70835F4-6498-4F3B-B7BA-5BC87F36AB4C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeDRepo", "RepoClient\ThreeDRepo.csproj", "{A70835F4-6498-4F3B-B7BA-5BC87F36AB4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
