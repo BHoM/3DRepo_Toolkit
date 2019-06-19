@@ -17,7 +17,9 @@ namespace ThreeDRepo
             Dictionary<string, object> postParameters = new Dictionary<string, object>();
             postParameters.Add("file", new MultipartForm.FileParameter(data, filePath, "application/octet-stream"));
 
+            
             string uri = host + "/" + teamspace + "/" + modelId + "/upload?key=" + apiKey;
+            Logger.Instance.Log("Posting a new revision at : " + uri);
             // Create request and receive response
             HttpWebResponse webResponse = MultipartForm.MultipartFormDataPost(uri, null, postParameters);
 
@@ -26,7 +28,10 @@ namespace ThreeDRepo
             string fullResponse = responseReader.ReadToEnd();
             webResponse.Close();
             if (fullResponse.Contains("The remote server returned an error"))
+            {
+                Logger.Instance.Log("Errored: " + fullResponse);
                 throw new Exception(fullResponse);
+            }
             
         }
     }
