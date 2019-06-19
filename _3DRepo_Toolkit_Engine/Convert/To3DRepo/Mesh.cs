@@ -24,7 +24,7 @@ namespace BH.Engine._3DRepo_Toolkit
                 new ThreeDRepo.Point(vertex.X, vertex.Y, vertex.Z)
             );
 
-            return new ThreeDRepo.Mesh(mesh.ToString(), points.ToArray(), faces.ToArray());
+            return new ThreeDRepo.Mesh("Mesh", points.ToArray(), faces.ToArray());
         }
 
         /***************************************************/

@@ -13,13 +13,26 @@
 
         public void AddToScene(Mesh mesh)
         {
+            Logger.Instance.Log("Adding mesh to scene.");
             sceneCreator.Add(mesh);
         }
 
-        public void Commit() {
+        public bool Commit() {
+            Logger.Instance.Log("Creating file...");
             var filePath = sceneCreator.CreateFile();
-            Connector.NewRevision(host, apiKey, teamspace, modelId, filePath);
+            Logger.Instance.Log("Created file at : " + filePath);
+            bool success;
+            try
+            {
+                Connector.NewRevision(host, apiKey, teamspace, modelId, filePath);
+                success = true;
+            } catch(System.Exception e)
+            {
+                success = false;
+            }
+            
             sceneCreator.Clear();
+            return success;
         }
 
         private string host;

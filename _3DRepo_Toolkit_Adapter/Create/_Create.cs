@@ -26,7 +26,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BH.oM.Structure.Elements;
-using BH.oM.Common.Materials;
+using ThreeDRepo;
 
 namespace BH.Adapter.ThreeDRepo
 {
@@ -38,14 +38,15 @@ namespace BH.Adapter.ThreeDRepo
 
         protected override bool Create<T>(IEnumerable<T> objects, bool replaceAll = false)
         {
+            Logger.Instance.Log("Create Called");
             //This is the main dispatcher method, calling the specific implementation methods for the other toolkits.
 
             bool success = true;        //boolean returning if the creation was successfull or not
 
             success = CreateCollection(objects as dynamic); //Calls the correct CreateCollection method based on dynamic casting
-
-            controller.Commit();
-
+            Logger.Instance.Log("Committing changes.");
+            success = controller.Commit();
+            Logger.Instance.Log("Done.");
             return success;             //Finally return if the creation was successful or not
 
         }
