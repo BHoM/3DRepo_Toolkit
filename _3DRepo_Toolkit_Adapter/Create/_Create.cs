@@ -44,7 +44,7 @@ namespace BH.Adapter.ThreeDRepo
 
             success = CreateCollection(objects as dynamic); //Calls the correct CreateCollection method based on dynamic casting
 
-            controller.commit();
+            controller.Commit();
 
             return success;             //Finally return if the creation was successful or not
 

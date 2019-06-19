@@ -16,7 +16,7 @@
 
         public void Commit() {
             var filePath = sceneCreator.CreateFile();
-            //WebRequest.NewRevision(host, apiKey, teamspace, modelId, filePath);
+            Connector.NewRevision(host, apiKey, teamspace, modelId, filePath);
             sceneCreator.Clear();
         }
 
