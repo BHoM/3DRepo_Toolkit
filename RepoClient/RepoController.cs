@@ -6,6 +6,8 @@
         {
             this.host = host;
             this.apiKey = apiKey;
+            this.teamspace = teamspace;
+            this.modelId = modelId;
             sceneCreator = new SceneCreator();
         }
 
