@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using BH.oM.Geometry;
 using ThreeDRepo;
+using BH.oM.Base;
 
 namespace BH.Adapter.ThreeDRepo
 {
@@ -34,14 +35,17 @@ namespace BH.Adapter.ThreeDRepo
         /**** Private methods                           ****/
         /***************************************************/
 
-        private bool CreateCollection(IEnumerable<BH.oM.Geometry.Mesh> meshes)
+        private bool CreateCollection(IEnumerable<IObject> objs)
         {
             //Code for creating a collection of materials in the software
             
-            foreach (BH.oM.Geometry.Mesh mesh in meshes)
+            foreach (var obj in objs)
             {
-                Logger.Instance.Log("Found Mesh...");
-                controller.AddToScene(Engine._3DRepo_Toolkit.Convert.To3DRepo(mesh));
+                if (obj is oM.Geometry.Mesh)
+                {
+                    Logger.Instance.Log("Found Mesh...");
+                    controller.AddToScene(Engine._3DRepo_Toolkit.Convert.To3DRepo(obj as oM.Geometry.Mesh));
+                }
             }
 
             return true;
