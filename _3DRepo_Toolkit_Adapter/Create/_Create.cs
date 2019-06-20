@@ -27,6 +27,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BH.oM.Structure.Elements;
 using ThreeDRepo;
+using BH.oM.Base;
 
 namespace BH.Adapter.ThreeDRepo
 {
@@ -37,6 +38,13 @@ namespace BH.Adapter.ThreeDRepo
         /***************************************************/
 
         protected override bool Create<T>(IEnumerable<T> objects, bool replaceAll = false)
+        {
+            return true;
+        }
+
+        /***************************************************/
+
+        protected bool Create(IEnumerable<IObject> objects, bool replaceAll = false)
         {
             Logger.Instance.Log("Create Called");
             //This is the main dispatcher method, calling the specific implementation methods for the other toolkits.
@@ -50,7 +58,5 @@ namespace BH.Adapter.ThreeDRepo
             return success;             //Finally return if the creation was successful or not
 
         }
-
-        /***************************************************/
     }
 }
