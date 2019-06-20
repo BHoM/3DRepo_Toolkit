@@ -91,7 +91,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Create\Mesh.cs" />
+    <Compile Include="Create\IObjects.cs" />
     <Compile Include="Create\_Create.cs" />
     <Compile Include="Delete\_Delete.cs" />
     <Compile Include="Types\NextId.cs" />
