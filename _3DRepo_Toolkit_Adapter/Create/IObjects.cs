@@ -20,10 +20,7 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using System;
 using System.Collections.Generic;
-using BH.oM.Geometry;
-using ThreeDRepo;
 using BH.oM.Base;
 
 namespace BH.Adapter.ThreeDRepo
@@ -37,13 +34,11 @@ namespace BH.Adapter.ThreeDRepo
 
         private bool CreateCollection(IEnumerable<IObject> objs)
         {
-            //Code for creating a collection of materials in the software
-            
+           
             foreach (var obj in objs)
             {
                 if (obj is oM.Geometry.Mesh)
                 {
-                    Logger.Instance.Log("Found Mesh...");
                     controller.AddToScene(Engine._3DRepo_Toolkit.Convert.To3DRepo(obj as oM.Geometry.Mesh));
                 }
             }
