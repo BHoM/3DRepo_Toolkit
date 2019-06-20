@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BH.Adapter;
 using BH.Engine._3DRepo_Toolkit;
+using BH.oM.Base;
 using ThreeDRepo;
 
 namespace BH.Adapter.ThreeDRepo
@@ -30,6 +31,14 @@ namespace BH.Adapter.ThreeDRepo
             Config.CloneBeforePush = true;      //Set to true to clone the objects before they are being pushed through the software. Required if any modifications at all, as adding a software ID is done to the objects
             Config.UseAdapterId = true;         //Tag objects with a software specific id in the CustomData. Requires the NextIndex method to be overridden and implemented
         }
+
+        public override List<IObject> Push(IEnumerable<IObject> objects, string tag = "", Dictionary<string, object> config = null)
+        {
+            Create(objects);
+            return base.Push(objects, tag, config);
+        }
+
+
 
         /***************************************************/
         /**** Private  Fields                           ****/
