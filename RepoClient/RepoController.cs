@@ -17,7 +17,7 @@
             sceneCreator.Add(mesh);
         }
 
-        public bool Commit() {
+        public bool Commit(ref string error) {
             Logger.Instance.Log("Creating file...");
             var filePath = sceneCreator.CreateFile();
             Logger.Instance.Log("Created file at : " + filePath);
@@ -28,6 +28,7 @@
                 success = true;
             } catch(System.Exception e)
             {
+                error = e.ToString();
                 success = false;
             }
             
