@@ -53,8 +53,13 @@ namespace BH.Adapter.ThreeDRepo
 
             success = CreateCollection(objects as dynamic); //Calls the correct CreateCollection method based on dynamic casting
             Logger.Instance.Log("Committing changes.");
-            success = controller.Commit();
-            Logger.Instance.Log("Done.");
+            string error = "";
+            success = controller.Commit(ref error);
+            if (success)
+                Logger.Instance.Log("Done.");
+            else
+                BH.Engine.Reflection.Compute.RecordError($"Error when sending data to 3DRepo:\n{error}");
+
             return success;             //Finally return if the creation was successful or not
 
         }
