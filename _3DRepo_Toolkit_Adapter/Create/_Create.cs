@@ -37,14 +37,14 @@ namespace BH.Adapter.ThreeDRepo
         /**** Adapter overload method                   ****/
         /***************************************************/
 
-        protected override bool Create<T>(IEnumerable<T> objects, bool replaceAll = false)
+        protected override bool Create<T>(IEnumerable<T> objects)
         {
             return true;
         }
 
         /***************************************************/
 
-        protected bool Create(IEnumerable<IObject> objects, bool replaceAll = false)
+        protected bool Create(IEnumerable<IObject> objects)
         {
             Logger.Instance.Log("Create Called");
             //This is the main dispatcher method, calling the specific implementation methods for the other toolkits.
