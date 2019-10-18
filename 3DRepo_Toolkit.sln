@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_3DRepo_Toolkit_Adapter", "_3DRepo_Toolkit_Adapter\_3DRepo_Toolkit_Adapter.csproj", "{CFD6BA4A-3480-4351-9F7F-B1B37ABB2F21}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3DRepo_Adapter", "_3DRepo_Toolkit_Adapter\3DRepo_Adapter.csproj", "{CFD6BA4A-3480-4351-9F7F-B1B37ABB2F21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_3DRepo_Toolkit_Engine", "_3DRepo_Toolkit_Engine\_3DRepo_Toolkit_Engine.csproj", "{625C4A3B-A0AB-4B29-B289-4C439B565EFF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3DRepo_Engine", "_3DRepo_Toolkit_Engine\3DRepo_Engine.csproj", "{625C4A3B-A0AB-4B29-B289-4C439B565EFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeDRepo", "RepoClient\ThreeDRepo.csproj", "{A70835F4-6498-4F3B-B7BA-5BC87F36AB4C}"
 EndProject
@@ -30,5 +30,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {25B8320F-DE2C-4CBE-98A5-584D670916FB}
 	EndGlobalSection
 EndGlobal

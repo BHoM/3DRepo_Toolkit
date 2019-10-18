@@ -37,7 +37,7 @@ namespace BH.Adapter.ThreeDRepo
         /**** Adapter overload method                   ****/
         /***************************************************/
 
-        protected override bool Create<T>(IEnumerable<T> objects)
+        protected override bool Create<T>(IEnumerable<T> objects, bool replaceAll = false)
         {
             return true;
         }
