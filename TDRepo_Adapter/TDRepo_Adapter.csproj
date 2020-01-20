@@ -7,8 +7,8 @@
     <ProjectGuid>{CFD6BA4A-3480-4351-9F7F-B1B37ABB2F21}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BH.Adapter._3DRepo_Toolkit</RootNamespace>
-    <AssemblyName>_3DRepo_Toolkit_Adapter</AssemblyName>
+    <RootNamespace>BH.Adapter.TDRepo</RootNamespace>
+    <AssemblyName>TDRepo_Adapter</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="Adapter_oM">
       <HintPath>..\..\BHoM_Adapter\Build\Adapter_oM.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Analytical_oM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -106,18 +107,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CRUD\Create\_Create.cs" />
+    <Compile Include="CRUD\Create\_ICreate.cs" />
     <Compile Include="TDRepoAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RepoClient\3DRepo_oM.csproj">
-      <Project>{a70835f4-6498-4f3b-b7ba-5bc87f36ab4c}</Project>
-      <Name>3DRepo_oM</Name>
+    <ProjectReference Include="..\TDRepo_Engine\TDRepo_Engine.csproj">
+      <Project>{625c4a3b-a0ab-4b29-b289-4c439b565eff}</Project>
+      <Name>TDRepo_Engine</Name>
+      <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\_3DRepo_Toolkit_Engine\3DRepo_Engine.csproj">
-      <Project>{625C4A3B-A0AB-4B29-B289-4C439B565EFF}</Project>
-      <Name>3DRepo_Engine</Name>
+    <ProjectReference Include="..\TDRepo_oM\TDRepo_oM.csproj">
+      <Project>{a70835f4-6498-4f3b-b7ba-5bc87f36ab4c}</Project>
+      <Name>TDRepo_oM</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

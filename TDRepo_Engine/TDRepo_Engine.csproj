@@ -7,8 +7,8 @@
     <ProjectGuid>{625C4A3B-A0AB-4B29-B289-4C439B565EFF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BH.Engine._3DRepo_Toolkit</RootNamespace>
-    <AssemblyName>_3DRepo_Toolkit_Engine</AssemblyName>
+    <RootNamespace>BH.Engine.TDRepo</RootNamespace>
+    <AssemblyName>TDRepo_Engine</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -101,9 +101,10 @@
     <Folder Include="Query\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RepoClient\3DRepo_oM.csproj">
+    <ProjectReference Include="..\TDRepo_oM\TDRepo_oM.csproj">
       <Project>{a70835f4-6498-4f3b-b7ba-5bc87f36ab4c}</Project>
-      <Name>3DRepo_oM</Name>
+      <Name>TDRepo_oM</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

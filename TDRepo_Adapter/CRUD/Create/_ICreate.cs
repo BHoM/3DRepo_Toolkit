@@ -26,12 +26,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BH.oM.Structure.Elements;
-using TDRepo;
 using BH.oM.Base;
 using BH.oM.Adapter;
+using BH.oM.TDRepo;
 
-
-namespace BH.Adapter.ThreeDRepo
+namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter
     {
@@ -68,7 +67,7 @@ namespace BH.Adapter.ThreeDRepo
 
             foreach (var obj in objs)
             {
-                controller.AddToScene(Engine._3DRepo_Toolkit.Convert.FromBHoM(obj as oM.Geometry.Mesh));
+                controller.AddToScene(Engine.TDRepo.Convert.FromBHoM(obj as oM.Geometry.Mesh));
             }
 
             return true;
