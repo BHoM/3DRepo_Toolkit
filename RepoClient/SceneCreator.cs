@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace ThreeDRepo
+namespace TDRepo
 {
     class SceneCreator
     {

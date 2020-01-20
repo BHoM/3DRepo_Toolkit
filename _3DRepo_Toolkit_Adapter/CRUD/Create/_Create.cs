@@ -26,25 +26,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BH.oM.Structure.Elements;
-using ThreeDRepo;
+using TDRepo;
 using BH.oM.Base;
+using BH.oM.Adapter;
+
 
 namespace BH.Adapter.ThreeDRepo
 {
-    public partial class RepoAdapter
+    public partial class TDRepoAdapter
     {
-        /***************************************************/
-        /**** Adapter overload method                   ****/
-        /***************************************************/
-
-        protected override bool Create<T>(IEnumerable<T> objects)
-        {
-            return true;
-        }
-
-        /***************************************************/
-
-        protected bool Create(IEnumerable<IObject> objects)
+        // This gets called by the Push component.
+        protected override bool ICreate<T>(IEnumerable<T> objects, oM.Adapter.ActionConfig actionConfig = null)
         {
             Logger.Instance.Log("Create Called");
             //This is the main dispatcher method, calling the specific implementation methods for the other toolkits.
@@ -52,16 +44,40 @@ namespace BH.Adapter.ThreeDRepo
             bool success = true;        //boolean returning if the creation was successfull or not
 
             success = CreateCollection(objects as dynamic); //Calls the correct CreateCollection method based on dynamic casting
+
             Logger.Instance.Log("Committing changes.");
+
             string error = "";
             success = controller.Commit(ref error);
+
             if (success)
                 Logger.Instance.Log("Done.");
             else
                 BH.Engine.Reflection.Compute.RecordError($"Error when sending data to 3DRepo:\n{error}");
 
             return success;             //Finally return if the creation was successful or not
+        }
 
+
+        /***************************************************/
+        /**** Private methods                           ****/
+        /***************************************************/
+
+        private bool CreateCollection(IEnumerable<oM.Geometry.Mesh> objs)
+        {
+
+            foreach (var obj in objs)
+            {
+                controller.AddToScene(Engine._3DRepo_Toolkit.Convert.FromBHoM(obj as oM.Geometry.Mesh));
+            }
+
+            return true;
+        }
+
+        private bool CreateCollection(IEnumerable<IBHoMObject> objs)
+        {
+            BH.Engine.Reflection.Compute.RecordError($"3DRepo adatper can't yet export objects of type {objs.First().GetType().Name}");
+            return false;
         }
     }
 }
