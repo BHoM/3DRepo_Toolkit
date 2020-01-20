@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
-namespace ThreeDRepo
+namespace TDRepo
 {
     class Connector
     {

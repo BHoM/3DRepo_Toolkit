@@ -91,7 +91,7 @@
   <ItemGroup>
     <Compile Include="Convert\AdapterId.cs" />
     <Compile Include="Convert\ToBHoM\Node.cs" />
-    <Compile Include="Convert\To3DRepo\Mesh.cs" />
+    <Compile Include="Convert\FromBHoM\Mesh.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -101,9 +101,9 @@
     <Folder Include="Query\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RepoClient\ThreeDRepo.csproj">
+    <ProjectReference Include="..\RepoClient\3DRepo_oM.csproj">
       <Project>{a70835f4-6498-4f3b-b7ba-5bc87f36ab4c}</Project>
-      <Name>ThreeDRepo</Name>
+      <Name>3DRepo_oM</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
