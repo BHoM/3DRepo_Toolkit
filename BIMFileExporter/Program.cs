@@ -29,7 +29,12 @@ namespace FileExporterTest
             var redMat = exporter.AddMaterial(new List<float> { 1f, 0f, 0f, 0f });
 
             Geometry geometry = new Geometry(
-                new List<double> { 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0 },
+                new List<double> { 
+                    0, 0, 0, 
+                    1, 0, 0, 
+                    1, 1, 0,
+                    0, 1, 0 
+                },
                 new List<uint> { 0, 1, 2, 0, 2, 3 }, null,
                 redMat);
 
