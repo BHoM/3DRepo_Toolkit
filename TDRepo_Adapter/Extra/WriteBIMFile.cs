@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,8 +37,21 @@ namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter : BHoMAdapter
     {
-        public static void WriteBIMFile(string filePath, string fileName, List<IObject> objectsToWrite)
+        public static string WriteBIMFile(List<IObject> objectsToWrite, string directory = null, string fileName = null)
         {
+            // --------------------------------------------- //
+            //             Directory preparation             //
+            // --------------------------------------------- //
+
+            directory = directory ?? Path.Combine("C:\\temp", "BIMFileFormat");
+
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+
+            fileName = fileName ?? Guid.NewGuid().ToString();
+            string bimFilePath = Path.Combine(directory, fileName + ".bim");
+
+
             BIMDataExporter exporter = new BIMDataExporter();
             var redMat = exporter.AddMaterial(new List<float> { 1f, 0f, 0f, 0f });
 
@@ -65,8 +79,9 @@ namespace BH.Adapter.TDRepo
                 },
                 geometry);
 
-            exporter.ExportToFile("C:\\Users\\Carmen\\Desktop\\manual.bim");
+            exporter.ExportToFile(bimFilePath);
 
+            return bimFilePath;
         }
     }
 }

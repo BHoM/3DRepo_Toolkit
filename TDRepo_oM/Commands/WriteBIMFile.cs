@@ -34,8 +34,8 @@ namespace BH.oM.External.TDRepo.Commands
     [Description("")]
     public class WriteBIMFileCommand : IExecuteCommand
     {
+        public List<IObject> objectsToWrite { get; set; }
         public string Filepath { get; set; } = null;
         public string Filename { get; set; } = null;
-        public List<IObject> objectsToWrite { get; set; }
     }
 }
