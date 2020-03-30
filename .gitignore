@@ -5,7 +5,6 @@
 *.exe
 *.o
 *.so
-*.dll
 
 # Packages #
 ############
@@ -58,5 +57,3 @@ bld/
 *.user
 .vs/
 /BHoM/Acoustic/Database
-
-sandbox
