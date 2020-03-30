@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Commands\WriteBIMFile.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="Objects\Material.cs" />
     <Compile Include="Objects\Mesh.cs" />
     <Compile Include="MultipartForm.cs" />
     <Compile Include="Objects\Point.cs" />

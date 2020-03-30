@@ -32,6 +32,7 @@ using BH.oM.Base;
 using BH.oM.TDRepo;
 using RepoFileExporter;
 using RepoFileExporter.dataStructures;
+using BH.oM.External.TDRepo;
 
 namespace BH.Adapter.TDRepo
 {
@@ -39,6 +40,21 @@ namespace BH.Adapter.TDRepo
     {
         public static string WriteBIMFile(List<IObject> objectsToWrite, string directory = null, string fileName = null)
         {
+
+            // --------------------------------------------- //
+            //             Checks on objects                 //
+            // --------------------------------------------- //
+
+            List<BH.oM.Geometry.Mesh> meshes = objectsToWrite.OfType<BH.oM.Geometry.Mesh>().ToList();
+
+            if (meshes.Count != objectsToWrite.Count)
+            {
+                BH.Engine.Reflection.Compute.RecordError($"Only objects of type {nameof(BH.oM.Geometry.Mesh)} are currently supported.");
+                return "";
+            }
+
+            // TODO: Extract mesh representation of any IObject.
+
             // --------------------------------------------- //
             //             Directory preparation             //
             // --------------------------------------------- //
@@ -51,32 +67,44 @@ namespace BH.Adapter.TDRepo
             fileName = fileName ?? Guid.NewGuid().ToString();
             string bimFilePath = Path.Combine(directory, fileName + ".bim");
 
+            // --------------------------------------------- //
+            //                File preparation               //
+            // --------------------------------------------- //
+
             BIMDataExporter exporter = new BIMDataExporter();
-            var redMat = exporter.AddMaterial(new List<float> { 1f, 0f, 0f, 0f });
 
-            Geometry geometry = new Geometry(
-                new List<double> { 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0 },
-                new List<uint> { 0, 1, 2, 0, 2, 3 }, null,
-                redMat);
+            // Prepare default material
+            Material defaultMat = new Material() { MaterialArray = new List<float> { 1f, 0f, 0f, 0f } };
+            int defaultMatIdx = exporter.AddMaterial(defaultMat.MaterialArray);
 
-            var rootNode = exporter.AddNode("root", -1, null);
-
-            Dictionary<string, RepoVariant> metadata = new Dictionary<string, RepoVariant>();
-            metadata.Add("CustomMeta1", RepoVariant.String("value 2"));
-            metadata.Add("Area", RepoVariant.Int(1));
-            metadata.Add("Boolean Test", RepoVariant.Boolean(true));
-            metadata.Add("Double", RepoVariant.Double(1.3242524));
-
-            exporter.AddNode("mesh1", rootNode, null, geometry, metadata);
-
-            exporter.AddNode("mesh2", rootNode,
-                new List<float> {
+            // Prepare transformation matrix 
+            List<float> transfMatrix = new List<float>
+                {
                     1, 0, 0, 2,
                     0, 1, 0, 2,
                     0, 0, 1, 2,
                     0, 0, 0, 1
-                },
-                geometry);
+                };
+
+            // Prepare root node
+            int rootNodeIdx = exporter.AddNode("root", -1, null);
+
+            // Process the meshes
+            for (int i = 0; i < meshes.Count; i++)
+            {
+                BH.oM.Geometry.Mesh m = meshes[i];
+
+                Geometry geometry = BH.Adapter.TDrepo.Convert.MeshToGeometry(m, defaultMatIdx);
+
+                // Add metadata
+                Dictionary<string, RepoVariant> metadata = new Dictionary<string, RepoVariant>();
+                metadata.Add("CustomMeta1", RepoVariant.String("value 2"));
+                metadata.Add("Area", RepoVariant.Int(1));
+                metadata.Add("Boolean Test", RepoVariant.Boolean(true));
+                metadata.Add("Double", RepoVariant.Double(1.3242524));
+
+                exporter.AddNode("mesh" + i, rootNodeIdx, transfMatrix, geometry, metadata);
+            }
 
             exporter.ExportToFile(bimFilePath);
 
