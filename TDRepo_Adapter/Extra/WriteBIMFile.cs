@@ -51,7 +51,6 @@ namespace BH.Adapter.TDRepo
             fileName = fileName ?? Guid.NewGuid().ToString();
             string bimFilePath = Path.Combine(directory, fileName + ".bim");
 
-
             BIMDataExporter exporter = new BIMDataExporter();
             var redMat = exporter.AddMaterial(new List<float> { 1f, 0f, 0f, 0f });
 
