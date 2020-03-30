@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BH.Adapter.TDRepo</RootNamespace>
     <AssemblyName>TDRepo_Adapter</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,6 +74,9 @@
       <HintPath>..\..\BHoM\Build\Geometry_oM.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="LitJson">
+      <HintPath>..\_refs\LitJson.dll</HintPath>
+    </Reference>
     <Reference Include="Physical_oM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BHoM\Build\Physical_oM.dll</HintPath>
@@ -89,7 +93,7 @@
     </Reference>
     <Reference Include="RepoFileExporter">
       <HintPath>..\_refs\RepoFileExporter.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Structure_Engine">
       <SpecificVersion>False</SpecificVersion>
@@ -113,7 +117,6 @@
   <ItemGroup>
     <Compile Include="CRUD\Create\_ICreate.cs" />
     <Compile Include="AdapterActions\Execute.cs" />
-    <Compile Include="CRUD\Create\_ICreate.cs" />
     <Compile Include="Extra\WriteBIMFile.cs" />
     <Compile Include="TDRepoAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -132,6 +135,16 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>rem update BHoM Assemblies folder
+call "..\..\BHoM_UI\Build\UI_PostBuild.exe" ..\..\ "$(AppData)\BHoM\Assemblies"
+
+rem copy Grasshopper_UI to BHoM Assemblies folder
+Copy /Y "..\..\Grasshopper_Toolkit\Build\BH.UI.Grasshopper.dll" "$(AppData)\BHoM\Assemblies\BH.UI.Grasshopper.dll"
+Copy /Y "..\..\Grasshopper_Toolkit\Build\BH.UI.Grasshopper.dll" "$(AppData)\BHoM\Assemblies\BH.UI.Grasshopper.gha"
+
+</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
