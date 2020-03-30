@@ -7,7 +7,7 @@
     <ProjectGuid>{625C4A3B-A0AB-4B29-B289-4C439B565EFF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BH.Engine.TDRepo</RootNamespace>
+    <RootNamespace>BH.Engine.External.TDRepo</RootNamespace>
     <AssemblyName>TDRepo_Engine</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
