@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of the Buildings and Habitats object Model (BHoM)
  * Copyright (c) 2015 - 2020, the respective contributors. All rights reserved.
  *
@@ -22,38 +22,30 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BH.Adapter;
+using BH.Engine.TDRepo;
+using BH.oM.Adapter;
+using BH.oM.Base;
+using BH.oM.Reflection;
+using BH.oM.TDRepo;
+using BH.oM.External.TDRepo.Commands;
 
-namespace BH.oM.TDRepo
+namespace BH.Adapter.TDRepo
 {
-    public class Logger
+    public partial class TDRepoAdapter
     {
-        private static Logger instance = null;
-        private Logger() {
-            fileStream = new StreamWriter(Path.Combine(Path.GetTempPath(), "RepoAdaptor.log"), true);
-        }
-
-        public static Logger Instance
+        public override Output<List<object>, bool> Execute(IExecuteCommand command, ActionConfig actionConfig = null)
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new Logger();
-                }
-                return instance;
-            }
+            return Execute(command as dynamic, actionConfig);
         }
 
-        public void Log(string text)
+        public Output<List<object>, bool> Execute(WriteBIMFileCommand cmd, ActionConfig actionConfig = null)
         {
-            fileStream.WriteLine(text);
-            fileStream.Flush();
+            BH.Adapter.TDRepo.TDRepoAdapter.WriteBIMFile(cmd.objectsToWrite, cmd.Filepath, cmd.Filename);
+            return null;
         }
-
-        private StreamWriter fileStream;
     }
 }

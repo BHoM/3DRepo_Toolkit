@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TDRepo_Engine", "TDRepo_Eng
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TDRepo_oM", "TDRepo_oM\TDRepo_oM.csproj", "{A70835F4-6498-4F3B-B7BA-5BC87F36AB4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIMFileExporterTest", "BIMFileExporter\BIMFileExporterTest.csproj", "{58ECC899-3782-4173-A65A-2BE8DE95E674}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A70835F4-6498-4F3B-B7BA-5BC87F36AB4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A70835F4-6498-4F3B-B7BA-5BC87F36AB4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A70835F4-6498-4F3B-B7BA-5BC87F36AB4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58ECC899-3782-4173-A65A-2BE8DE95E674}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58ECC899-3782-4173-A65A-2BE8DE95E674}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58ECC899-3782-4173-A65A-2BE8DE95E674}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58ECC899-3782-4173-A65A-2BE8DE95E674}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

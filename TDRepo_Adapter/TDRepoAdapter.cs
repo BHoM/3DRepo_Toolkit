@@ -42,12 +42,16 @@ namespace BH.Adapter.TDRepo
         //Add any applicable constructors here, such as linking to a specific file or anything else as well as linking to that file through the (if existing) com link via the API
         public TDRepoAdapter(string teamspace, string modelId, string apiKey, string url = "https://api1.www.3drepo.io/api")
         {
+            AdapterIdName = BH.Engine.TDRepo.Convert.AdapterIdName;
             m_AdapterSettings.DefaultPushType = oM.Adapter.PushType.CreateOnly;
 
-            Logger.Instance.Log("Establishing repo controller with URL: " + url + " api key: " + apiKey + " teamspace: " + teamspace + "modelID: " + modelId);
-            controller = new RepoController(url, apiKey, teamspace, modelId);
+            Logger.Instance.Log("Establishing repo Adapter controller with URL: " + url + " api key: " + apiKey + " teamspace: " + teamspace + "modelID: " + modelId);
 
-            AdapterIdName = BH.Engine.TDRepo.Convert.AdapterIdName;   //Set the "AdapterId" to "SoftwareName_id". Generally stored as a constant string in the convert class in the SoftwareName_Engine
+            this.host = url;
+            this.apiKey = apiKey;
+            this.teamspace = teamspace;
+            this.modelId = modelId;
+            sceneCreator = new SceneCreator();
         }
 
 
@@ -55,10 +59,32 @@ namespace BH.Adapter.TDRepo
         /**** Private  Fields                           ****/
         /***************************************************/
 
-        //Add any comlink object as a private field here, example named:
+        private string host;
+        private string apiKey;
+        private string teamspace;
+        private string modelId;
+        private SceneCreator sceneCreator;
 
-        private RepoController controller;
+        private bool Commit(ref string error)
+        {
+            Logger.Instance.Log("Creating file...");
+            var filePath = sceneCreator.CreateFile();
+            Logger.Instance.Log("Created file at : " + filePath);
+            bool success;
+            try
+            {
+                Connector.NewRevision(host, apiKey, teamspace, modelId, filePath);
+                success = true;
+            }
+            catch (System.Exception e)
+            {
+                error = e.ToString();
+                success = false;
+            }
 
+            sceneCreator.Clear();
+            return success;
+        }
 
         /***************************************************/
 

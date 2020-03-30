@@ -22,27 +22,34 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.oM.Structure.Elements;
 
-namespace BH.Engine.TDRepo
+namespace BH.oM.TDRepo
 {
-    public static partial class Convert
+    public struct BIMFileMeta
     {
-        /***************************************************/
-        /**** Public Methods                            ****/
-        /***************************************************/
+        public long headerSize;
+        public long geometrySize;
+        public long sizesStart;
+        public long sizesSize;
+        public long matStart;
+        public long matSize;
+        public long numChildren;
 
-        //Add methods for converting to BHoM from the specific software types. 
-        //Only do this if possible to do without any com-calls or similar to the adapter
-        //Example:
-        //public static Node ToBHoM(this _3DRepo_ToolkitNode node)
-        //{
-        //    //Insert code for convertion
-        //}
-
-        /***************************************************/
+        public void write(BinaryWriter bin)
+        {
+            bin.Write(headerSize);
+            bin.Write(geometrySize);
+            bin.Write(sizesStart);
+            bin.Write(sizesSize);
+            bin.Write(matStart);
+            bin.Write(matSize);
+            bin.Write(numChildren);
+            bin.Flush();
+        }
     }
 }

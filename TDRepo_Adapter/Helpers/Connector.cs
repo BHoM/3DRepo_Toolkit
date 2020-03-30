@@ -26,23 +26,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
-namespace BH.oM.TDRepo
+namespace BH.Adapter.TDRepo
 {
-    class Connector
+    internal class Connector
     {
         internal static void NewRevision(string host, string apiKey, string teamspace, string modelId, string filePath)
         {
+            // Read temporary file where the scene objects were stored by the SceneCreator
             FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             byte[] data = new byte[fs.Length];
             fs.Read(data, 0, data.Length);
             fs.Close();
 
+            // Create the POST request parameters
             Dictionary<string, object> postParameters = new Dictionary<string, object>();
             postParameters.Add("file", new MultipartForm.FileParameter(data, filePath, "application/octet-stream"));
-
             
             string uri = host + "/" + teamspace + "/" + modelId + "/upload?key=" + apiKey;
             Logger.Instance.Log("Posting a new revision at : " + uri);
+
             // Create request and receive response
             HttpWebResponse webResponse = MultipartForm.MultipartFormDataPost(uri, null, postParameters);
 

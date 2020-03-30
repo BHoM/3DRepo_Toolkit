@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DE6DA902-05AE-4551-ACB5-F46D14000CDF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RepoNET</RootNamespace>
+    <AssemblyName>BIMFileExporter</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug 2015|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug 2015\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release 2015|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release 2015\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug 2017|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug 2017\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release 2017|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release 2017\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug 2016|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug 2016\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release 2016|AnyCPU'">
+    <OutputPath>bin\Release 2016\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release 2018|AnyCPU'">
+    <OutputPath>bin\Release 2018\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug 2018|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug 2018\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release 2019|AnyCPU'">
+    <OutputPath>bin\Release 2019\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug 2019|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug 2019\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release 2020|AnyCPU'">
+    <OutputPath>bin\Release 2020\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug 2020|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug 2020\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autodesk.Navisworks.Api, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2020' OR '$(Configuration)' == 'Release 2020'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2020\Autodesk.Navisworks.Api.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.ComApi, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2020' OR '$(Configuration)' == 'Release 2020'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2020\Autodesk.Navisworks.ComApi.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Controls, Version=14.0.1298.75, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2020' OR '$(Configuration)' == 'Release 2020'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2020\Autodesk.Navisworks.Controls.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Interop.ComApi, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2020' OR '$(Configuration)' == 'Release 2020'">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2020\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Api, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2019' OR '$(Configuration)' == 'Release 2019'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2019\Autodesk.Navisworks.Api.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.ComApi, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2019' OR '$(Configuration)' == 'Release 2019'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2019\Autodesk.Navisworks.ComApi.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Controls, Version=14.0.1298.75, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2019' OR '$(Configuration)' == 'Release 2019'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2019\Autodesk.Navisworks.Controls.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Interop.ComApi, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2019' OR '$(Configuration)' == 'Release 2019'">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2019\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Api, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2018' OR '$(Configuration)' == 'Release 2018'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2018\Autodesk.Navisworks.Api.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.ComApi, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2018' OR '$(Configuration)' == 'Release 2018'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2018\Autodesk.Navisworks.ComApi.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Controls, Version=14.0.1298.75, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2018' OR '$(Configuration)' == 'Release 2018'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2018\Autodesk.Navisworks.Controls.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Interop.ComApi, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2018' OR '$(Configuration)' == 'Release 2018'">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2018\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Api, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2017' OR '$(Configuration)' == 'Release 2017'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2017\Autodesk.Navisworks.Api.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.ComApi, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2017' OR '$(Configuration)' == 'Release 2017'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2017\Autodesk.Navisworks.ComApi.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Controls, Version=14.0.1298.75, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2017' OR '$(Configuration)' == 'Release 2017'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2017\Autodesk.Navisworks.Controls.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Interop.ComApi, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2017' OR '$(Configuration)' == 'Release 2017'">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2017\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Api, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2016' OR '$(Configuration)' == 'Release 2016'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2016\Autodesk.Navisworks.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.ComApi, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2016' OR '$(Configuration)' == 'Release 2016'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2016\Autodesk.Navisworks.ComApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Controls, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2016' OR '$(Configuration)' == 'Release 2016'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2016\Autodesk.Navisworks.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Interop.ComApi, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2016' OR '$(Configuration)' == 'Release 2016'">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2016\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Api, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2015' OR '$(Configuration)' == 'Release 2015'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2015\Autodesk.Navisworks.Api.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.ComApi, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2015' OR '$(Configuration)' == 'Release 2015'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2015\Autodesk.Navisworks.ComApi.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Controls, Version=14.0.1298.75, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2015' OR '$(Configuration)' == 'Release 2015'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2015\Autodesk.Navisworks.Controls.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Interop.ComApi, Version=13.0.1240.52, Culture=neutral, PublicKeyToken=d85e58fa5af9b484, processorArchitecture=AMD64" Condition="'$(Configuration)' == 'Debug 2015' OR '$(Configuration)' == 'Release 2015'">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2015\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics, Version=3.18.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.3.18.0\lib\net40\MathNet.Numerics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json" Condition="'$(Configuration)' == 'Debug 2020' OR '$(Configuration)' == 'Release 2020'">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2020\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json" Condition="'$(Configuration)' == 'Debug 2019' OR '$(Configuration)' == 'Release 2019'">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2019\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json" Condition="'$(Configuration)' == 'Debug 2018' OR '$(Configuration)' == 'Release 2018'">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2018\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json" Condition="'$(Configuration)' == 'Debug 2017' OR '$(Configuration)' == 'Release 2017'">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2017\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json" Condition="'$(Configuration)' == 'Debug 2016' OR '$(Configuration)' == 'Release 2016'">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2016\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json" Condition="'$(Configuration)' == 'Debug 2015' OR '$(Configuration)' == 'Release 2015'">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2015\Loaders\Rx\NewtonSoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BIMFileMaterial.cs" />
+    <Compile Include="BIMFileScene.cs" />
+    <Compile Include="GeometryProcessor.cs" />
+    <Compile Include="BIMFileNode.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -47,14 +47,14 @@ namespace BH.Adapter.TDRepo
             Logger.Instance.Log("Committing changes.");
 
             string error = "";
-            success = controller.Commit(ref error);
+            success = Commit(ref error);
 
             if (success)
                 Logger.Instance.Log("Done.");
             else
                 BH.Engine.Reflection.Compute.RecordError($"Error when sending data to 3DRepo:\n{error}");
 
-            return success;             //Finally return if the creation was successful or not
+            return success;
         }
 
 
@@ -64,10 +64,10 @@ namespace BH.Adapter.TDRepo
 
         private bool CreateCollection(IEnumerable<oM.Geometry.Mesh> objs)
         {
-
             foreach (var obj in objs)
             {
-                controller.AddToScene(Engine.TDRepo.Convert.FromBHoM(obj as oM.Geometry.Mesh));
+                Logger.Instance.Log("Adding mesh to scene.");
+                sceneCreator.Add(Engine.TDRepo.Convert.FromBHoM(obj as oM.Geometry.Mesh));
             }
 
             return true;
