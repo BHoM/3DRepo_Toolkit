@@ -87,6 +87,10 @@
       <HintPath>..\..\BHoM\Build\Reflection_oM.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="RepoFileExporter">
+      <HintPath>..\_refs\RepoFileExporter.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Structure_Engine">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BHoM_Engine\Build\Structure_Engine.dll</HintPath>
@@ -108,6 +112,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CRUD\Create\_ICreate.cs" />
+    <Compile Include="AdapterActions\Execute.cs" />
+    <Compile Include="CRUD\Create\_ICreate.cs" />
+    <Compile Include="Extra\WriteBIMFile.cs" />
     <Compile Include="TDRepoAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
