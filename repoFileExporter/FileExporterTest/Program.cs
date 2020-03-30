@@ -52,7 +52,7 @@ namespace FileExporterTest
                 },
                 geometry);
 
-            exporter.ExportToFile("C:\\Temp\\BIMfileformat\\manual.bim");
+            exporter.ExportToFile("C:\\Users\\Carmen\\Desktop\\manual.bim");
         }
     }
 }

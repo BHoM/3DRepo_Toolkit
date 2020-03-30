@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FileExporterTest")]
+[assembly: AssemblyTitle("BIMFileExporter")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("FileExporterTest")]
+[assembly: AssemblyProduct("BIMFileExporter")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f720ea5a-f9ca-443f-b1c4-62cd970b07ed")]
+[assembly: Guid("58ecc899-3782-4173-a65a-2be8de95e674")]
 
 // Version information for an assembly consists of the following four values:
 //
