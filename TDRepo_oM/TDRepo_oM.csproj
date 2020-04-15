@@ -51,11 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\WriteBIMFile.cs" />
-    <Compile Include="Logger.cs" />
+    <Compile Include="Configs\DisplayOptions.cs" />
     <Compile Include="Objects\Material.cs" />
     <Compile Include="Objects\Mesh.cs" />
     <Compile Include="MultipartForm.cs" />
     <Compile Include="Objects\Point.cs" />
+    <Compile Include="Configs\PushConfig.cs" />
     <Compile Include="RepoController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Objects\Face.cs" />

@@ -44,7 +44,7 @@ namespace BH.Adapter.TDRepo
         {
             m_AdapterSettings.DefaultPushType = oM.Adapter.PushType.CreateOnly;
 
-            Logger.Instance.Log("Establishing repo controller with URL: " + url + " api key: " + apiKey + " teamspace: " + teamspace + "modelID: " + modelId);
+            BH.Engine.Reflection.Compute.RecordNote("Establishing repo controller with URL: " + url + " api key: " + apiKey + " teamspace: " + teamspace + "modelID: " + modelId);
             controller = new RepoController(url, apiKey, teamspace, modelId);
 
             AdapterIdName = BH.Engine.TDRepo.Convert.AdapterIdName;   //Set the "AdapterId" to "SoftwareName_id". Generally stored as a constant string in the convert class in the SoftwareName_Engine

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of the Buildings and Habitats object Model (BHoM)
  * Copyright (c) 2015 - 2020, the respective contributors. All rights reserved.
  *
@@ -20,29 +20,25 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
+using BH.oM.Base;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.oM.Structure.Elements;
 
-namespace BH.Engine.TDRepo
+
+namespace BH.oM.External.TDRepo
 {
-    public static partial class Convert
+    public class DisplayOptions : IObject
     {
-        /***************************************************/
-        /**** Public Methods                            ****/
-        /***************************************************/
-
-        //Add methods for converting to BHoM from the specific software types. 
-        //Only do this if possible to do without any com-calls or similar to the adapter
-        //Example:
-        //public static Node ToBHoM(this _3DRepo_ToolkitNode node)
-        //{
-        //    //Insert code for convertion
-        //}
-
-        /***************************************************/
+        [Description("If true, the bars are meshes extruded using their Section property.\n" +
+            "CAREFUL: heavier meshes might increase upload time over the Timeout limit.")]
+        public bool DetailedBars { get; set; } = false;
+        [Description("If true, nodes are meshes representing the support condition (e.g. cone with sphere on top for a Pin).\n" +
+            "CAREFUL: heavier meshes might increase upload time over the Timeout limit.")]
+        public bool DetailedNodes { get; set; } = true;
     }
 }
+

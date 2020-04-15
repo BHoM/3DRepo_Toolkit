@@ -1,0 +1,91 @@
+// Binary header including pointers to the json part - where the json start, where geometry blob starts
+// Json part
+// Binary - geometry etc
+
+{
+    "nodes": [
+        {
+            "id": 0,
+            "name": "cube.fbx", // root node of the scene
+            "units": "Feet",
+            "bbox": {
+                "min": [ -100.00003218650818, -100.00000762939402, -100.00003385543823 ],
+                "max": [ 100.00004410743713, 100.00000762939504, 100.00005769729614 ]
+            },
+            "transformation": [
+                0.032808398950131233,
+                0.0,
+                0.0,
+                0.0,
+
+                0.0,
+                0.0,
+                0.032808398950131233,
+                0.0,
+
+                0.0,
+                -0.032808398950131233,
+                0.0,
+                0.0,
+
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        {
+            "parent": 0,
+            "id": 1,
+            "name": "Cube", // child of the node tha owns the geometry
+            "geometry": {
+                "bbox": {
+                    "min": [ -100.00003218650818, -100.00000762939402, -100.00003385543823 ],
+                    "max": [ 100.00004410743713, 100.00000762939504, 100.00005769729614 ]
+                },
+                "numIndices": 36,
+                "numVertices": 24,
+                "indices": [ 0, 144 ], // indices at the start of the binary blob
+                "vertices": [ 144, 720 ],
+                "normals": [ 720, 1008 ],
+                "material": 0
+            }
+        },
+        {
+            "parent": 0,
+            "id": 2,
+            "name": "Cube2", // child of the node tha owns the geometry
+            "geometry": {
+                "bbox": {
+                    "min": [ -100.00003218650818, -100.00000762939402, -100.00003385543823 ],
+                    "max": [ 100.00004410743713, 100.00000762939504, 100.00005769729614 ]
+                },
+                "numIndices": 36,
+                "numVertices": 24,
+                "indices": [ 1008, 1008+144 ], // indices at the start of the binary blob
+                "vertices": [ 144, 720 ],
+                "normals": [ 720, 1008 ],
+                "material": 1
+            }
+        }
+
+    ],
+    "sizes": [ 72, 318, 765 ], // check with Carmen - sizes of the nodes?
+    "materials": [
+        {
+            "diffuse": [ 0.8, 0.8, 0.8 ],
+            "ambient": [ 0.0, 0.0, 0.0 ],
+            "specular": [ 1.0, 1.0, 1.0 ],
+            "emissive": [ 0.8, 0.8, 0.8 ],
+            "transparency": 0.0,
+            "shininess": 0.09607843
+        },
+        {
+            "diffuse": [ 0.8, 0.8, 0.8 ],
+            "ambient": [ 0.0, 0.0, 0.0 ],
+            "specular": [ 1.0, 1.0, 1.0 ],
+            "emissive": [ 0.8, 0.8, 0.8 ],
+            "transparency": 0.0,
+            "shininess": 0.09607843
+        }
+    ]

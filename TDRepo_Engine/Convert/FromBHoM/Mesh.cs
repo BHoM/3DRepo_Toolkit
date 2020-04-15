@@ -29,7 +29,7 @@ using BH.oM.Structure.Elements;
 using BH.oM.Geometry;
 using BH.oM.TDRepo;
 
-namespace BH.Engine.TDRepo
+namespace BH.Engine.External.TDRepo
 {
     public static partial class Convert
     {

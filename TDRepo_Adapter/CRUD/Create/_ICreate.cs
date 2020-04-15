@@ -29,32 +29,26 @@ using BH.oM.Structure.Elements;
 using BH.oM.Base;
 using BH.oM.Adapter;
 using BH.oM.TDRepo;
+using BH.oM.External.TDRepo;
 
 namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter
     {
         // This gets called by the Push component.
-        protected override bool ICreate<T>(IEnumerable<T> objects, oM.Adapter.ActionConfig actionConfig = null)
+        protected override bool ICreate<T>(IEnumerable<T> objects, ActionConfig actionConfig = null)
         {
-            Logger.Instance.Log("Create Called");
-            //This is the main dispatcher method, calling the specific implementation methods for the other toolkits.
+            bool success = true;
 
-            bool success = true;        //boolean returning if the creation was successfull or not
+            TDRepoActionConfig tdRepoActionConfig = actionConfig as TDRepoActionConfig ?? new TDRepoActionConfig();
 
-            success = CreateCollection(objects as dynamic); //Calls the correct CreateCollection method based on dynamic casting
+            if (!tdRepoActionConfig.BIMformatCreate)
+                return CreateUsingObj(objects); // Export using the (now old) obj format
 
-            Logger.Instance.Log("Committing changes.");
+            WriteBIMFile(objects.OfType<IObject>().ToList());
 
-            string error = "";
-            success = controller.Commit(ref error);
 
-            if (success)
-                Logger.Instance.Log("Done.");
-            else
-                BH.Engine.Reflection.Compute.RecordError($"Error when sending data to 3DRepo:\n{error}");
-
-            return success;             //Finally return if the creation was successful or not
+            return success;
         }
 
 
@@ -62,21 +56,30 @@ namespace BH.Adapter.TDRepo
         /**** Private methods                           ****/
         /***************************************************/
 
-        private bool CreateCollection(IEnumerable<oM.Geometry.Mesh> objs)
+        private bool CreateUsingObj<T>(IEnumerable<T> objs)
         {
-
+            // Add to the scene
             foreach (var obj in objs)
             {
-                controller.AddToScene(Engine.TDRepo.Convert.FromBHoM(obj as oM.Geometry.Mesh));
+                oM.Geometry.Mesh mesh = obj as oM.Geometry.Mesh;
+
+                if (mesh == null)
+                {
+                    BH.Engine.Reflection.Compute.RecordError($"3DRepo adatper can't yet export objects of type {objs.First().GetType().Name}");
+                    break;
+                }
+
+                controller.AddToScene(BH.Engine.External.TDRepo.Convert.FromBHoM(mesh));
             }
 
-            return true;
-        }
+            // Commit
+            string error = "";
+            bool success = controller.Commit(ref error);
 
-        private bool CreateCollection(IEnumerable<IBHoMObject> objs)
-        {
-            BH.Engine.Reflection.Compute.RecordError($"3DRepo adatper can't yet export objects of type {objs.First().GetType().Name}");
-            return false;
+            if (!success)
+                BH.Engine.Reflection.Compute.RecordError($"Error when sending data to 3DRepo:\n{error}");
+
+            return true;
         }
     }
 }

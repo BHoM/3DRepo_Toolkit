@@ -1,6 +1,6 @@
-/*
+﻿﻿/*
  * This file is part of the Buildings and Habitats object Model (BHoM)
- * Copyright (c) 2015 - 2020, the respective contributors. All rights reserved.
+ * Copyright (c) 2015 - 2019, the respective contributors. All rights reserved.
  *
  * Each contributor holds copyright over their respective contributions.
  * The project versioning (Git) records all such contribution source information.
@@ -22,38 +22,26 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BHG = BH.oM.Geometry;
+using BH.oM.Base;
+using BH.Engine.Geometry;
+using System.Reflection;
+using BH.oM.Geometry;
+using BH.Engine.Base;
+using System.ComponentModel;
+using BH.oM.External.TDRepo;
 
-namespace BH.oM.TDRepo
+namespace BH.Engine.External.TDRepo
 {
-    public class Logger
+    public static partial class Compute
     {
-        private static Logger instance = null;
-        private Logger() {
-            fileStream = new StreamWriter(Path.Combine(Path.GetTempPath(), "RepoAdaptor.log"), true);
-        }
-
-        public static Logger Instance
+        // Fallback case
+        private static Rhino.Geometry.Mesh BHoMRepresentation(this IBHoMObject bHoMObject, DisplayOptions displayOptions)
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new Logger();
-                }
-                return instance;
-            }
+            return null;
         }
-
-        public void Log(string text)
-        {
-            fileStream.WriteLine(text);
-            fileStream.Flush();
-        }
-
-        private StreamWriter fileStream;
     }
 }

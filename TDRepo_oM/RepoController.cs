@@ -35,14 +35,11 @@ namespace BH.oM.TDRepo
 
         public void AddToScene(Mesh mesh)
         {
-            Logger.Instance.Log("Adding mesh to scene.");
             sceneCreator.Add(mesh);
         }
 
         public bool Commit(ref string error) {
-            Logger.Instance.Log("Creating file...");
             var filePath = sceneCreator.CreateFile();
-            Logger.Instance.Log("Created file at : " + filePath);
             bool success;
             try
             {
