@@ -28,33 +28,20 @@ using System.Text;
 using System.Threading.Tasks;
 using BH.Adapter;
 using BH.Engine.TDRepo;
+using BH.Engine.Base;
 using BH.oM.Base;
 using BH.oM.TDRepo;
 using RepoFileExporter;
 using RepoFileExporter.dataStructures;
 using BH.oM.External.TDRepo;
+using BH.oM.Geometry;
 
 namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter : BHoMAdapter
     {
-        public static string WriteBIMFile(List<IObject> objectsToWrite, string directory = null, string fileName = null)
+        public static string WriteBIMFile(List<IObject> objectsToWrite, string directory = null, string fileName = null, DisplayOptions displayOptions = null)
         {
-
-            // --------------------------------------------- //
-            //             Checks on objects                 //
-            // --------------------------------------------- //
-
-            List<BH.oM.Geometry.Mesh> meshes = objectsToWrite.OfType<BH.oM.Geometry.Mesh>().ToList();
-
-            if (meshes.Count != objectsToWrite.Count)
-            {
-                BH.Engine.Reflection.Compute.RecordError($"Only objects of type {nameof(BH.oM.Geometry.Mesh)} are currently supported.");
-                return "";
-            }
-
-            // TODO: Extract mesh representation of any IObject.
-
             // --------------------------------------------- //
             //             Directory preparation             //
             // --------------------------------------------- //
@@ -66,6 +53,22 @@ namespace BH.Adapter.TDRepo
 
             fileName = fileName ?? Guid.NewGuid().ToString();
             string bimFilePath = Path.Combine(directory, fileName + ".bim");
+
+
+            // --------------------------------------------- //
+            //             Compute representation            //
+            // --------------------------------------------- //
+
+            List<BH.oM.Geometry.Mesh> meshes = new List<oM.Geometry.Mesh>();
+
+            foreach (IObject obj in objectsToWrite)
+            {
+                // See if there is a custom BHoM mesh representation for that BHoMObject.
+                BH.oM.Geometry.Mesh meshRepresentation = BH.Engine.External.TDRepo.Compute.MeshRepresentation(obj as dynamic, displayOptions);
+
+                meshes.Add(meshRepresentation);
+            }
+
 
             // --------------------------------------------- //
             //                File preparation               //

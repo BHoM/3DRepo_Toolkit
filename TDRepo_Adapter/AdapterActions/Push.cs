@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of the Buildings and Habitats object Model (BHoM)
  * Copyright (c) 2015 - 2020, the respective contributors. All rights reserved.
  *
@@ -20,38 +20,31 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BH.Adapter;
+using BH.Engine.TDRepo;
+using BH.oM.Adapter;
+using BH.oM.Base;
+using BH.oM.Reflection;
+using BH.oM.TDRepo;
+using BH.oM.External.TDRepo.Commands;
+using BH.oM.External.TDRepo;
 
-namespace BH.oM.TDRepo
+namespace BH.Adapter.TDRepo
 {
-    class Connector
+    public partial class TDRepoAdapter
     {
-        internal static void NewRevision(string host, string apiKey, string teamspace, string modelId, string filePath)
+        public override List<object> Push(IEnumerable<object> objects, string tag = "", PushType pushType = PushType.AdapterDefault, ActionConfig actionConfig = null)
         {
-            FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            byte[] data = new byte[fs.Length];
-            fs.Read(data, 0, data.Length);
-            fs.Close();
+            if (actionConfig == null)
+                actionConfig = new TDRepoActionConfig();
 
-            Dictionary<string, object> postParameters = new Dictionary<string, object>();
-            postParameters.Add("file", new MultipartForm.FileParameter(data, filePath, "application/octet-stream"));
-            
-            string uri = host + "/" + teamspace + "/" + modelId + "/upload?key=" + apiKey;
-
-            // Create request and receive response
-            HttpWebResponse webResponse = MultipartForm.MultipartFormDataPost(uri, null, postParameters);
-
-            // Process response
-            StreamReader responseReader = new StreamReader(webResponse.GetResponseStream());
-            string fullResponse = responseReader.ReadToEnd();
-            webResponse.Close();
-
-            if (fullResponse.Contains("The remote server returned an error"))
-                throw new Exception(fullResponse);
+            return base.Push(objects, tag, pushType, actionConfig);
         }
+     
     }
 }
