@@ -25,6 +25,7 @@ using BH.oM.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,7 +36,8 @@ namespace BH.oM.External.TDRepo.Commands
     public class WriteBIMFileCommand : IExecuteCommand
     {
         public List<IObject> objectsToWrite { get; set; }
-        public string Filepath { get; set; } = null;
-        public string Filename { get; set; } = null;
+        public string Filepath { get; set; } = Path.Combine("C:\\temp", "BIMFileFormat");
+        public string Filename { get; set; } = Guid.NewGuid().ToString();
+        public DisplayOptions DisplayOptions { get; set; } = new DisplayOptions();
     }
 }

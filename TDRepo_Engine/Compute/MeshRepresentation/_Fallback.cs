@@ -39,7 +39,7 @@ namespace BH.Engine.External.TDRepo
     public static partial class Compute
     {
         // Fallback case
-        private static Rhino.Geometry.Mesh BHoMRepresentation(this IBHoMObject bHoMObject, DisplayOptions displayOptions)
+        private static Rhino.Geometry.Mesh MeshRepresentation(this IBHoMObject bHoMObject, DisplayOptions displayOptions)
         {
             return null;
         }
