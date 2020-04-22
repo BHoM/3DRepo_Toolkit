@@ -39,6 +39,9 @@ namespace BH.oM.External.TDRepo
         [Description("If true, nodes are meshes representing the support condition (e.g. cone with sphere on top for a Pin).\n" +
             "CAREFUL: heavier meshes might increase upload time over the Timeout limit.")]
         public bool DetailedNodes { get; set; } = true;
+
+        [Description("Insert the key of the BHoMObjects' CustomData dictionary that contains the color information.")]
+        public string CustomDataColorKey { get; set; }
     }
 }
 

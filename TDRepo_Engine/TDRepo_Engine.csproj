@@ -72,6 +72,9 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Graphics_oM, Version=3.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Reflection_Engine">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BHoM_Engine\Build\Reflection_Engine.dll</HintPath>
@@ -112,10 +115,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Compute\BHoMRepresentation\Bar.cs" />
-    <Compile Include="Compute\BHoMRepresentation\Node.cs" />
+    <Compile Include="Compute\MeshRepresentation\Panel.cs" />
+    <Compile Include="Compute\MeshRepresentation\Bar.cs" />
+    <Compile Include="Compute\MeshRepresentation\Node.cs" />
+    <Compile Include="Compute\FlatJson.cs" />
     <Compile Include="Compute\MeshRepresentation.cs" />
-    <Compile Include="Compute\BHoMRepresentation\_Fallback.cs" />
+    <Compile Include="Compute\MeshRepresentation\_Fallback.cs" />
     <Compile Include="Convert\AdapterId.cs" />
     <Compile Include="Convert\ToMesh\_Fallback.cs" />
     <Compile Include="Convert\ToMesh\Line.cs" />

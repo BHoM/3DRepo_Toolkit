@@ -44,7 +44,7 @@ namespace BH.Engine.External.TDRepo
     {
 
         [Description("Returns a BHoM Mesh representation for the Node based on its DOF, e.g. a box for fully fixed, a cone with sphere on top for pin.")]
-        public static IGeometry BHoMRepresentation(this Node node, DisplayOptions displayOptions = null)
+        public static BH.oM.Geometry.Mesh MeshRepresentation(this Node node, DisplayOptions displayOptions = null)
         {
             if (displayOptions == null)
                 displayOptions = new DisplayOptions();
@@ -52,9 +52,9 @@ namespace BH.Engine.External.TDRepo
             if (displayOptions.DetailedNodes)
                 return RhinoMeshRepresentation(node).FromRhino();
             else
-                return node.Position(); // returns the point.
+                return node.Position().RhinoMeshRepresentation().FromRhino(); // returns the point.
         }
-       
+
         private static Rhino.Geometry.Mesh RhinoMeshRepresentation(this Node node, bool detailed = true)
         {
             if (node.Position == null)
@@ -64,7 +64,7 @@ namespace BH.Engine.External.TDRepo
             }
 
             var point = (Rhino.Geometry.Point3d)node.Position.IToRhino();
-            double scale = 2;
+            double scale = 1;
 
             // Mesh to represent the node constraint
             Rhino.Geometry.Mesh mesh = null;
@@ -81,37 +81,45 @@ namespace BH.Engine.External.TDRepo
             if (fixedToTranslation && fixedToRotation)
             {
                 // Fully fixed: box
-                double boxDims = 0.06 * scale;
+                double boxDims = 0.12 * scale;
                 var rhinoBox = new Rhino.Geometry.BoundingBox(new[] { point, new Rhino.Geometry.Point3d(point.X + 2 * boxDims, point.Y + 2 * boxDims, point.Z), new Rhino.Geometry.Point3d(point.X - 2 * boxDims, point.Y - 2 * boxDims, point.Z - 3 * boxDims) });
                 mesh = Rhino.Geometry.Mesh.CreateFromBox(rhinoBox, 1, 1, 1);
             }
             else if (fixedToTranslation && !fixedToRotation)
             {
                 // Pin: cone + sphere
-                double radius = 0.06 * scale;
+                double radius = 0.12 * scale;
 
                 var rhinoSphere = new Rhino.Geometry.Sphere(new Rhino.Geometry.Plane(point, new Rhino.Geometry.Vector3d(0, 0, 1)), radius);
                 mesh = Rhino.Geometry.Mesh.CreateFromSphere(rhinoSphere, 8, 4);
 
                 var xyPlane = new Rhino.Geometry.Plane(new Rhino.Geometry.Point3d(point.X, point.Y, point.Z - radius), new Rhino.Geometry.Vector3d(0, 0, -1));
-                Rhino.Geometry.Cone cone = new Rhino.Geometry.Cone(xyPlane, 5 * radius, 3 * radius);
+                Rhino.Geometry.Cone cone = new Rhino.Geometry.Cone(xyPlane, 4 * radius, 3 * radius);
                 var coneMesh = Rhino.Geometry.Mesh.CreateFromCone(cone, 1, 4);
 
                 mesh.Append(coneMesh);
             }
-
-            if (mesh == null && false) // optional, deactivated for now
+            else
             {
-                // Just make a little sphere
-                double radius = 0.06 * scale;
-                var rhinoSphere = new Rhino.Geometry.Sphere(new Rhino.Geometry.Plane(point, new Rhino.Geometry.Vector3d(0, 0, 1)), radius);
-                mesh = Rhino.Geometry.Mesh.CreateFromSphere(rhinoSphere, 8, 4);
+                // Visualise as sphere?
             }
+
 
             BH.Engine.Structure.Create.Constraint6DOF(false, false, false, false, false, false);
 
             return mesh;
         }
 
+
+        private static Rhino.Geometry.Mesh RhinoMeshRepresentation(this Point point, double scale = 1)
+        {
+            // Make a little sphere
+            double radius = 0.12 * scale;
+            var rhinoSphere = new Rhino.Geometry.Sphere(new Rhino.Geometry.Plane(point.ToRhino(), new Rhino.Geometry.Vector3d(0, 0, 1)), radius);
+            var mesh = Rhino.Geometry.Mesh.CreateFromSphere(rhinoSphere, 8, 4);
+
+            return mesh;
+        }
     }
 }
+

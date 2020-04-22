@@ -37,44 +37,36 @@ using BH.Engine.Structure;
 using BH.Engine.Rhinoceros;
 using BH.oM.Structure.Constraints;
 using BH.oM.External.TDRepo;
+using BH.oM.Analytical.Elements;
 
 namespace BH.Engine.External.TDRepo
 {
     public static partial class Compute
     {
         [Description("Returns a BHoM mesh representation for the BHoM Bar.")]
-        public static IGeometry BHoMRepresentation(this Bar bar, DisplayOptions displayOptions = null)
+        public static BH.oM.Geometry.Mesh MeshRepresentation(this Panel panel, DisplayOptions displayOptions = null)
         {
-            if (displayOptions == null)
-                displayOptions = new DisplayOptions();
+            Rhino.Geometry.Mesh joinedMesh = new Rhino.Geometry.Mesh();
 
-            if (displayOptions.DetailedBars)
-                return RhinoMeshRepresentation(bar).FromRhino();
-            else
-            {
-                //returns the piped centreline.
-                return Rhino.Geometry.Mesh.CreateFromCurvePipe(bar.Centreline().ToRhino().ToNurbsCurve(), 0.2, 3, 1, Rhino.Geometry.MeshPipeCapStyle.None, true).FromRhino();
-            }
+            //var externalEdgeLines = panel.ExternalEdges.Select(e => BH.Engine.Geometry.Create.Line(e.Curve.IStartPoint(), e.Curve.IEndPoint())).ToList();
+            //BH.Engine.Geometry.Compute.Join(joinedCurves);
+
+            //List <PlanarSurface> surfaces = BH.Engine.Geometry.Create.PlanarSurface(panel.ExternalEdges.Select(e => e.Curve).ToList());
+
+            //List<Rhino.Geometry.Mesh> rhinoMeshes = surfaces.SelectMany(srf => 
+            //        Rhino.Geometry.Mesh.CreateFromBrep(srf.ToRhino(), Rhino.Geometry.MeshingParameters.Minimal)
+            //    ).ToList();
+
+            //joinedMesh.Append(rhinoMeshes);
+
+            var rhinoEdges = panel.ExternalEdges.Select(e => e.Curve.IToRhino());
+            var joinedEdges = Rhino.Geometry.Curve.JoinCurves(rhinoEdges).OrderBy(c => c.GetLength());
+            joinedMesh = Rhino.Geometry.Mesh.CreateFromPlanarBoundary(joinedEdges.First(), Rhino.Geometry.MeshingParameters.Minimal);
+
+            return joinedMesh.FromRhino();
         }
 
-        [Description("Returns a RHINO mesh representation for the BHoM Bar.")]
-        private static Rhino.Geometry.Mesh RhinoMeshRepresentation(this Bar bar)
-        {
-            // Gets the BH.oM.Geometry.Extrusion out of the Bar. If the profile is made of two curves (e.g. I section), selects only the outermost.
-            var barOutermostExtrusion = bar.Extrude(false).Cast<Extrusion>().OrderBy(extr => extr.Curve.IArea()).First();
-
-            // Obtains the Rhino extrusion.
-            Rhino.Geometry.Surface rhinoExtrusion = Rhino.Geometry.Extrusion.CreateExtrusion(barOutermostExtrusion.Curve.IToRhino(), (Rhino.Geometry.Vector3d)barOutermostExtrusion.Direction.IToRhino());
-
-            // The mesh here for some reason comes out really bad. It would be better to let speckle handle it.
-            Rhino.Geometry.Mesh mesh = Rhino.Geometry.Mesh.CreateFromSurface(rhinoExtrusion, Rhino.Geometry.MeshingParameters.Minimal);
-
-            //// Add the endnodes representations.
-            mesh.Append(bar.StartNode.RhinoMeshRepresentation());
-            mesh.Append(bar.EndNode.RhinoMeshRepresentation());
-
-            return mesh;
-        }
+      
     }
 }
 

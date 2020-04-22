@@ -33,30 +33,50 @@ using BH.oM.Geometry;
 using BH.Engine.Base;
 using System.ComponentModel;
 using BH.oM.External.TDRepo;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace BH.Engine.External.TDRepo
 {
     public static partial class Compute
     {
-        // Fallback case
-        public static BH.oM.Geometry.Mesh MeshRepresentation(IObject obj, DisplayOptions displayOptions = null)
+        public static Dictionary<string, object> FlattenJsonToDictionary(string json)
         {
-            if (obj is BH.oM.Geometry.Mesh)
-                return obj as BH.oM.Geometry.Mesh;
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            JToken token = JToken.Parse(json);
+            FillDictionaryFromJToken(dict, token, "");
+            return dict;
+        }
 
-            BH.oM.Geometry.Mesh meshRepresentation = Compute.MeshRepresentation(obj as dynamic, displayOptions);
+        private static void FillDictionaryFromJToken(Dictionary<string, object> dict, JToken token, string prefix)
+        {
+            switch (token.Type)
+            {
+                case JTokenType.Object:
+                    foreach (JProperty prop in token.Children<JProperty>())
+                    {
+                        FillDictionaryFromJToken(dict, prop.Value, Join(prefix, prop.Name));
+                    }
+                    break;
 
-            if (meshRepresentation != null)
-                return meshRepresentation;
+                case JTokenType.Array:
+                    int index = 0;
+                    foreach (JToken value in token.Children())
+                    {
+                        FillDictionaryFromJToken(dict, value, Join(prefix, index.ToString()));
+                        index++;
+                    }
+                    break;
 
-            // Else, see if we can get some BHoM geometry out of the BHoMObject itself to represent it.
-            IGeometry geom = (obj as IBHoMObject)?.IGeometry();
-            if (geom != null)
-                meshRepresentation = Convert.FromBHoM(geom as dynamic);
+                default:
+                    dict.Add(prefix, ((JValue)token).Value);
+                    break;
+            }
+        }
 
-
-            BH.Engine.Reflection.Compute.RecordError("Couldn't compute the Mesh representation out of the provided bhom representation object.");
-            return null;
+        private static string Join(string prefix, string name)
+        {
+            return (string.IsNullOrEmpty(prefix) ? name : prefix + "." + name);
         }
     }
 }

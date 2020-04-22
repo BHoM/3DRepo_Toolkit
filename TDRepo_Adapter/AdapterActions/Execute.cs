@@ -44,7 +44,7 @@ namespace BH.Adapter.TDRepo
 
         public Output<List<object>, bool> Execute(WriteBIMFileCommand cmd, ActionConfig actionConfig = null)
         {
-            string filePath = WriteBIMFile(cmd.objectsToWrite, cmd.Filepath, cmd.Filename);
+            string filePath = WriteBIMFile(cmd.objectsToWrite, cmd.Filepath, cmd.Filename, cmd.DisplayOptions);
 
             return new Output<List<object>, bool> { Item1 = new List<object>(){ filePath }, Item2 = true };
         }
