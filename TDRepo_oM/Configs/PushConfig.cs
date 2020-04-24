@@ -29,13 +29,25 @@ using BH.oM.Base;
 using BH.oM.Adapter;
 using BH.oM.TDRepo;
 using System.ComponentModel;
+using System.IO;
 
 namespace BH.oM.External.TDRepo
 {
-    public class TDRepoActionConfig : ActionConfig
+    public class PushConfig : ActionConfig
     {
         [Description("Sets whether to create (export) models following the .BIM format convention." +
             "If false, file export follows .obj convention (no material).")]
-        public bool BIMformatCreate { get; set; } = true;
+        public bool PushBIMFormat { get; set; } = true;
+
+        [Description("Directory where to save the .BIM file that is to be uploaded.")]
+        public string Directory { get; set; } = Path.Combine("C:\\temp", "3DRepoToolkitBIMFiles");
+
+        [Description("Name of the .BIM file that is to be uploaded.")]
+        public string FileName { get; set; } = Guid.NewGuid().ToString();
+
+        [Description("Toggles whether to delete or keep the .BIM file once it is uploaded.")]
+        public bool KeepBIMFile { get; set; } = true;
+
+        public DisplayOptions DisplayOptions { get; set; } = new DisplayOptions();
     }
 }

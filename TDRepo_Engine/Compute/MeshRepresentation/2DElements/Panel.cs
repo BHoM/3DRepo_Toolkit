@@ -37,43 +37,19 @@ using BH.Engine.Structure;
 using BH.Engine.Rhinoceros;
 using BH.oM.Structure.Constraints;
 using BH.oM.External.TDRepo;
+using BH.oM.Analytical.Elements;
 
 namespace BH.Engine.External.TDRepo
 {
     public static partial class Compute
     {
-        [Description("Returns a BHoM mesh representation for the BHoM Bar.")]
-        public static BH.oM.Geometry.Mesh MeshRepresentation(this Bar bar, DisplayOptions displayOptions = null)
+        [Description("Returns a BHoM mesh representation for the BHoM Panel.")]
+        public static BH.oM.Geometry.Mesh MeshRepresentation(this Panel panel, DisplayOptions displayOptions = null)
         {
-            if (displayOptions == null)
-                displayOptions = new DisplayOptions();
-
-            if (displayOptions.DetailedBars)
-                return RhinoMeshRepresentation(bar).FromRhino();
+            if (displayOptions.Detailed2DElements)
+                return panel.IGeometry().IBounds().MeshRepresentation();
             else
-            {
-                //returns the piped centreline.
-                return Rhino.Geometry.Mesh.CreateFromCurvePipe(bar.Centreline().ToRhino().ToNurbsCurve(), 0.01, 3, 1, Rhino.Geometry.MeshPipeCapStyle.None, true).FromRhino();
-            }
-        }
-
-        [Description("Returns a RHINO mesh representation for the BHoM Bar.")]
-        private static Rhino.Geometry.Mesh RhinoMeshRepresentation(this Bar bar)
-        {
-            // Gets the BH.oM.Geometry.Extrusion out of the Bar. If the profile is made of two curves (e.g. I section), selects only the outermost.
-            var barOutermostExtrusion = bar.Extrude(false).Cast<Extrusion>().OrderBy(extr => extr.Curve.IArea()).First();
-
-            // Obtains the Rhino extrusion.
-            Rhino.Geometry.Surface rhinoExtrusion = Rhino.Geometry.Extrusion.CreateExtrusion(barOutermostExtrusion.Curve.IToRhino(), (Rhino.Geometry.Vector3d)barOutermostExtrusion.Direction.IToRhino());
-
-            // The mesh here for some reason comes out really bad. It would be better to let speckle handle it.
-            Rhino.Geometry.Mesh mesh = Rhino.Geometry.Mesh.CreateFromSurface(rhinoExtrusion, Rhino.Geometry.MeshingParameters.Minimal);
-
-            //// Add the endnodes representations.
-            mesh.Append(bar.StartNode.RhinoMeshRepresentation());
-            mesh.Append(bar.EndNode.RhinoMeshRepresentation());
-
-            return mesh;
+                return (panel.Geometry() as PlanarSurface).MeshRepresentation();
         }
     }
 }
