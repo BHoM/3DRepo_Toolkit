@@ -44,29 +44,18 @@ namespace BH.Engine.External.TDRepo
     public static partial class Compute
     {
         [Description("Returns a BHoM mesh representation for the BHoM Bar.")]
-        public static BH.oM.Geometry.Mesh MeshRepresentation(this Panel panel, DisplayOptions displayOptions = null)
+        public static BH.oM.Geometry.Mesh MeshRepresentation(this Cone cone, DisplayOptions displayOptions = null)
         {
-            Rhino.Geometry.Mesh joinedMesh = new Rhino.Geometry.Mesh();
+            displayOptions = displayOptions ?? new DisplayOptions();
 
-            //var externalEdgeLines = panel.ExternalEdges.Select(e => BH.Engine.Geometry.Create.Line(e.Curve.IStartPoint(), e.Curve.IEndPoint())).ToList();
-            //BH.Engine.Geometry.Compute.Join(joinedCurves);
-
-            //List <PlanarSurface> surfaces = BH.Engine.Geometry.Create.PlanarSurface(panel.ExternalEdges.Select(e => e.Curve).ToList());
-
-            //List<Rhino.Geometry.Mesh> rhinoMeshes = surfaces.SelectMany(srf => 
-            //        Rhino.Geometry.Mesh.CreateFromBrep(srf.ToRhino(), Rhino.Geometry.MeshingParameters.Minimal)
-            //    ).ToList();
-
-            //joinedMesh.Append(rhinoMeshes);
-
-            var rhinoEdges = panel.ExternalEdges.Select(e => e.Curve.IToRhino());
-            var joinedEdges = Rhino.Geometry.Curve.JoinCurves(rhinoEdges).OrderBy(c => c.GetLength());
-            joinedMesh = Rhino.Geometry.Mesh.CreateFromPlanarBoundary(joinedEdges.First(), Rhino.Geometry.MeshingParameters.Minimal);
-
-            return joinedMesh.FromRhino();
+            return cone.RhinoMeshRepresentation(displayOptions).FromRhino();
         }
 
-      
+        public static Rhino.Geometry.Mesh RhinoMeshRepresentation(this Cone cone, DisplayOptions displayOptions = null)
+        {
+            return Rhino.Geometry.Mesh.CreateFromCone(cone.ToRhino(), 1, 4);
+        }
     }
+
 }
 

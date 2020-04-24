@@ -38,8 +38,12 @@ namespace BH.oM.TDRepo
             sceneCreator.Add(mesh);
         }
 
-        public bool Commit(ref string error) {
-            var filePath = sceneCreator.CreateFile();
+        public string WriteOBJFile()
+        {
+            return sceneCreator.WriteObjFile();
+        }
+
+        public bool Commit(string filePath, ref string error) {
             bool success;
             try
             {

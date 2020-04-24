@@ -1,6 +1,6 @@
-﻿/*
+﻿﻿/*
  * This file is part of the Buildings and Habitats object Model (BHoM)
- * Copyright (c) 2015 - 2020, the respective contributors. All rights reserved.
+ * Copyright (c) 2015 - 2019, the respective contributors. All rights reserved.
  *
  * Each contributor holds copyright over their respective contributions.
  * The project versioning (Git) records all such contribution source information.
@@ -25,42 +25,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.Adapter;
-using BH.Engine.TDRepo;
-using BH.oM.Adapter;
+using BHG = BH.oM.Geometry;
 using BH.oM.Base;
-using BH.oM.Reflection;
-using BH.oM.TDRepo;
-using BH.oM.External.TDRepo.Commands;
+using BH.Engine.Geometry;
+using System.Reflection;
+using BH.oM.Geometry;
+using BH.Engine.Base;
+using System.ComponentModel;
 using BH.oM.External.TDRepo;
-using System.IO;
 
-namespace BH.Adapter.TDRepo
+namespace BH.Engine.External.TDRepo
 {
-    public partial class TDRepoAdapter
+    public static partial class Compute
     {
-        public override List<object> Push(IEnumerable<object> objects, string tag = "", PushType pushType = PushType.AdapterDefault, ActionConfig actionConfig = null)
+        // Fallback case
+        private static Rhino.Geometry.Mesh MeshRepresentation(this IBHoMObject bHoMObject, DisplayOptions displayOptions)
         {
-            PushConfig pushConfig = actionConfig as PushConfig ?? new PushConfig();
+            BH.Engine.Reflection.Compute.RecordError($"Failed to find a method to compute the Mesh representation of {bHoMObject.GetType().Name}");
 
-            if (!pushConfig.PushBIMFormat)
-            {
-                UploadOBJ(objects); // Upload using the (soon to be completely superseded) obj format
-
-                return new List<object>();
-            }
-
-            // Write .BIM file and commit
-            string error = "";
-            string BIMFilePath = WriteBIMFile(objects.OfType<IObject>().ToList(), pushConfig.Directory, pushConfig.FileName, pushConfig.DisplayOptions);
-
-            bool success = controller.Commit(BIMFilePath, ref error);
-
-            if (!success)
-                BH.Engine.Reflection.Compute.RecordError($"Error on uploading data to 3DRepo:\n{error}");
-
-            return objects.ToList();
+            return null;
         }
 
+        // Fallback case
+        private static Rhino.Geometry.Mesh RhinoMeshRepresentation(this IObject bHoMObject, DisplayOptions displayOptions)
+        {
+            BH.Engine.Reflection.Compute.RecordError($"Failed to find a method to compute the Rhino Mesh out of {bHoMObject.GetType().Name}");
+            return null;
+        }
     }
 }

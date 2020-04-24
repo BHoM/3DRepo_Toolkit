@@ -37,7 +37,7 @@ namespace BH.oM.TDRepo
             meshes.Clear();
         }
 
-        internal string CreateFile() {
+        internal string WriteObjFile() {
             // This current creates a .obj (no .mtl) for the sake of simplicity.
             // For full support this really should be generating a .bim to support rich BIM data.
             string filePath = Path.GetTempPath() + System.Guid.NewGuid() + ".obj";

@@ -41,7 +41,7 @@ namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter : BHoMAdapter
     {
-        public static string WriteBIMFile(List<IObject> objectsToWrite, string directory = null, string fileName = null, DisplayOptions displayOptions = null)
+        private static string WriteBIMFile(List<IObject> objectsToWrite, string directory = null, string fileName = null, DisplayOptions displayOptions = null)
         {
             // --------------------------------------------- //
             //                    Set-up                     //

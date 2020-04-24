@@ -1,6 +1,6 @@
 ﻿/*
  * This file is part of the Buildings and Habitats object Model (BHoM)
- * Copyright (c) 2015 - 2020, the respective contributors. All rights reserved.
+ * Copyright (c) 2015 - 2019, the respective contributors. All rights reserved.
  *
  * Each contributor holds copyright over their respective contributions.
  * The project versioning (Git) records all such contribution source information.
@@ -25,42 +25,52 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.Adapter;
-using BH.Engine.TDRepo;
-using BH.oM.Adapter;
+using BHG = BH.oM.Geometry;
 using BH.oM.Base;
-using BH.oM.Reflection;
-using BH.oM.TDRepo;
-using BH.oM.External.TDRepo.Commands;
+using BH.Engine.Geometry;
+using System.Reflection;
+using BH.oM.Geometry;
+using BH.Engine.Base;
+using System.ComponentModel;
+using BH.oM.Structure.Elements;
+using BH.Engine.Structure;
+using BH.Engine.Rhinoceros;
+using BH.oM.Structure.Constraints;
 using BH.oM.External.TDRepo;
-using System.IO;
+using BH.oM.Analytical.Elements;
 
-namespace BH.Adapter.TDRepo
+namespace BH.Engine.External.TDRepo
 {
-    public partial class TDRepoAdapter
+    public static partial class Compute
     {
-        public override List<object> Push(IEnumerable<object> objects, string tag = "", PushType pushType = PushType.AdapterDefault, ActionConfig actionConfig = null)
+        [Description("Returns a BHoM mesh representation for the BHoM Bar.")]
+        public static BH.oM.Geometry.Mesh MeshRepresentation(this CompositeGeometry compositeGeometry, DisplayOptions displayOptions = null)
         {
-            PushConfig pushConfig = actionConfig as PushConfig ?? new PushConfig();
+            displayOptions = displayOptions ?? new DisplayOptions();
 
-            if (!pushConfig.PushBIMFormat)
+            List<Mesh> meshes = new List<Mesh>();
+
+            foreach (var geom in compositeGeometry.Elements)
             {
-                UploadOBJ(objects); // Upload using the (soon to be completely superseded) obj format
-
-                return new List<object>();
+                meshes.Add(MeshRepresentation(geom as dynamic, displayOptions));
             }
 
-            // Write .BIM file and commit
-            string error = "";
-            string BIMFilePath = WriteBIMFile(objects.OfType<IObject>().ToList(), pushConfig.Directory, pushConfig.FileName, pushConfig.DisplayOptions);
 
-            bool success = controller.Commit(BIMFilePath, ref error);
-
-            if (!success)
-                BH.Engine.Reflection.Compute.RecordError($"Error on uploading data to 3DRepo:\n{error}");
-
-            return objects.ToList();
+            return compositeGeometry.RhinoMeshRepresentation(displayOptions).FromRhino();
         }
 
+        public static Rhino.Geometry.Mesh RhinoMeshRepresentation(this CompositeGeometry compositeGeometry, DisplayOptions displayOptions = null)
+        {
+            Rhino.Geometry.Mesh compositeMesh = new Rhino.Geometry.Mesh();
+
+            foreach (var geom in compositeGeometry.Elements)
+            {
+                compositeMesh.Append(RhinoMeshRepresentation(geom as dynamic, displayOptions));
+            }
+
+            return compositeMesh;
+        }
     }
+
 }
+

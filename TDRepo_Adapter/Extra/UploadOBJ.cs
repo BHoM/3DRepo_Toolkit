@@ -1,6 +1,6 @@
-﻿﻿/*
+/*
  * This file is part of the Buildings and Habitats object Model (BHoM)
- * Copyright (c) 2015 - 2019, the respective contributors. All rights reserved.
+ * Copyright (c) 2015 - 2020, the respective contributors. All rights reserved.
  *
  * Each contributor holds copyright over their respective contributions.
  * The project versioning (Git) records all such contribution source information.
@@ -25,23 +25,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BHG = BH.oM.Geometry;
+using BH.oM.Structure.Elements;
 using BH.oM.Base;
-using BH.Engine.Geometry;
-using System.Reflection;
-using BH.oM.Geometry;
-using BH.Engine.Base;
-using System.ComponentModel;
+using BH.oM.Adapter;
+using BH.oM.TDRepo;
 using BH.oM.External.TDRepo;
 
-namespace BH.Engine.External.TDRepo
+namespace BH.Adapter.TDRepo
 {
-    public static partial class Compute
+    public partial class TDRepoAdapter
     {
-        // Fallback case
-        private static Rhino.Geometry.Mesh MeshRepresentation(this IBHoMObject bHoMObject, DisplayOptions displayOptions)
+        /***************************************************/
+        /**** Private methods                           ****/
+        /***************************************************/
+
+        private bool UploadOBJ<T>(IEnumerable<T> objs)
         {
-            return null;
+            var meshes = objs.OfType<oM.Geometry.Mesh>();
+
+            if (meshes.Count() != objs.Count())
+                BH.Engine.Reflection.Compute.RecordWarning($"The OBJ file format supports only Push of {typeof(oM.Geometry.Mesh).Name}.");
+
+            // Add to the scene
+            foreach (var mesh in meshes)
+            {
+                if (mesh == null)
+                    continue;
+
+                controller.AddToScene(BH.Engine.External.TDRepo.Convert.FromBHoM(mesh));
+            }
+
+
+            // Write OBJ file and commit
+            string error = "";
+            string OBJFilePath = controller.WriteOBJFile();
+
+            bool success = controller.Commit(OBJFilePath, ref error);
+
+            if (!success)
+                BH.Engine.Reflection.Compute.RecordError($"Error on uploading data to 3DRepo:\n{error}");
+
+            return true;
         }
     }
 }
+

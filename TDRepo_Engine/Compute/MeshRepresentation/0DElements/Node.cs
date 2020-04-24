@@ -46,79 +46,64 @@ namespace BH.Engine.External.TDRepo
         [Description("Returns a BHoM Mesh representation for the Node based on its DOF, e.g. a box for fully fixed, a cone with sphere on top for pin.")]
         public static BH.oM.Geometry.Mesh MeshRepresentation(this Node node, DisplayOptions displayOptions = null)
         {
-            if (displayOptions == null)
-                displayOptions = new DisplayOptions();
+            displayOptions = displayOptions ?? new DisplayOptions();
 
-            if (displayOptions.DetailedNodes)
-                return RhinoMeshRepresentation(node).FromRhino();
-            else
-                return node.Position().RhinoMeshRepresentation().FromRhino(); // returns the point.
-        }
-
-        private static Rhino.Geometry.Mesh RhinoMeshRepresentation(this Node node, bool detailed = true)
-        {
             if (node.Position == null)
             {
                 Reflection.Compute.RecordError("Specified Node does not have a position defined.");
                 return null;
             }
 
-            var point = (Rhino.Geometry.Point3d)node.Position.IToRhino();
-            double scale = 1;
+            if (node.Support == null || !displayOptions.Detailed1DElements) // If there is no support information, or by choice...
+                return node.Position().MeshRepresentation(displayOptions); // ...just return the representation for the point.
 
-            // Mesh to represent the node constraint
-            Rhino.Geometry.Mesh mesh = null;
+            // -------------------------------------------- //
+            // -------- Compute the representation -------- //
+            // -------------------------------------------- //
 
-            if (node.Support == null)
-                return new Rhino.Geometry.Mesh();
-
-            // Different 3d representation for different DOF
-            var fixedDOFTypes = new[] { oM.Structure.Constraints.DOFType.Fixed, oM.Structure.Constraints.DOFType.FixedNegative, oM.Structure.Constraints.DOFType.FixedPositive,
+            // Different representation for different DOF type.
+            DOFType[] fixedDOFTypes = new[] { oM.Structure.Constraints.DOFType.Fixed, oM.Structure.Constraints.DOFType.FixedNegative, oM.Structure.Constraints.DOFType.FixedPositive,
             oM.Structure.Constraints.DOFType.Spring, oM.Structure.Constraints.DOFType.Friction, oM.Structure.Constraints.DOFType.Damped, oM.Structure.Constraints.DOFType.SpringPositive, oM.Structure.Constraints.DOFType.SpringNegative};
+
             bool fixedToTranslation = fixedDOFTypes.Contains(node.Support.TranslationX) || fixedDOFTypes.Contains(node.Support.TranslationY) || fixedDOFTypes.Contains(node.Support.TranslationZ);
             bool fixedToRotation = fixedDOFTypes.Contains(node.Support.RotationX) || fixedDOFTypes.Contains(node.Support.RotationY) || fixedDOFTypes.Contains(node.Support.RotationZ);
 
             if (fixedToTranslation && fixedToRotation)
             {
                 // Fully fixed: box
-                double boxDims = 0.12 * scale;
-                var rhinoBox = new Rhino.Geometry.BoundingBox(new[] { point, new Rhino.Geometry.Point3d(point.X + 2 * boxDims, point.Y + 2 * boxDims, point.Z), new Rhino.Geometry.Point3d(point.X - 2 * boxDims, point.Y - 2 * boxDims, point.Z - 3 * boxDims) });
-                mesh = Rhino.Geometry.Mesh.CreateFromBox(rhinoBox, 1, 1, 1);
+                double boxDims = 0.12 * displayOptions.Element0DScale;
+
+                var centrePoint = node.Position;
+                BoundingBox bbox = BH.Engine.Geometry.Create.BoundingBox(
+                    new Point() { X = centrePoint.X + 2 * boxDims, Y = centrePoint.Y + 2 * boxDims, Z = centrePoint.Z },
+                    new Point() { X = centrePoint.X - 2 * boxDims, Y = centrePoint.Y - 2 * boxDims, Z = centrePoint.Z - 3 * boxDims });
+
+                return MeshRepresentation(bbox);
             }
-            else if (fixedToTranslation && !fixedToRotation)
+
+            if (fixedToTranslation && !fixedToRotation)
             {
                 // Pin: cone + sphere
-                double radius = 0.12 * scale;
+                double radius = 0.12 * displayOptions.Element0DScale;
 
-                var rhinoSphere = new Rhino.Geometry.Sphere(new Rhino.Geometry.Plane(point, new Rhino.Geometry.Vector3d(0, 0, 1)), radius);
-                mesh = Rhino.Geometry.Mesh.CreateFromSphere(rhinoSphere, 8, 4);
+                CompositeGeometry compositeGeometry = new CompositeGeometry();
 
-                var xyPlane = new Rhino.Geometry.Plane(new Rhino.Geometry.Point3d(point.X, point.Y, point.Z - radius), new Rhino.Geometry.Vector3d(0, 0, -1));
-                Rhino.Geometry.Cone cone = new Rhino.Geometry.Cone(xyPlane, 4 * radius, 3 * radius);
-                var coneMesh = Rhino.Geometry.Mesh.CreateFromCone(cone, 1, 4);
+                Sphere sphere = BH.Engine.Geometry.Create.Sphere(node.Position(), radius);
+                compositeGeometry.Elements.Add(sphere);
 
-                mesh.Append(coneMesh);
+                Cone cone = BH.Engine.Geometry.Create.Cone(
+                    new Point() { X = node.Position.X, Y = node.Position.Y, Z = node.Position.Z - radius },
+                    new Vector() { X = 0, Y = 0, Z = -1 },
+                    4 * radius,
+                    3 * radius
+                    );
+                compositeGeometry.Elements.Add(cone);
+
+                return compositeGeometry.MeshRepresentation();
             }
-            else
-            {
-                // Visualise as sphere?
-            }
 
-
-            BH.Engine.Structure.Create.Constraint6DOF(false, false, false, false, false, false);
-
-            return mesh;
-        }
-
-
-        private static Rhino.Geometry.Mesh RhinoMeshRepresentation(this Point point, double scale = 1)
-        {
-            // Make a little sphere
-            double radius = 0.12 * scale;
-            var rhinoSphere = new Rhino.Geometry.Sphere(new Rhino.Geometry.Plane(point.ToRhino(), new Rhino.Geometry.Vector3d(0, 0, 1)), radius);
-            var mesh = Rhino.Geometry.Mesh.CreateFromSphere(rhinoSphere, 8, 4);
-
-            return mesh;
+            // Else: we could add more for other DOFs; for now just return a sphere.
+            return node.RhinoMeshRepresentation(displayOptions).FromRhino();
         }
     }
 }

@@ -31,17 +31,26 @@ using System.Threading.Tasks;
 
 namespace BH.oM.External.TDRepo
 {
+    [Description("Controls the representational Mesh assigned to various object types.")]
     public class DisplayOptions : IObject
     {
-        [Description("If true, the bars are meshes extruded using their Section property.\n" +
+        [Description("If true, 0D elements are detailed. E.g. Points are represented by spheres; Node representation includes the support condition (e.g. pyramid with sphere on top for a Pin).\n" +
             "CAREFUL: heavier meshes might increase upload time over the Timeout limit.")]
-        public bool DetailedBars { get; set; } = false;
-        [Description("If true, nodes are meshes representing the support condition (e.g. cone with sphere on top for a Pin).\n" +
+        public bool Detailed0DElements { get; set; } = true;
+
+        [Description("Scale the Element0D representation.")]
+        public double Element0DScale { get; set; } = 1;
+
+        [Description("If true, 1D elements are detailed. E.g. the bars are extruded using their Section property.\n" +
             "CAREFUL: heavier meshes might increase upload time over the Timeout limit.")]
-        public bool DetailedNodes { get; set; } = true;
+        public bool Detailed1DElements { get; set; } = false;
+
+        [Description("If true, 2D elements are detailed. E.g. panels are represented as boxes with their thickness.\n" +
+            "CAREFUL: heavier meshes might increase upload time over the Timeout limit.")]
+        public bool Detailed2DElements { get; set; } = false;
 
         [Description("Insert the key of the BHoMObjects' CustomData dictionary that contains the color information.")]
-        public string CustomDataColorKey { get; set; }
+        public string CustomDataColorKey { get; set; } = "Colour";
     }
 }
 
