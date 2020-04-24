@@ -42,24 +42,23 @@ namespace BH.Adapter.TDRepo
 
         //Add any applicable constructors here, such as linking to a specific file or anything else as well as linking to that file through the (if existing) com link via the API
         [Input("teamspace", "Name of the teamspace owning the Model.")]
-        [Input("modelId", "Id of the model.")]
-        [Input("modelId", "Id of the model within the teamspace.")]
+        [Input("modelId", "Id of the model within the teamspace. Can be found on the Dashboard website by selecting 'Model Settings'.")]
         [Input("userAPIKey", "User API key to allow the upload through the 3D Repo Web API.\n" +
-            "This must be generated for the specific model from the Model Manager website. See https://www.youtube.com/watch?v=prio5r5zGGc")] // or https://3drepo.github.io/3drepo.io/#api-User-generateApiKey
+            "This must be generated per individual user from the Dashboard website: go in 'User Profile' to find it.")] // Also see https://www.youtube.com/watch?v=prio5r5zGGc or https://3drepo.github.io/3drepo.io/#api-User-generateApiKey
         [Input("url", "Address of the web server.")]
-        public TDRepoAdapter(string teamspace = null, string modelId = null, string apiKey = null, string url = "https://api1.www.3drepo.io/api")
+        public TDRepoAdapter(string teamspace = null, string modelId = null, string userAPIKey = null, string url = "https://api1.www.3drepo.io/api")
         {
             m_AdapterSettings.DefaultPushType = oM.Adapter.PushType.CreateOnly;
 
-            if (string.IsNullOrWhiteSpace(teamspace) || string.IsNullOrWhiteSpace(modelId) || string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(url))
+            if (string.IsNullOrWhiteSpace(teamspace) || string.IsNullOrWhiteSpace(modelId) || string.IsNullOrWhiteSpace(userAPIKey) || string.IsNullOrWhiteSpace(url))
             {
-                BH.Engine.Reflection.Compute.RecordWarning("Some of the required inputs to connect to the 3D Repo server is missing or invalid.\n" +
+                BH.Engine.Reflection.Compute.RecordWarning("Some of the required inputs to connect to the 3D Repo server are missing or invalid.\n" +
                     "You can still use the Adapter with the Execute action, which allows you to save a .BIM file that you can upload manually on 3DRepo.");
             }
+            else
+                BH.Engine.Reflection.Compute.RecordNote($"Note: you should be using your own `userAPIKey`, see input description.\nSharing the user API Key is DANGEROUS.\nIf you didn't input your own key, you might be doing unauthorized changes.");
 
-            BH.Engine.Reflection.Compute.RecordNote($"Establishing repo controller with:\n URL: {url}\nApi key: {apiKey}\nTeamspace: {teamspace}\nModelID: {modelId}");
-
-            controller = new RepoController(url, apiKey, teamspace, modelId);
+            controller = new RepoController(url, userAPIKey, teamspace, modelId);
 
             AdapterIdName = BH.Engine.TDRepo.Convert.AdapterIdName;   //Set the "AdapterId" to "SoftwareName_id". Generally stored as a constant string in the convert class in the SoftwareName_Engine
         }
