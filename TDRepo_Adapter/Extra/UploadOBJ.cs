@@ -39,7 +39,7 @@ namespace BH.Adapter.TDRepo
         /**** Private methods                           ****/
         /***************************************************/
 
-        private bool UploadOBJ<T>(IEnumerable<T> objs)
+        private bool UploadOBJ<T>(IEnumerable<T> objs) where T : IObject
         {
             var meshes = objs.OfType<oM.Geometry.Mesh>();
 

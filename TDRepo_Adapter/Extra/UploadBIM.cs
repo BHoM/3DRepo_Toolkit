@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This file is part of the Buildings and Habitats object Model (BHoM)
  * Copyright (c) 2015 - 2020, the respective contributors. All rights reserved.
  *
@@ -25,36 +25,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.Adapter;
-using BH.Engine.TDRepo;
-using BH.oM.Adapter;
+using BH.oM.Structure.Elements;
 using BH.oM.Base;
-using BH.oM.Reflection;
+using BH.oM.Adapter;
 using BH.oM.TDRepo;
-using BH.oM.External.TDRepo.Commands;
 using BH.oM.External.TDRepo;
-using System.IO;
 
 namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter
     {
-        public override List<object> Push(IEnumerable<object> objects, string tag = "", PushType pushType = PushType.AdapterDefault, ActionConfig actionConfig = null)
+        /***************************************************/
+        /**** Private methods                           ****/
+        /***************************************************/
+
+        private bool UploadBIM(IEnumerable<IObject> objs, PushConfig pushConfig)
         {
-            PushConfig pushConfig = actionConfig as PushConfig ?? new PushConfig();
+            // Write .BIM file and commit
+            string error = "";
+            string BIMFilePath = WriteBIMFile(objs.ToList(), pushConfig.Directory, pushConfig.FileName, pushConfig.DisplayOptions);
 
-            var iObjs = objects.OfType<IObject>();
+            bool success = controller.Commit(BIMFilePath, ref error);
 
-            if (iObjs.Count() != objects.Count())
-                BH.Engine.Reflection.Compute.RecordError("Push currently supports only objects implementing BH.oM.IObject.");
+            if (!success)
+                BH.Engine.Reflection.Compute.RecordError($"Error on uploading data to 3DRepo:\n{error}");
 
-            if (pushConfig.PushBIMFormat)
-                UploadBIM(iObjs, pushConfig);
-            else
-                UploadOBJ(iObjs); // Upload using the (soon to be completely superseded) obj format
-
-            return new List<object>();
+            return success;
         }
-
     }
 }
+
