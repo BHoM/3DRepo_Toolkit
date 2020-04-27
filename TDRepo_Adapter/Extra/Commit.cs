@@ -40,7 +40,7 @@ namespace BH.Adapter.TDRepo
             }
             catch (System.Exception e)
             {
-                BH.Engine.Reflection.Compute.RecordError($"Committing to server failed. Error:\n{e.ToString()}");
+                BH.Engine.Reflection.Compute.RecordError($"Committing to server failed. Error:\n{e.Message}");
                 success = false;
             }
 
@@ -58,7 +58,11 @@ namespace BH.Adapter.TDRepo
             Dictionary<string, object> postParameters = new Dictionary<string, object>();
             postParameters.Add("file", new FileParameter(data, filePath, "application/octet-stream"));
 
-            string uri = host + "/" + teamspace + "/" + modelId + "/upload?key=" + apiKey;
+            Uri result = null;
+
+            Uri.TryCreate(new Uri(host), $"/{teamspace}/{modelId}/upload?key={apiKey}", out result);
+
+            string uri = result.ToString();
 
             // Create request and receive response
             HttpWebResponse webResponse = MultipartFormDataPost(uri, null, postParameters);
@@ -80,36 +84,6 @@ namespace BH.Adapter.TDRepo
             byte[] formData = GetMultipartFormData(postParameters, formDataBoundary);
 
             return PostForm(postUrl, userAgent, contentType, formData, cookies);
-        }
-
-        private static HttpWebResponse PostForm(string postUrl, string userAgent, string contentType, byte[] formData, CookieContainer cookies)
-        {
-            HttpWebRequest request = WebRequest.Create(postUrl) as HttpWebRequest;
-
-            if (request == null)
-            {
-                throw new NullReferenceException("request is not a http request");
-            }
-
-            // Set up the request properties.
-            request.Method = "POST";
-            request.ContentType = contentType;
-            request.CookieContainer = cookies;
-            request.ContentLength = formData.Length;
-
-            // You could add authentication here as well if needed:
-            // request.PreAuthenticate = true;
-            // request.AuthenticationLevel = System.Net.Security.AuthenticationLevel.MutualAuthRequested;
-            // request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.Default.GetBytes("username" + ":" + "password")));
-
-            // Send the form data to the request.
-            using (Stream requestStream = request.GetRequestStream())
-            {
-                requestStream.Write(formData, 0, formData.Length);
-                requestStream.Close();
-            }
-
-            return request.GetResponse() as HttpWebResponse;
         }
 
         private static byte[] GetMultipartFormData(Dictionary<string, object> postParameters, string boundary)
@@ -163,6 +137,36 @@ namespace BH.Adapter.TDRepo
             formDataStream.Close();
 
             return formData;
+        }
+
+        private static HttpWebResponse PostForm(string postUrl, string userAgent, string contentType, byte[] formData, CookieContainer cookies)
+        {
+            HttpWebRequest request = WebRequest.Create(postUrl) as HttpWebRequest;
+
+            if (request == null)
+            {
+                throw new NullReferenceException("request is not a http request");
+            }
+
+            // Set up the request properties.
+            request.Method = "POST";
+            request.ContentType = contentType;
+            request.CookieContainer = cookies;
+            request.ContentLength = formData.Length;
+
+            // You could add authentication here as well if needed:
+            // request.PreAuthenticate = true;
+            // request.AuthenticationLevel = System.Net.Security.AuthenticationLevel.MutualAuthRequested;
+            // request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.Default.GetBytes("username" + ":" + "password")));
+
+            // Send the form data to the request.
+            using (Stream requestStream = request.GetRequestStream())
+            {
+                requestStream.Write(formData, 0, formData.Length);
+                requestStream.Close();
+            }
+
+            return request.GetResponse() as HttpWebResponse;
         }
 
         private class FileParameter
