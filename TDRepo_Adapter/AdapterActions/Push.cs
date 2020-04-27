@@ -39,6 +39,12 @@ namespace BH.Adapter.TDRepo
     {
         public override List<object> Push(IEnumerable<object> objects, string tag = "", PushType pushType = PushType.AdapterDefault, ActionConfig actionConfig = null)
         {
+            if (string.IsNullOrWhiteSpace(m_host) || string.IsNullOrEmpty(m_teamspace) || string.IsNullOrEmpty(m_userAPIKey) || string.IsNullOrEmpty(m_modelId))
+            {
+                BH.Engine.Reflection.Compute.RecordError("One or more of the needed parameters in the TDRepoAdapter is missing or invalid (modelId, userAPIkey, etc).");
+                return new List<object>();
+            }
+
             PushConfig pushConfig = actionConfig as PushConfig ?? new PushConfig();
 
             var iObjs = objects.OfType<IObject>();
