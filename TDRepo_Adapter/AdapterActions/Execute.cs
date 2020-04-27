@@ -26,11 +26,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BH.Adapter;
-using BH.Engine.TDRepo;
 using BH.oM.Adapter;
 using BH.oM.Base;
 using BH.oM.Reflection;
-using BH.oM.TDRepo;
 using BH.oM.External.TDRepo.Commands;
 
 namespace BH.Adapter.TDRepo

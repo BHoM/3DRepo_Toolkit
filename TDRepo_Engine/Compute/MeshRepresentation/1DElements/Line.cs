@@ -36,22 +36,21 @@ using BH.oM.Structure.Elements;
 using BH.Engine.Structure;
 using BH.Engine.Rhinoceros;
 using BH.oM.Structure.Constraints;
-using BH.oM.External.TDRepo;
 
 namespace BH.Engine.External.TDRepo
 {
     public static partial class Compute
     {
         [Description("Returns a BHoM mesh representation for the BHoM Bar.")]
-        public static BH.oM.Geometry.Mesh MeshRepresentation(this Line line, DisplayOptions displayOptions = null)
+        public static BH.oM.Geometry.Mesh MeshRepresentation(this Line line, BH.oM.External.TDRepo.DisplayOptions displayOptions = null)
         {
-            displayOptions = displayOptions ?? new DisplayOptions();
+            displayOptions = displayOptions ?? new BH.oM.External.TDRepo.DisplayOptions();
 
             return line.RhinoMeshRepresentation(displayOptions).FromRhino();
         }
 
         [Description("Returns a RHINO mesh representation for the BHoM Bar.")]
-        private static Rhino.Geometry.Mesh RhinoMeshRepresentation(this Line line, DisplayOptions displayOptions)
+        private static Rhino.Geometry.Mesh RhinoMeshRepresentation(this Line line, BH.oM.External.TDRepo.DisplayOptions displayOptions)
         {
             // Returns the piped centreline.
             return Rhino.Geometry.Mesh.CreateFromCurvePipe(line.ToRhino().ToNurbsCurve(), 0.01, 3, 1, Rhino.Geometry.MeshPipeCapStyle.None, true); 

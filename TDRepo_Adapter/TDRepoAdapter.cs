@@ -26,10 +26,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BH.Adapter;
-using BH.Engine.TDRepo;
 using BH.oM.Base;
 using BH.oM.Reflection.Attributes;
-using BH.oM.TDRepo;
 
 namespace BH.Adapter.TDRepo
 {
@@ -58,9 +56,12 @@ namespace BH.Adapter.TDRepo
             else
                 BH.Engine.Reflection.Compute.RecordNote($"Note: you should be using your own `userAPIKey`, see input description.\nSharing the user API Key is DANGEROUS.\nIf you didn't input your own key, you might be doing unauthorized changes.");
 
-            controller = new RepoController(url, userAPIKey, teamspace, modelId);
+            m_host = url;
+            m_userAPIKey = userAPIKey;
+            m_teamspace = teamspace;
+            m_modelId = modelId;
 
-            AdapterIdName = BH.Engine.TDRepo.Convert.AdapterIdName;   //Set the "AdapterId" to "SoftwareName_id". Generally stored as a constant string in the convert class in the SoftwareName_Engine
+            AdapterIdName = Convert.AdapterIdName;   //Set the "AdapterId" to "SoftwareName_id". Generally stored as a constant string in the convert class in the SoftwareName_Engine
         }
 
 
@@ -68,14 +69,16 @@ namespace BH.Adapter.TDRepo
         /**** Private  Fields                           ****/
         /***************************************************/
 
-        //Add any comlink object as a private field here, example named:
+        private string m_host;
+        private string m_userAPIKey;
+        private string m_teamspace;
+        private string m_modelId;
+        private static Encoding m_encoding = Encoding.UTF8;
 
-        private RepoController controller;
+        List<BH.oM.External.TDRepo.Mesh> m_3DRepoMeshesForOBJexport = new List<BH.oM.External.TDRepo.Mesh>();
 
 
         /***************************************************/
-
-
     }
 }
 

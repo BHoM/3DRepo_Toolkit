@@ -36,7 +36,6 @@ using BH.oM.Structure.Elements;
 using BH.Engine.Structure;
 using BH.Engine.Rhinoceros;
 using BH.oM.Structure.Constraints;
-using BH.oM.External.TDRepo;
 
 namespace BH.Engine.External.TDRepo
 {
@@ -44,9 +43,9 @@ namespace BH.Engine.External.TDRepo
     {
 
         [Description("Returns a BHoM Mesh representation for the Node based on its DOF, e.g. a box for fully fixed, a cone with sphere on top for pin.")]
-        public static BH.oM.Geometry.Mesh MeshRepresentation(this Node node, DisplayOptions displayOptions = null)
+        public static BH.oM.Geometry.Mesh MeshRepresentation(this Node node, BH.oM.External.TDRepo.DisplayOptions displayOptions = null)
         {
-            displayOptions = displayOptions ?? new DisplayOptions();
+            displayOptions = displayOptions ?? new BH.oM.External.TDRepo.DisplayOptions();
 
             if (node.Position == null)
             {

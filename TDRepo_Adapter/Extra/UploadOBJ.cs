@@ -28,8 +28,8 @@ using System.Threading.Tasks;
 using BH.oM.Structure.Elements;
 using BH.oM.Base;
 using BH.oM.Adapter;
-using BH.oM.TDRepo;
 using BH.oM.External.TDRepo;
+using System.IO;
 
 namespace BH.Adapter.TDRepo
 {
@@ -39,33 +39,23 @@ namespace BH.Adapter.TDRepo
         /**** Private methods                           ****/
         /***************************************************/
 
-        private bool UploadOBJ<T>(IEnumerable<T> objs) where T : IObject
+        private bool UploadOBJ(IEnumerable<IObject> objs)
         {
-            var meshes = objs.OfType<oM.Geometry.Mesh>();
+            List<oM.Geometry.Mesh> meshes = objs.OfType<oM.Geometry.Mesh>().ToList();
 
             if (meshes.Count() != objs.Count())
                 BH.Engine.Reflection.Compute.RecordWarning($"The OBJ file format supports only Push of {typeof(oM.Geometry.Mesh).Name}.");
 
             // Add to the scene
-            foreach (var mesh in meshes)
-            {
-                if (mesh == null)
-                    continue;
+            IEnumerable<Mesh> tdRepoMeshes = meshes.Where(tdRepoMesh => tdRepoMesh != null)
+                .Select(tdRepoMesh => BH.Adapter.TDRepo.Convert.FromBHoM(tdRepoMesh));
 
-                controller.AddToScene(BH.Engine.External.TDRepo.Convert.FromBHoM(mesh));
-            }
+            m_3DRepoMeshesForOBJexport.AddRange(tdRepoMeshes);
 
+            // Write OBJ file and commit it.
+            string OBJFilePath = WriteOBJFile();
 
-            // Write OBJ file and commit
-            string error = "";
-            string OBJFilePath = controller.WriteOBJFile();
-
-            bool success = controller.Commit(OBJFilePath, ref error);
-
-            if (!success)
-                BH.Engine.Reflection.Compute.RecordError($"Error on uploading data to 3DRepo:\n{error}");
-
-            return true;
+            return Commit(OBJFilePath);
         }
     }
 }

@@ -36,7 +36,6 @@ using BH.oM.Structure.Elements;
 using BH.Engine.Structure;
 using BH.Engine.Rhinoceros;
 using BH.oM.Structure.Constraints;
-using BH.oM.External.TDRepo;
 using BH.oM.Analytical.Elements;
 
 namespace BH.Engine.External.TDRepo
@@ -44,14 +43,15 @@ namespace BH.Engine.External.TDRepo
     public static partial class Compute
     {
         [Description("Returns a BHoM mesh representation for the BHoM Bar.")]
-        public static BH.oM.Geometry.Mesh MeshRepresentation(this PlanarSurface planarSurface, DisplayOptions displayOptions = null)
+
+        public static BH.oM.Geometry.Mesh MeshRepresentation(this PlanarSurface planarSurface, BH.oM.External.TDRepo.DisplayOptions displayOptions = null)
         {
-            displayOptions = displayOptions ?? new DisplayOptions();
+            displayOptions = displayOptions ?? new BH.oM.External.TDRepo.DisplayOptions();
 
             return planarSurface.RhinoMeshRepresentation(displayOptions).FromRhino();
         }
 
-        private static Rhino.Geometry.Mesh RhinoMeshRepresentation(this PlanarSurface planarSurface, DisplayOptions displayOptions)
+        private static Rhino.Geometry.Mesh RhinoMeshRepresentation(this PlanarSurface planarSurface, BH.oM.External.TDRepo.DisplayOptions displayOptions)
         {
             Rhino.Geometry.Mesh RhinoMesh = new Rhino.Geometry.Mesh();
             RhinoMesh.Append(Rhino.Geometry.Mesh.CreateFromBrep(planarSurface.ToRhino(), Rhino.Geometry.MeshingParameters.Minimal));

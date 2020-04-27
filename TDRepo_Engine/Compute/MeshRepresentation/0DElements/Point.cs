@@ -43,7 +43,7 @@ namespace BH.Engine.External.TDRepo
     public static partial class Compute
     {
         [Description("Returns a BHoM Mesh representation for the Node based on its DOF, e.g. a box for fully fixed, a cone with sphere on top for pin.")]
-        public static BH.oM.Geometry.Mesh MeshRepresentation(this Point point, DisplayOptions displayOptions = null)
+        public static BH.oM.Geometry.Mesh MeshRepresentation(this BH.oM.Geometry.Point point, DisplayOptions displayOptions = null)
         {
             displayOptions = displayOptions ?? new DisplayOptions();
 

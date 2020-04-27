@@ -119,19 +119,15 @@
     <Compile Include="Compute\MeshRepresentation\1DElements\Line.cs" />
     <Compile Include="Compute\MeshRepresentation\2DElements\PlanarSurface.cs" />
     <Compile Include="Compute\MeshRepresentation\3DElements\Cone.cs" />
-    <Compile Include="Compute\MeshRepresentation\CompositeGeometry.cs" />
+    <Compile Include="Compute\MeshRepresentation\Others\CompositeGeometry.cs" />
     <Compile Include="Compute\MeshRepresentation\3DElements\Sphere.cs" />
     <Compile Include="Compute\MeshRepresentation\3DElements\BoundingBox.cs" />
     <Compile Include="Compute\MeshRepresentation\2DElements\Panel.cs" />
     <Compile Include="Compute\MeshRepresentation\1DElements\Bar.cs" />
     <Compile Include="Compute\MeshRepresentation\0DElements\Node.cs" />
     <Compile Include="Compute\FlatJson.cs" />
-    <Compile Include="Compute\MeshRepresentation.cs" />
+    <Compile Include="Compute\MeshRepresentation\IMeshRepresentation.cs" />
     <Compile Include="Compute\MeshRepresentation\_Fallbacks.cs" />
-    <Compile Include="Convert\AdapterId.cs" />
-    <Compile Include="Convert\ToMesh\_Fallback.cs" />
-    <Compile Include="Convert\ToMesh\Line.cs" />
-    <Compile Include="Convert\FromBHoM\Mesh.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

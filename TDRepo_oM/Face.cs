@@ -25,26 +25,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.oM.Structure.Elements;
-using BH.oM.Geometry;
-using BH.oM.TDRepo;
 
-namespace BH.Engine.External.TDRepo
+namespace BH.oM.External.TDRepo
 {
-    public static partial class Convert
-    {
-        /***************************************************/
-        /**** Public Methods                            ****/
-        /***************************************************/
+    public class Face {
+        public int[] indices;
 
-        public static BH.oM.Geometry.Mesh ToMesh(BH.oM.Geometry.Line line)
-        {
-            // Here we could pipe the line and return the mesh.
-
-            return null;
+        public Face(int[] indices) {
+            this.indices = indices;
         }
-
-        /***************************************************/
     }
 }
-

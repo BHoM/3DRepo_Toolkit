@@ -39,7 +39,7 @@ namespace BH.Engine.External.TDRepo
     public static partial class Compute
     {
         // Fallback case
-        public static BH.oM.Geometry.Mesh MeshRepresentation(IObject obj, DisplayOptions displayOptions = null)
+        public static BH.oM.Geometry.Mesh IMeshRepresentation(IObject obj, DisplayOptions displayOptions = null)
         {
             if (obj is BH.oM.Geometry.Mesh)
                 return obj as BH.oM.Geometry.Mesh;
@@ -52,7 +52,7 @@ namespace BH.Engine.External.TDRepo
             // Else, see if we can get some BHoM geometry out of the BHoMObject itself to represent it.
             IGeometry geom = (obj as IBHoMObject)?.IGeometry();
             if (geom != null)
-                meshRepresentation = Convert.FromBHoM(geom as dynamic);
+                meshRepresentation = Compute.MeshRepresentation(geom as dynamic, displayOptions);
 
 
             BH.Engine.Reflection.Compute.RecordError("Couldn't compute the Mesh representation out of the provided bhom representation object.");

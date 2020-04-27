@@ -25,25 +25,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.oM.Structure.Elements;
-using BH.oM.Geometry;
-using BH.oM.TDRepo;
 
-namespace BH.Engine.External.TDRepo
+namespace BH.Adapter.TDRepo
 {
     public static partial class Convert
     {
-        /***************************************************/
-        /**** Public Methods                            ****/
-        /***************************************************/
-
-        public static BH.oM.Geometry.Mesh ToMesh(object obj)
-        {
-            BH.Engine.Reflection.Compute.RecordError($"No conversion found from {obj.GetType().Name} to {nameof(BH.oM.Geometry.Mesh)}");
-            return null;
-        }
-
-        /***************************************************/
+        //Key used to find the software in the custom data of created or read objects
+        public const string AdapterIdName = "3DRepo_id";
     }
 }
 
