@@ -26,11 +26,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BH.Adapter;
-using BH.Engine.TDRepo;
 using BH.oM.Adapter;
 using BH.oM.Base;
 using BH.oM.Reflection;
-using BH.oM.TDRepo;
 using BH.oM.External.TDRepo.Commands;
 using BH.oM.External.TDRepo;
 using System.IO;
@@ -46,7 +44,7 @@ namespace BH.Adapter.TDRepo
             var iObjs = objects.OfType<IObject>();
 
             if (iObjs.Count() != objects.Count())
-                BH.Engine.Reflection.Compute.RecordError("Push currently supports only objects implementing BH.oM.IObject.");
+                BH.Engine.Reflection.Compute.RecordError("Push to 3DRepo currently supports only objects implementing BH.oM.IObject.");
 
             if (pushConfig.PushBIMFormat)
                 UploadBIM(iObjs, pushConfig);

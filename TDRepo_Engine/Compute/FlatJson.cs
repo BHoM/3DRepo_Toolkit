@@ -35,11 +35,15 @@ using System.ComponentModel;
 using BH.oM.External.TDRepo;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using BH.oM.Reflection.Attributes;
 
 namespace BH.Engine.External.TDRepo
 {
     public static partial class Compute
     {
+        [Description("Flattens a json string into a Dictionary<string, object>. All the nested values in the json are flattened at the top level of the dictionary.")]
+        [Input("json", "Json string with a collection of values.")]
+        [Output("A Dictionary with all the values from the json flattened at the same level.")]
         public static Dictionary<string, object> FlattenJsonToDictionary(string json)
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();

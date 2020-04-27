@@ -28,10 +28,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BH.Adapter;
-using BH.Engine.TDRepo;
 using BH.Engine.Base;
 using BH.oM.Base;
-using BH.oM.TDRepo;
 using RepoFileExporter;
 using RepoFileExporter.dataStructures;
 using BH.oM.External.TDRepo;
@@ -68,7 +66,7 @@ namespace BH.Adapter.TDRepo
             foreach (IObject obj in objectsToWrite)
             {
                 // See if there is a custom BHoM mesh representation for that BHoMObject.
-                BH.oM.Geometry.Mesh meshRepresentation = BH.Engine.External.TDRepo.Compute.MeshRepresentation(obj as dynamic, displayOptions);
+                BH.oM.Geometry.Mesh meshRepresentation = BH.Engine.External.TDRepo.Compute.IMeshRepresentation(obj, displayOptions);
 
                 representationMeshes.Add(meshRepresentation);
                 objsAndRepresentations.Add(new Tuple<IObject, oM.Geometry.Mesh>(obj, meshRepresentation));

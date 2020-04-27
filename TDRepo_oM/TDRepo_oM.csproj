@@ -52,16 +52,12 @@
   <ItemGroup>
     <Compile Include="Commands\WriteBIMFile.cs" />
     <Compile Include="Configs\DisplayOptions.cs" />
-    <Compile Include="Objects\Material.cs" />
-    <Compile Include="Objects\Mesh.cs" />
-    <Compile Include="MultipartForm.cs" />
-    <Compile Include="Objects\Point.cs" />
+    <Compile Include="Material.cs" />
+    <Compile Include="Mesh.cs" />
+    <Compile Include="Point.cs" />
     <Compile Include="Configs\PushConfig.cs" />
-    <Compile Include="RepoController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Objects\Face.cs" />
-    <Compile Include="SceneCreator.cs" />
-    <Compile Include="Connector.cs" />
+    <Compile Include="Face.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

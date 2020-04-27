@@ -28,8 +28,8 @@ using System.Threading.Tasks;
 using BH.oM.Structure.Elements;
 using BH.oM.Base;
 using BH.oM.Adapter;
-using BH.oM.TDRepo;
 using BH.oM.External.TDRepo;
+using System.IO;
 
 namespace BH.Adapter.TDRepo
 {
@@ -39,18 +39,12 @@ namespace BH.Adapter.TDRepo
         /**** Private methods                           ****/
         /***************************************************/
 
-        private bool UploadBIM(IEnumerable<IObject> objs, PushConfig pushConfig)
+        private bool UploadBIM(IEnumerable<IObject> iObjs, PushConfig pushConfig)
         {
-            // Write .BIM file and commit
-            string error = "";
-            string BIMFilePath = WriteBIMFile(objs.ToList(), pushConfig.Directory, pushConfig.FileName, pushConfig.DisplayOptions);
+            // Write .BIM file and commit it.
+            string BIMFilePath = WriteBIMFile(iObjs.ToList(), pushConfig.Directory, pushConfig.FileName, pushConfig.DisplayOptions);
 
-            bool success = controller.Commit(BIMFilePath, ref error);
-
-            if (!success)
-                BH.Engine.Reflection.Compute.RecordError($"Error on uploading data to 3DRepo:\n{error}");
-
-            return success;
+            return Commit(BIMFilePath);
         }
     }
 }

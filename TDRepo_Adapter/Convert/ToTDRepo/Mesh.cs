@@ -25,13 +25,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BH.oM.Structure.Elements;
+using BH.oM.Geometry;
+using BH.oM.External.TDRepo;
 
-namespace BH.Engine.TDRepo
+namespace BH.Adapter.TDRepo
 {
     public static partial class Convert
     {
-        //Key used to find the software in the custom data of created or read objects
-        public const string AdapterIdName = "3DRepo_id";
+        /***************************************************/
+        /**** Public Methods                            ****/
+        /***************************************************/
+
+        public static BH.oM.External.TDRepo.Mesh FromBHoM(BH.oM.Geometry.Mesh mesh)
+        {
+            var faces = mesh.Faces.Select(face =>
+                new BH.oM.External.TDRepo.Face(new int[]{ face.A, face.B, face.C, face.D })
+            );
+
+            var points = mesh.Vertices.Select(vertex =>
+                new BH.oM.External.TDRepo.Point(vertex.X, vertex.Y, vertex.Z)
+            );
+
+            return new BH.oM.External.TDRepo.Mesh("Mesh", points.ToArray(), faces.ToArray());
+        }
+
+        /***************************************************/
     }
 }
 

@@ -26,31 +26,55 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BH.oM.Structure.Elements;
-using BH.oM.Geometry;
-using BH.oM.TDRepo;
+using BH.oM.Base;
+using BH.oM.Adapter;
+using BH.oM.External.TDRepo;
+using System.IO;
 
-namespace BH.Engine.External.TDRepo
+namespace BH.Adapter.TDRepo
 {
-    public static partial class Convert
+    public partial class TDRepoAdapter
     {
         /***************************************************/
-        /**** Public Methods                            ****/
+        /**** Private methods                           ****/
         /***************************************************/
 
-        public static BH.oM.TDRepo.Mesh FromBHoM(BH.oM.Geometry.Mesh mesh)
+        private string WriteOBJFile()
         {
-            var faces = mesh.Faces.Select(face =>
-                new BH.oM.TDRepo.Face(new int[]{ face.A, face.B, face.C, face.D })
-            );
+            // This current creates a .obj (no .mtl) for the sake of simplicity.
+            // For full support this really should be generating a .bim to support rich BIM data.
+            string filePath = Path.GetTempPath() + System.Guid.NewGuid() + ".obj";
+            using (var file = new System.IO.StreamWriter(filePath))
+            {
+                int startIdx = 0;
+                foreach (var mesh in m_3DRepoMeshesForOBJexport)
+                {
+                    Dictionary<int, int> indexToFullIdx = new Dictionary<int, int>();
+                    file.WriteLine("o " + mesh.name);
 
-            var points = mesh.Vertices.Select(vertex =>
-                new BH.oM.TDRepo.Point(vertex.X, vertex.Y, vertex.Z)
-            );
+                    int idxCount = 0;
+                    foreach (var v in mesh.vertices)
+                    {
+                        indexToFullIdx[idxCount++] = idxCount + startIdx;
+                        file.WriteLine("v " + v.x + " " + v.y + " " + v.z);
+                    }
 
-            return new BH.oM.TDRepo.Mesh("Mesh", points.ToArray(), faces.ToArray());
+                    foreach (var f in mesh.faces)
+                    {
+                        string line = "f ";
+                        foreach (var index in f.indices)
+                        {
+                            line += indexToFullIdx[index] + " ";
+                        }
+                        file.WriteLine(line);
+
+                    }
+
+                    startIdx += idxCount;
+                }
+            }
+            return filePath;
         }
-
-        /***************************************************/
     }
 }
 

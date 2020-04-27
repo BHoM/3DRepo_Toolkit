@@ -20,38 +20,26 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BH.oM.TDRepo
+namespace BH.oM.External.TDRepo
 {
-    class Connector
+    public class Point
     {
-        internal static void NewRevision(string host, string apiKey, string teamspace, string modelId, string filePath)
+        public double x;
+        public double y;
+        public double z;
+
+        public Point(double x, double y, double z)
         {
-            FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            byte[] data = new byte[fs.Length];
-            fs.Read(data, 0, data.Length);
-            fs.Close();
-
-            Dictionary<string, object> postParameters = new Dictionary<string, object>();
-            postParameters.Add("file", new MultipartForm.FileParameter(data, filePath, "application/octet-stream"));
-            
-            string uri = host + "/" + teamspace + "/" + modelId + "/upload?key=" + apiKey;
-
-            // Create request and receive response
-            HttpWebResponse webResponse = MultipartForm.MultipartFormDataPost(uri, null, postParameters);
-
-            // Process response
-            StreamReader responseReader = new StreamReader(webResponse.GetResponseStream());
-            string fullResponse = responseReader.ReadToEnd();
-            webResponse.Close();
-
-            if (fullResponse.Contains("The remote server returned an error"))
-                throw new Exception(fullResponse);
+            this.x = x;
+            this.y = y;
+            this.z = z;
         }
     }
 }
+

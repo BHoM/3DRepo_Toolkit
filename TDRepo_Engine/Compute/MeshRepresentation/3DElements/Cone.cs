@@ -36,7 +36,6 @@ using BH.oM.Structure.Elements;
 using BH.Engine.Structure;
 using BH.Engine.Rhinoceros;
 using BH.oM.Structure.Constraints;
-using BH.oM.External.TDRepo;
 using BH.oM.Analytical.Elements;
 
 namespace BH.Engine.External.TDRepo
@@ -44,14 +43,14 @@ namespace BH.Engine.External.TDRepo
     public static partial class Compute
     {
         [Description("Returns a BHoM mesh representation for the BHoM Bar.")]
-        public static BH.oM.Geometry.Mesh MeshRepresentation(this Cone cone, DisplayOptions displayOptions = null)
+        public static BH.oM.Geometry.Mesh MeshRepresentation(this Cone cone, BH.oM.External.TDRepo.DisplayOptions displayOptions = null)
         {
-            displayOptions = displayOptions ?? new DisplayOptions();
+            displayOptions = displayOptions ?? new BH.oM.External.TDRepo.DisplayOptions();
 
             return cone.RhinoMeshRepresentation(displayOptions).FromRhino();
         }
 
-        public static Rhino.Geometry.Mesh RhinoMeshRepresentation(this Cone cone, DisplayOptions displayOptions = null)
+        public static Rhino.Geometry.Mesh RhinoMeshRepresentation(this Cone cone, BH.oM.External.TDRepo.DisplayOptions displayOptions = null)
         {
             return Rhino.Geometry.Mesh.CreateFromCone(cone.ToRhino(), 1, 4);
         }

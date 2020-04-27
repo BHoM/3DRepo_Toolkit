@@ -23,50 +23,33 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BHG = BH.oM.Geometry;
-using BH.oM.Base;
-using BH.Engine.Geometry;
-using System.Reflection;
 using BH.oM.Geometry;
-using BH.Engine.Base;
 using System.ComponentModel;
-using BH.oM.Structure.Elements;
-using BH.Engine.Structure;
 using BH.Engine.Rhinoceros;
-using BH.oM.Structure.Constraints;
-using BH.oM.External.TDRepo;
-using BH.oM.Analytical.Elements;
 
 namespace BH.Engine.External.TDRepo
 {
     public static partial class Compute
     {
         [Description("Returns a BHoM mesh representation for the BHoM Bar.")]
-        public static BH.oM.Geometry.Mesh MeshRepresentation(this CompositeGeometry compositeGeometry, DisplayOptions displayOptions = null)
+        public static BH.oM.Geometry.Mesh MeshRepresentation(this CompositeGeometry compositeGeometry, BH.oM.External.TDRepo.DisplayOptions displayOptions = null)
         {
-            displayOptions = displayOptions ?? new DisplayOptions();
+            displayOptions = displayOptions ?? new BH.oM.External.TDRepo.DisplayOptions();
 
             List<Mesh> meshes = new List<Mesh>();
 
             foreach (var geom in compositeGeometry.Elements)
-            {
                 meshes.Add(MeshRepresentation(geom as dynamic, displayOptions));
-            }
-
 
             return compositeGeometry.RhinoMeshRepresentation(displayOptions).FromRhino();
         }
 
-        public static Rhino.Geometry.Mesh RhinoMeshRepresentation(this CompositeGeometry compositeGeometry, DisplayOptions displayOptions = null)
+        public static Rhino.Geometry.Mesh RhinoMeshRepresentation(this CompositeGeometry compositeGeometry, BH.oM.External.TDRepo.DisplayOptions displayOptions = null)
         {
             Rhino.Geometry.Mesh compositeMesh = new Rhino.Geometry.Mesh();
 
             foreach (var geom in compositeGeometry.Elements)
-            {
                 compositeMesh.Append(RhinoMeshRepresentation(geom as dynamic, displayOptions));
-            }
 
             return compositeMesh;
         }

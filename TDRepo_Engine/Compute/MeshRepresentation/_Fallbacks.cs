@@ -39,7 +39,7 @@ namespace BH.Engine.External.TDRepo
     public static partial class Compute
     {
         // Fallback case
-        private static Rhino.Geometry.Mesh MeshRepresentation(this IBHoMObject bHoMObject, DisplayOptions displayOptions)
+        private static BH.oM.Geometry.Mesh MeshRepresentation(this IObject bHoMObject, DisplayOptions displayOptions)
         {
             BH.Engine.Reflection.Compute.RecordError($"Failed to find a method to compute the Mesh representation of {bHoMObject.GetType().Name}");
 
