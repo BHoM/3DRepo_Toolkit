@@ -49,7 +49,9 @@ namespace BH.Engine.External.TDRepo
                 displayOptions = new DisplayOptions();
 
             if (displayOptions.Detailed1DElements)
+            {
                 return bar.RhinoMeshRepresentation(displayOptions).FromRhino();
+            }
             else
             {
                 //returns the piped centreline.
@@ -60,20 +62,54 @@ namespace BH.Engine.External.TDRepo
         [Description("Returns a RHINO mesh representation for the BHoM Bar.")]
         private static Rhino.Geometry.Mesh RhinoMeshRepresentation(this Bar bar, DisplayOptions displayOptions)
         {
+            if (Rhino.RhinoApp.ExeVersion == 5)
+                return RhinoMeshRepresentation_Rh5(bar, displayOptions);
+            else
+                return RhinoMeshRepresentation_Rh6Plus(bar, displayOptions);
+        }
+
+        [Description("Returns a RHINO mesh representation for the BHoM Bar.")]
+        private static Rhino.Geometry.Mesh RhinoMeshRepresentation_Rh5(this Bar bar, DisplayOptions displayOptions)
+        {
             // Gets the BH.oM.Geometry.Extrusion out of the Bar. If the profile is made of two curves (e.g. I section), selects only the outermost.
             var barOutermostExtrusion = bar.Extrude(false).Cast<Extrusion>().OrderBy(extr => extr.Curve.IArea()).First();
 
             // Obtains the Rhino extrusion.
             Rhino.Geometry.Surface rhinoExtrusion = Rhino.Geometry.Extrusion.CreateExtrusion(barOutermostExtrusion.Curve.IToRhino(), (Rhino.Geometry.Vector3d)barOutermostExtrusion.Direction.IToRhino());
 
-            // The mesh here for some reason comes out really bad. It would be better to let speckle handle it.
-            Rhino.Geometry.Mesh mesh = Rhino.Geometry.Mesh.CreateFromSurface(rhinoExtrusion, Rhino.Geometry.MeshingParameters.Minimal);
+            Rhino.Geometry.Mesh rhinoMesh = new Rhino.Geometry.Mesh();
+
+            // Conversion for Rhino 5.
+            var rhinoMeshes = Rhino.Geometry.Mesh.CreateFromBrep(rhinoExtrusion.ToBrep(), Rhino.Geometry.MeshingParameters.Minimal).ToList();
+            rhinoMeshes.ForEach(m => rhinoMesh.Append(m));
 
             //// Add the endnodes representations.
-            mesh.Append(bar.StartNode.RhinoMeshRepresentation(displayOptions));
-            mesh.Append(bar.EndNode.RhinoMeshRepresentation(displayOptions));
+            rhinoMesh.Append(bar.StartNode.MeshRepresentation(displayOptions).ToRhino());
+            rhinoMesh.Append(bar.EndNode.MeshRepresentation(displayOptions).ToRhino());
 
-            return mesh;
+            return rhinoMesh;
+        }
+
+        [Description("Returns a RHINO mesh representation for the BHoM Bar.")]
+        private static Rhino.Geometry.Mesh RhinoMeshRepresentation_Rh6Plus(this Bar bar, DisplayOptions displayOptions)
+        {
+            // Gets the BH.oM.Geometry.Extrusion out of the Bar. If the profile is made of two curves (e.g. I section), selects only the outermost.
+            var barOutermostExtrusion = bar.Extrude(false).Cast<Extrusion>().OrderBy(extr => extr.Curve.IArea()).First();
+
+            // Obtains the Rhino extrusion.
+            Rhino.Geometry.Surface rhinoExtrusion = Rhino.Geometry.Extrusion.CreateExtrusion(barOutermostExtrusion.Curve.IToRhino(), (Rhino.Geometry.Vector3d)barOutermostExtrusion.Direction.IToRhino());
+
+            Rhino.Geometry.Mesh rhinoMesh = new Rhino.Geometry.Mesh();
+
+            // This works for Rhino 6+ only.
+            rhinoMesh = Rhino.Geometry.Mesh.CreateFromSurface(rhinoExtrusion, Rhino.Geometry.MeshingParameters.Minimal);
+
+
+            //// Add the endnodes representations.
+            rhinoMesh.Append(bar.StartNode.RhinoMeshRepresentation(displayOptions));
+            rhinoMesh.Append(bar.EndNode.RhinoMeshRepresentation(displayOptions));
+
+            return rhinoMesh;
         }
     }
 }

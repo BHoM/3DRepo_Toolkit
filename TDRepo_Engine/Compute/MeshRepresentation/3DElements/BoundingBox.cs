@@ -54,10 +54,10 @@ namespace BH.Engine.External.TDRepo
         public static Rhino.Geometry.Mesh RhinoMeshRepresentation(this BoundingBox bbox, DisplayOptions displayOptions)
         {
             Rhino.Geometry.BoundingBox rhinoBb = (Rhino.Geometry.BoundingBox)bbox.IToRhino();
-            if (rhinoBb.IsValid)
+            //if (rhinoBb.IsValid)
                 return Rhino.Geometry.Mesh.CreateFromBox(rhinoBb, 1, 1, 1);
 
-            BH.Engine.Reflection.Compute.RecordError("The geometry to be represented returned an invalid bounding box.");
+            //BH.Engine.Reflection.Compute.RecordError("The geometry to be represented returned an invalid bounding box.");
 
             return null;
         }
