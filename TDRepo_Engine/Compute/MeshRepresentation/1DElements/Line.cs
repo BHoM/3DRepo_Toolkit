@@ -20,22 +20,11 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BHG = BH.oM.Geometry;
-using BH.oM.Base;
-using BH.Engine.Geometry;
-using System.Reflection;
 using BH.oM.Geometry;
-using BH.Engine.Base;
+using System.Linq;
 using System.ComponentModel;
-using BH.oM.Structure.Elements;
-using BH.Engine.Structure;
 using BH.Engine.Rhinoceros;
-using BH.oM.Structure.Constraints;
+using System.Collections.Generic;
 
 namespace BH.Engine.External.TDRepo
 {
@@ -49,11 +38,24 @@ namespace BH.Engine.External.TDRepo
             return line.RhinoMeshRepresentation(displayOptions).FromRhino();
         }
 
-        [Description("Returns a RHINO mesh representation for the BHoM Bar.")]
         private static Rhino.Geometry.Mesh RhinoMeshRepresentation(this Line line, BH.oM.External.TDRepo.DisplayOptions displayOptions)
         {
             // Returns the piped centreline.
-            return Rhino.Geometry.Mesh.CreateFromCurvePipe(line.ToRhino().ToNurbsCurve(), 0.01, 3, 1, Rhino.Geometry.MeshPipeCapStyle.None, true); 
+
+            try
+            {
+                // This only works for Rhino 6.
+                return Rhino.Geometry.Mesh.CreateFromCurvePipe(line.ToRhino().ToNurbsCurve(), 0.01, 3, 1, Rhino.Geometry.MeshPipeCapStyle.None, true);
+            }
+            catch { }
+
+            // Conversion for Rhino 5.
+            List<Rhino.Geometry.Brep> pipe = Rhino.Geometry.Brep.CreatePipe(line.ToRhino().ToNurbsCurve(), 0.01, true, Rhino.Geometry.PipeCapMode.None, true, 0.01, 0.01).ToList();
+            Rhino.Geometry.Mesh rhinoMesh = new Rhino.Geometry.Mesh();
+            List<Rhino.Geometry.Mesh> pipeMeshes = pipe.SelectMany(p => Rhino.Geometry.Mesh.CreateFromBrep(p, Rhino.Geometry.MeshingParameters.Minimal)).ToList();
+            pipeMeshes.ForEach(m => rhinoMesh.Append(m));
+
+            return rhinoMesh;
         }
     }
 }

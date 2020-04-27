@@ -32,11 +32,7 @@ using System.Reflection;
 using BH.oM.Geometry;
 using BH.Engine.Base;
 using System.ComponentModel;
-using BH.oM.Structure.Elements;
-using BH.Engine.Structure;
 using BH.Engine.Rhinoceros;
-using BH.oM.Structure.Constraints;
-using BH.oM.Analytical.Elements;
 
 namespace BH.Engine.External.TDRepo
 {
@@ -53,9 +49,13 @@ namespace BH.Engine.External.TDRepo
 
         private static Rhino.Geometry.Mesh RhinoMeshRepresentation(this PlanarSurface planarSurface, BH.oM.External.TDRepo.DisplayOptions displayOptions)
         {
-            Rhino.Geometry.Mesh RhinoMesh = new Rhino.Geometry.Mesh();
-            RhinoMesh.Append(Rhino.Geometry.Mesh.CreateFromBrep(planarSurface.ToRhino(), Rhino.Geometry.MeshingParameters.Minimal));
-            return RhinoMesh;
+            Rhino.Geometry.Mesh joinedMesh = new Rhino.Geometry.Mesh();
+
+            Rhino.Geometry.Mesh[] allMeshes = Rhino.Geometry.Mesh.CreateFromBrep(planarSurface.ToRhino(), Rhino.Geometry.MeshingParameters.Minimal);
+
+            allMeshes.ToList().ForEach(m => joinedMesh.Append(m));
+
+            return joinedMesh;
         }
     }
 }
