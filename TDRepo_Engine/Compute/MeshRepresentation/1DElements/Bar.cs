@@ -84,8 +84,8 @@ namespace BH.Engine.External.TDRepo
             rhinoMeshes.ForEach(m => rhinoMesh.Append(m));
 
             //// Add the endnodes representations.
-            rhinoMesh.Append(bar.StartNode.MeshRepresentation(displayOptions).ToRhino());
-            rhinoMesh.Append(bar.EndNode.MeshRepresentation(displayOptions).ToRhino());
+            rhinoMesh.Append(bar.StartNode.MeshRepresentation(displayOptions, true).ToRhino());
+            rhinoMesh.Append(bar.EndNode.MeshRepresentation(displayOptions, true).ToRhino());
 
             return rhinoMesh;
         }
@@ -106,8 +106,8 @@ namespace BH.Engine.External.TDRepo
 
 
             //// Add the endnodes representations.
-            rhinoMesh.Append(bar.StartNode.MeshRepresentation(displayOptions).ToRhino());
-            rhinoMesh.Append(bar.EndNode.MeshRepresentation(displayOptions).ToRhino());
+            rhinoMesh.Append(bar.StartNode.MeshRepresentation(displayOptions, true).ToRhino());
+            rhinoMesh.Append(bar.EndNode.MeshRepresentation(displayOptions, true).ToRhino());
 
             return rhinoMesh;
         }

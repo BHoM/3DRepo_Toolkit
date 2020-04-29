@@ -43,7 +43,7 @@ namespace BH.Engine.External.TDRepo
     {
 
         [Description("Returns a BHoM Mesh representation for the Node based on its DOF, e.g. a box for fully fixed, a cone with sphere on top for pin.")]
-        public static BH.oM.Geometry.Mesh MeshRepresentation(this Node node, BH.oM.External.TDRepo.DisplayOptions displayOptions = null)
+        public static BH.oM.Geometry.Mesh MeshRepresentation(this Node node, BH.oM.External.TDRepo.DisplayOptions displayOptions = null, bool isSubObject = false)
         {
             displayOptions = displayOptions ?? new BH.oM.External.TDRepo.DisplayOptions();
 
@@ -54,7 +54,7 @@ namespace BH.Engine.External.TDRepo
             }
 
             if (node.Support == null || !displayOptions.Detailed1DElements) // If there is no support information, or by choice...
-                return node.Position().MeshRepresentation(displayOptions); // ...just return the representation for the point.
+                return node.Position().MeshRepresentation(displayOptions, isSubObject); // ...just return the representation for the point.
 
             // -------------------------------------------- //
             // -------- Compute the representation -------- //
@@ -102,7 +102,10 @@ namespace BH.Engine.External.TDRepo
             }
 
             // Else: we could add more for other DOFs; for now just return a sphere.
-            return node.RhinoMeshRepresentation(displayOptions).FromRhino();
+            if (isSubObject)
+                return null; //do not return spheres if the Nodes are sub-objects (e.g. of a bar)
+            else 
+                return node.RhinoMeshRepresentation(displayOptions).FromRhino();
         }
     }
 }

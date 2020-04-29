@@ -43,8 +43,11 @@ namespace BH.Engine.External.TDRepo
     public static partial class Compute
     {
         [Description("Returns a BHoM Mesh representation for the Node based on its DOF, e.g. a box for fully fixed, a cone with sphere on top for pin.")]
-        public static BH.oM.Geometry.Mesh MeshRepresentation(this BH.oM.Geometry.Point point, DisplayOptions displayOptions = null)
+        public static BH.oM.Geometry.Mesh MeshRepresentation(this BH.oM.Geometry.Point point, DisplayOptions displayOptions = null, bool isSubObject = false)
         {
+            if (isSubObject) // if it is a property of another object (e.g. a Line) do not display its endpoints as spheres.
+                return null;
+
             displayOptions = displayOptions ?? new DisplayOptions();
 
             double radius = 0.12 * displayOptions.Element0DScale;
