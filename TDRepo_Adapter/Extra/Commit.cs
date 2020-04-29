@@ -60,7 +60,7 @@ namespace BH.Adapter.TDRepo
 
             Uri result = null;
 
-            Uri.TryCreate(new Uri(host), $"/{teamspace}/{modelId}/upload?key={apiKey}", out result);
+            Uri.TryCreate($"{host}/{teamspace}/{modelId}/upload?key={apiKey}", UriKind.Absolute, out result);
 
             string uri = result.ToString();
 
