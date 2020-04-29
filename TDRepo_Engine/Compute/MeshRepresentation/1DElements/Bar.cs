@@ -106,8 +106,8 @@ namespace BH.Engine.External.TDRepo
 
 
             //// Add the endnodes representations.
-            rhinoMesh.Append(bar.StartNode.MeshRepresentation(displayOptions));
-            rhinoMesh.Append(bar.EndNode.MeshRepresentation(displayOptions));
+            rhinoMesh.Append(bar.StartNode.MeshRepresentation(displayOptions).ToRhino());
+            rhinoMesh.Append(bar.EndNode.MeshRepresentation(displayOptions).ToRhino());
 
             return rhinoMesh;
         }
