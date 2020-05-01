@@ -99,7 +99,7 @@
     <Reference Include="RepoFileExporter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_tempRefs\RepoFileExporter.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Serialiser_Engine">
       <HintPath>..\..\BHoM_Engine\Build\Serialiser_Engine.dll</HintPath>
