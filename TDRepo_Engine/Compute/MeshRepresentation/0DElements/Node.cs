@@ -53,7 +53,7 @@ namespace BH.Engine.External.TDRepo
                 return null;
             }
 
-            if (node.Support == null || !displayOptions.Detailed1DElements) // If there is no support information, or by choice...
+            if (node.Support == null || !displayOptions.Detailed0DElements) // If there is no support information, or by choice...
                 return node.Position().MeshRepresentation(displayOptions, isSubObject); // ...just return the representation for the point.
 
             // -------------------------------------------- //
@@ -101,11 +101,11 @@ namespace BH.Engine.External.TDRepo
                 return compositeGeometry.MeshRepresentation();
             }
 
-            // Else: we could add more for other DOFs; for now just return a sphere.
-            if (isSubObject)
-                return null; //do not return spheres if the Nodes are sub-objects (e.g. of a bar)
-            else 
-                return node.RhinoMeshRepresentation(displayOptions).FromRhino();
+            // Else: we could add more for other DOFs; for now just return the representation for its point.
+            if (!isSubObject)
+                return MeshRepresentation(node.Position);
+            else
+                return null; //do not return representation for point if the Nodes are sub-objects (e.g. of a bar)
         }
     }
 }
