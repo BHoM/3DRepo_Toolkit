@@ -21,36 +21,44 @@
  */
 
 using BH.oM.Base;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using System.Drawing;
 
 namespace BH.oM.External.TDRepo
 {
-    [Description("Controls the representational Mesh assigned to various object types.")]
-    public class DisplayOptions : IObject
+    public class DisplayOptions : BHoMObject
     {
-        [Description("If true, 0D elements are detailed. E.g. Points are represented by spheres; Node representation includes the support condition (e.g. pyramid with sphere on top for a Pin).\n" +
-            "CAREFUL: heavier meshes might increase upload time over the Timeout limit.")]
-        public bool Detailed0DElements { get; set; } = true;
+        /***************************************************/
+        /****            Public Properties              ****/
+        /***************************************************/
+
+        [Description("If true, 0D elements are detailed. E.g. Points are represented by spheres; Node representation includes the support condition (e.g. pyramid with sphere on top for a Pin).")]
+        public virtual bool Detailed0DElements { get; set; } = true;
 
         [Description("Scale the Element0D representation.")]
-        public double Element0DScale { get; set; } = 1;
+        public virtual double Element0DScale { get; set; } = 1;
 
-        [Description("If true, 1D elements are detailed. E.g. the bars are extruded using their Section property.\n" +
-            "CAREFUL: heavier meshes might increase upload time over the Timeout limit.")]
-        public bool Detailed1DElements { get; set; } = false;
+        [Description("If true, 1D elements are detailed: e.g. the Bars are extruded using their Section property. Else, the Bars' centreline is coarsely piped.")]
+        public virtual bool Detailed1DElements { get; set; } = false;
 
-        [Description("If true, 2D elements are detailed. E.g. panels are represented as boxes with their thickness.\n" +
-            "CAREFUL: heavier meshes might increase upload time over the Timeout limit.")]
-        public bool Detailed2DElements { get; set; } = false;
+        [Description("Scale the Element1D representation, if applicable. E.g. for Lines, this increases the Pipe size.")]
+        public virtual double Element1DScale { get; set; } = 1;
 
-        [Description("Insert the key of the BHoMObjects' CustomData dictionary that contains the color information.")]
+        [Description("Regulates the refinement of Pipe meshes for 1DElements, i.e. the number of faces of the Pipes. By default, circular Pipes are meshed with 3 faces.")]
+        public virtual double Element1DRefinement { get; set; } = 3;
+
+        [Description("If true, 2D elements are detailed. E.g. panels are represented as boxes with their thickness.")]
+        public virtual bool Detailed2DElements { get; set; } = false;
+
+        [Description("The key of the BHoMObjects' CustomData dictionary where a custom RenderMesh might be found.")]
+        public string CustomRendermeshKey { get; set; } = "Rendermesh";
+
+        [Description("The key of the BHoMObjects' CustomData dictionary where colour information might be found.")]
         public string CustomDataColorKey { get; set; } = "Colour";
+
+        /***************************************************/
+
     }
 }
 

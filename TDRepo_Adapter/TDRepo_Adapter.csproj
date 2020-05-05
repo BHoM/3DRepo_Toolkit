@@ -77,6 +77,10 @@
       <HintPath>..\..\BHoM\Build\Geometry_oM.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Graphics_oM">
+      <HintPath>..\..\BHoM\Build\Graphics_oM.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="LitJson, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_tempRefs\LitJson.dll</HintPath>
@@ -154,8 +158,12 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>rem update BHoM Assemblies folder
+call "..\..\BHoM_UI\Build\UI_PostBuild.exe" ..\..\ "$(AppData)\BHoM\Assemblies"
+
+rem copy Grasshopper_UI to BHoM Assemblies folder
+Copy /Y "..\..\Grasshopper_Toolkit\Build\BH.UI.Grasshopper.dll" "$(AppData)\BHoM\Assemblies\BH.UI.Grasshopper.dll"
+Copy /Y "..\..\Grasshopper_Toolkit\Build\BH.UI.Grasshopper.dll" "$(AppData)\BHoM\Assemblies\BH.UI.Grasshopper.gha"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
