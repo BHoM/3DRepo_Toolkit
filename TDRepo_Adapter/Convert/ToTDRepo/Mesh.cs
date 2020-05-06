@@ -37,17 +37,17 @@ namespace BH.Adapter.TDRepo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public static BH.oM.External.TDRepo.Mesh FromBHoM(BH.oM.Geometry.Mesh mesh)
+        public static BH.oM.External.TDRepo.TDR_Mesh FromBHoM(BH.oM.Geometry.Mesh mesh)
         {
             var faces = mesh.Faces.Select(face =>
-                new BH.oM.External.TDRepo.Face(new int[]{ face.A, face.B, face.C, face.D })
+                new BH.oM.External.TDRepo.TDR_Face(new int[]{ face.A, face.B, face.C, face.D })
             );
 
             var points = mesh.Vertices.Select(vertex =>
-                new BH.oM.External.TDRepo.Point(vertex.X, vertex.Y, vertex.Z)
+                new BH.oM.External.TDRepo.TDR_Point(vertex.X, vertex.Y, vertex.Z)
             );
 
-            return new BH.oM.External.TDRepo.Mesh("Mesh", points.ToArray(), faces.ToArray());
+            return new BH.oM.External.TDRepo.TDR_Mesh("Mesh", points.ToArray(), faces.ToArray());
         }
 
         /***************************************************/

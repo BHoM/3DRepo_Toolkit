@@ -28,10 +28,10 @@ using System.Threading.Tasks;
 
 namespace BH.oM.External.TDRepo
 {
-    public class Face {
+    public class TDR_Face {
         public int[] indices;
 
-        public Face(int[] indices) {
+        public TDR_Face(int[] indices) {
             this.indices = indices;
         }
     }

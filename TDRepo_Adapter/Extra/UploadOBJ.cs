@@ -47,7 +47,7 @@ namespace BH.Adapter.TDRepo
                 BH.Engine.Reflection.Compute.RecordWarning($"The OBJ file format supports only Push of {typeof(oM.Geometry.Mesh).Name}.");
 
             // Add to the scene
-            IEnumerable<Mesh> tdRepoMeshes = meshes.Where(tdRepoMesh => tdRepoMesh != null)
+            IEnumerable<TDR_Mesh> tdRepoMeshes = meshes.Where(tdRepoMesh => tdRepoMesh != null)
                 .Select(tdRepoMesh => BH.Adapter.TDRepo.Convert.FromBHoM(tdRepoMesh));
 
             m_3DRepoMeshesForOBJexport.AddRange(tdRepoMeshes);

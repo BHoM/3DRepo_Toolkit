@@ -34,6 +34,7 @@ using RepoFileExporter;
 using RepoFileExporter.dataStructures;
 using BH.oM.External.TDRepo;
 using BH.oM.Geometry;
+using BH.oM.Graphics;
 
 namespace BH.Adapter.TDRepo
 {
@@ -60,32 +61,44 @@ namespace BH.Adapter.TDRepo
             //             Compute representation            //
             // --------------------------------------------- //
 
-            List<BH.oM.Geometry.Mesh> representationMeshes = new List<oM.Geometry.Mesh>();
-            List<Tuple<IObject, BH.oM.Geometry.Mesh>> objsAndRepresentations = new List<Tuple<IObject, BH.oM.Geometry.Mesh>>();
+            List<Mesh> representationMeshes = new List<Mesh>();
+            List<Tuple<IObject, Mesh>> objsAndRepresentations = new List<Tuple<IObject, Mesh>>();
 
             foreach (IObject obj in objectsToWrite)
             {
-                BH.oM.Geometry.Mesh meshRepresentation = null;
+                Mesh meshRepresentation = null;
 
                 // See if there is a custom BHoM mesh representation for that BHoMObject.
                 IBHoMObject bHoMObject = obj as IBHoMObject;
-                BH.oM.Graphics.RenderMesh renderMesh = null;
+                RenderMesh renderMesh = null;
                 if (bHoMObject != null)
                 {
                     object renderMeshObj = null;
                     bHoMObject.CustomData.TryGetValue(displayOptions.CustomRendermeshKey, out renderMeshObj);
-                    renderMesh = renderMeshObj as BH.oM.Graphics.RenderMesh;
-                    meshRepresentation = renderMeshObj as BH.oM.Geometry.Mesh;
+                    renderMesh = renderMeshObj as RenderMesh;
+                    meshRepresentation = renderMeshObj as Mesh;
+
+                    if (typeof(IEnumerable<object>).IsAssignableFrom(renderMeshObj.GetType()))
+                    {
+                        List<object> objects = renderMeshObj as List<object>;
+                        List<RenderMesh> renderMeshes = objects.OfType<RenderMesh>().ToList();
+                        if (renderMeshes.Count > 0)
+                            renderMesh = JoinRenderMeshes(renderMeshes);
+
+                        List<Mesh> meshes = objects.OfType<Mesh>().ToList();
+                        if (meshes.Count > 0)
+                            meshRepresentation = JoinMeshes(meshes);
+                    }
                 }
 
                 if (renderMesh != null)
-                    meshRepresentation = new oM.Geometry.Mesh() { Faces = renderMesh.Faces, Vertices = renderMesh.Vertices.Select(v => new oM.Geometry.Point() { X = v.Point.X, Y = v.Point.Y, Z = v.Point.Z }).ToList() };
+                    meshRepresentation = new Mesh() { Faces = renderMesh.Faces, Vertices = renderMesh.Vertices.Select(v => new oM.Geometry.Point() { X = v.Point.X, Y = v.Point.Y, Z = v.Point.Z }).ToList() };
 
                 if (renderMesh == null && meshRepresentation == null)
                     meshRepresentation = BH.Engine.External.TDRepo.Compute.IMeshRepresentation(obj, displayOptions);
 
                 representationMeshes.Add(meshRepresentation);
-                objsAndRepresentations.Add(new Tuple<IObject, oM.Geometry.Mesh>(obj, meshRepresentation));
+                objsAndRepresentations.Add(new Tuple<IObject, Mesh>(obj, meshRepresentation));
             }
 
 
@@ -96,7 +109,7 @@ namespace BH.Adapter.TDRepo
             BIMDataExporter exporter = new BIMDataExporter();
 
             // Prepare default material
-            Material defaultMat = new Material() { MaterialArray = new List<float> { 1f, 1f, 1f, 1f } };
+            TDR_Material defaultMat = new TDR_Material() { MaterialArray = new List<float> { 1f, 1f, 1f, 1f } };
             int defaultMatIdx = exporter.AddMaterial(defaultMat.MaterialArray);
 
             // Prepare transformation matrix 
@@ -136,7 +149,7 @@ namespace BH.Adapter.TDRepo
                         float b = (float)col.B / 255;
                         float a = (float)col.A / 255;
 
-                        Material customMat = new Material() { MaterialArray = new List<float> { r, g, b, a } };
+                        TDR_Material customMat = new TDR_Material() { MaterialArray = new List<float> { r, g, b, a } };
                         customMatIdx = exporter.AddMaterial(customMat.MaterialArray);
                     }
                 }
@@ -181,6 +194,46 @@ namespace BH.Adapter.TDRepo
             exporter.ExportToFile(bimFilePath);
 
             return bimFilePath;
+        }
+
+        private static RenderMesh JoinRenderMeshes(List<RenderMesh> renderMeshes)
+        {
+            List<Vertex> vertices = new List<Vertex>();
+            List<Face> faces = new List<Face>();
+
+            vertices.AddRange(renderMeshes[0].Vertices);
+            faces.AddRange(renderMeshes[0].Faces);
+
+            for (int i = 1; i < renderMeshes.Count; i++)
+            {
+                int lastVerticesCount = vertices.Count;
+                vertices.AddRange(renderMeshes[i].Vertices);
+                faces.AddRange(
+                    renderMeshes[i].Faces.Select(f =>
+                        new Face() { A = f.A + lastVerticesCount, B = f.B + lastVerticesCount, C = f.C + lastVerticesCount, D = f.D == -1 ? f.D : f.D + lastVerticesCount }));
+            }
+
+            return new RenderMesh() { Vertices = vertices, Faces = faces };
+        }
+
+        private static Mesh JoinMeshes(List<Mesh> meshes)
+        {
+            List<BH.oM.Geometry.Point> vertices = new List<BH.oM.Geometry.Point>();
+            List<Face> faces = new List<Face>();
+
+            vertices.AddRange(meshes[0].Vertices);
+            faces.AddRange(meshes[0].Faces);
+
+            for (int i = 1; i < meshes.Count; i++)
+            {
+                int lastVerticesCount = vertices.Count;
+                vertices.AddRange(meshes[i].Vertices);
+                faces.AddRange(
+                    meshes[i].Faces.Select(f =>
+                        new Face() { A = f.A + lastVerticesCount, B = f.B + lastVerticesCount, C = f.C + lastVerticesCount, D = f.D == -1 ? f.D : f.D + lastVerticesCount }));
+            }
+
+            return new Mesh() { Vertices = vertices, Faces = faces };
         }
     }
 }

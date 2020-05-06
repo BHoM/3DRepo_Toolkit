@@ -28,13 +28,13 @@ using System.Threading.Tasks;
 
 namespace BH.oM.External.TDRepo
 {
-    public class Mesh
+    public class TDR_Mesh
     {
         public string name;
-        public Point[] vertices;
-        public Face[] faces;
+        public TDR_Point[] vertices;
+        public TDR_Face[] faces;
 
-        public Mesh(string name, Point[] vertices, Face[] faces)
+        public TDR_Mesh(string name, TDR_Point[] vertices, TDR_Face[] faces)
         {
             this.name = name;
             this.vertices = vertices;
