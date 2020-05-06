@@ -28,13 +28,13 @@ using System.Threading.Tasks;
 
 namespace BH.oM.External.TDRepo
 {
-    public class Point
+    public class TDR_Point
     {
         public double x;
         public double y;
         public double z;
 
-        public Point(double x, double y, double z)
+        public TDR_Point(double x, double y, double z)
         {
             this.x = x;
             this.y = y;

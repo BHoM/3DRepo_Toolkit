@@ -75,7 +75,7 @@ namespace BH.Adapter.TDRepo
         private string m_modelId;
         private static Encoding m_encoding = Encoding.UTF8;
 
-        List<BH.oM.External.TDRepo.Mesh> m_3DRepoMeshesForOBJexport = new List<BH.oM.External.TDRepo.Mesh>();
+        List<BH.oM.External.TDRepo.TDR_Mesh> m_3DRepoMeshesForOBJexport = new List<BH.oM.External.TDRepo.TDR_Mesh>();
 
 
         /***************************************************/
