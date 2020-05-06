@@ -75,11 +75,13 @@ namespace BH.Adapter.TDRepo
                     object renderMeshObj = null;
                     bHoMObject.CustomData.TryGetValue(displayOptions.CustomRendermeshKey, out renderMeshObj);
                     renderMesh = renderMeshObj as BH.oM.Graphics.RenderMesh;
+                    meshRepresentation = renderMeshObj as BH.oM.Geometry.Mesh;
                 }
 
                 if (renderMesh != null)
                     meshRepresentation = new oM.Geometry.Mesh() { Faces = renderMesh.Faces, Vertices = renderMesh.Vertices.Select(v => new oM.Geometry.Point() { X = v.Point.X, Y = v.Point.Y, Z = v.Point.Z }).ToList() };
-                else
+
+                if (renderMesh == null && meshRepresentation == null)
                     meshRepresentation = BH.Engine.External.TDRepo.Compute.IMeshRepresentation(obj, displayOptions);
 
                 representationMeshes.Add(meshRepresentation);
