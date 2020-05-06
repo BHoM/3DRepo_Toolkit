@@ -63,10 +63,10 @@ namespace BH.Adapter.TDRepo
             List<Mesh> representationMeshes = new List<Mesh>();
             List<Tuple<IObject, Mesh>> objsAndRepresentations = new List<Tuple<IObject, Mesh>>();
 
-
             IBHoMObject bHoMObject = null;
             for (int i = 0; i < objectsToWrite.Count; i++)
             {
+
                 IObject obj = objectsToWrite[i];
 
                 Mesh meshRepresentation = null;
