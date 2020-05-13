@@ -73,7 +73,9 @@ namespace BH.Adapter.TDRepo
                 if (bHoMObject != null)
                 {
                     object renderMeshObj = null;
+                
                     bHoMObject.CustomData.TryGetValue(renderMeshOptions.CustomRendermeshKey, out renderMeshObj);
+
                     renderMesh = renderMeshObj as RenderMesh;
                     meshRepresentation = renderMeshObj as Mesh;
 
@@ -95,6 +97,7 @@ namespace BH.Adapter.TDRepo
 
                 if (renderMesh != null) //convert to Mesh
                     meshRepresentation = new Mesh() { Faces = renderMesh.Faces, Vertices = renderMesh.Vertices.Select(v => new oM.Geometry.Point() { X = v.Point.X, Y = v.Point.Y, Z = v.Point.Z }).ToList() };
+
 
                 representationMeshes.Add(meshRepresentation);
                 objsAndRepresentations.Add(new Tuple<IObject, Mesh>(obj, meshRepresentation));
