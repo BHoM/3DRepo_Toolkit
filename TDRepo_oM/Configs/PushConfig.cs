@@ -48,6 +48,6 @@ namespace BH.oM.External.TDRepo
         [Description("Toggles whether to delete or keep the .BIM file once it is uploaded.")]
         public bool KeepBIMFile { get; set; } = true;
 
-        public RenderMeshOptions DisplayOptions { get; set; } = new RenderMeshOptions();
+        public RenderMeshOptions RenderMeshOptions { get; set; } = new RenderMeshOptions();
     }
 }
