@@ -40,7 +40,7 @@ namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter : BHoMAdapter
     {
-        private static string WriteBIMFile(List<IObject> objectsToWrite, string directory = null, string fileName = null, DisplayOptions displayOptions = null)
+        private static string WriteBIMFile(List<IObject> objectsToWrite, string directory = null, string fileName = null, RenderMeshOptions renderMeshOptions = null)
         {
             // --------------------------------------------- //
             //                    Set-up                     //
@@ -54,8 +54,7 @@ namespace BH.Adapter.TDRepo
             fileName = fileName ?? Guid.NewGuid().ToString();
             string bimFilePath = Path.Combine(directory, fileName + ".bim");
 
-            displayOptions = displayOptions ?? new DisplayOptions();
-
+            renderMeshOptions = renderMeshOptions ?? new RenderMeshOptions();
 
             // --------------------------------------------- //
             //             Compute representation            //
@@ -74,7 +73,7 @@ namespace BH.Adapter.TDRepo
                 if (bHoMObject != null)
                 {
                     object renderMeshObj = null;
-                    bHoMObject.CustomData.TryGetValue(displayOptions.CustomRendermeshKey, out renderMeshObj);
+                    bHoMObject.CustomData.TryGetValue(renderMeshOptions.CustomRendermeshKey, out renderMeshObj);
                     renderMesh = renderMeshObj as RenderMesh;
                     meshRepresentation = renderMeshObj as Mesh;
 
@@ -91,11 +90,11 @@ namespace BH.Adapter.TDRepo
                     }
                 }
 
-                if (renderMesh != null)
-                    meshRepresentation = new Mesh() { Faces = renderMesh.Faces, Vertices = renderMesh.Vertices.Select(v => new oM.Geometry.Point() { X = v.Point.X, Y = v.Point.Y, Z = v.Point.Z }).ToList() };
-
                 if (renderMesh == null && meshRepresentation == null)
-                    meshRepresentation = BH.Engine.External.TDRepo.Compute.IMeshRepresentation(obj, displayOptions);
+                    renderMesh = BH.Engine.Representation.Compute.IRenderMesh(obj, renderMeshOptions);
+
+                if (renderMesh != null) //convert to Mesh
+                    meshRepresentation = new Mesh() { Faces = renderMesh.Faces, Vertices = renderMesh.Vertices.Select(v => new oM.Geometry.Point() { X = v.Point.X, Y = v.Point.Y, Z = v.Point.Z }).ToList() };
 
                 representationMeshes.Add(meshRepresentation);
                 objsAndRepresentations.Add(new Tuple<IObject, Mesh>(obj, meshRepresentation));

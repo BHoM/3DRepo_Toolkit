@@ -55,7 +55,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\WriteBIMFile.cs" />
-    <Compile Include="Configs\DisplayOptions.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="Point.cs" />
