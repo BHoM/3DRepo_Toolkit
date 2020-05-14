@@ -73,22 +73,24 @@ namespace BH.Adapter.TDRepo
                 if (bHoMObject != null)
                 {
                     object renderMeshObj = null;
-                
                     bHoMObject.CustomData.TryGetValue(renderMeshOptions.CustomRendermeshKey, out renderMeshObj);
 
-                    renderMesh = renderMeshObj as RenderMesh;
-                    meshRepresentation = renderMeshObj as Mesh;
-
-                    if (typeof(IEnumerable<object>).IsAssignableFrom(renderMeshObj.GetType()))
+                    if (renderMeshObj != null)
                     {
-                        List<object> objects = renderMeshObj as List<object>;
-                        List<RenderMesh> renderMeshes = objects.OfType<RenderMesh>().ToList();
-                        if (renderMeshes.Count > 0)
-                            renderMesh = JoinRenderMeshes(renderMeshes);
+                        renderMesh = renderMeshObj as RenderMesh;
+                        meshRepresentation = renderMeshObj as Mesh;
 
-                        List<Mesh> meshes = objects.OfType<Mesh>().ToList();
-                        if (meshes.Count > 0)
-                            meshRepresentation = JoinMeshes(meshes);
+                        if (typeof(IEnumerable<object>).IsAssignableFrom(renderMeshObj.GetType()))
+                        {
+                            List<object> objects = renderMeshObj as List<object>;
+                            List<RenderMesh> renderMeshes = objects.OfType<RenderMesh>().ToList();
+                            if (renderMeshes.Count > 0)
+                                renderMesh = JoinRenderMeshes(renderMeshes);
+
+                            List<Mesh> meshes = objects.OfType<Mesh>().ToList();
+                            if (meshes.Count > 0)
+                                meshRepresentation = JoinMeshes(meshes);
+                        }
                     }
                 }
 
@@ -97,7 +99,6 @@ namespace BH.Adapter.TDRepo
 
                 if (renderMesh != null) //convert to Mesh
                     meshRepresentation = new Mesh() { Faces = renderMesh.Faces, Vertices = renderMesh.Vertices.Select(v => new oM.Geometry.Point() { X = v.Point.X, Y = v.Point.Y, Z = v.Point.Z }).ToList() };
-
 
                 representationMeshes.Add(meshRepresentation);
                 objsAndRepresentations.Add(new Tuple<IObject, Mesh>(obj, meshRepresentation));
