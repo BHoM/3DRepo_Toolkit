@@ -63,13 +63,18 @@ namespace BH.Adapter.TDRepo
             List<Mesh> representationMeshes = new List<Mesh>();
             List<Tuple<IObject, Mesh>> objsAndRepresentations = new List<Tuple<IObject, Mesh>>();
 
-            foreach (IObject obj in objectsToWrite)
+
+            IBHoMObject bHoMObject = null;
+            for (int i = 0; i < objectsToWrite.Count; i++)
             {
+                IObject obj = objectsToWrite[i];
+
                 Mesh meshRepresentation = null;
 
                 // See if there is a custom BHoM mesh representation for that BHoMObject.
-                IBHoMObject bHoMObject = obj as IBHoMObject;
+                bHoMObject = obj as IBHoMObject;
                 RenderMesh renderMesh = null;
+
                 if (bHoMObject != null)
                 {
                     object renderMeshObj = null;
@@ -101,6 +106,14 @@ namespace BH.Adapter.TDRepo
                     meshRepresentation = new Mesh() { Faces = renderMesh.Faces, Vertices = renderMesh.Vertices.Select(v => new oM.Geometry.Point() { X = v.Point.X, Y = v.Point.Y, Z = v.Point.Z }).ToList() };
 
                 representationMeshes.Add(meshRepresentation);
+
+                if (bHoMObject != null)
+                {
+                    // Add/update the RenderMesh in CustomData
+                    bHoMObject.CustomData["RenderMesh"] = renderMesh;
+                    obj = bHoMObject;
+                }
+
                 objsAndRepresentations.Add(new Tuple<IObject, Mesh>(obj, meshRepresentation));
             }
 
@@ -134,7 +147,7 @@ namespace BH.Adapter.TDRepo
                 Tuple<IObject, BH.oM.Geometry.Mesh> objAndRepr = objsAndRepresentations[i];
 
                 // Check if a colour has been specified in the BHoMObject's CustomData
-                IBHoMObject bHoMObject = objAndRepr.Item1 as IBHoMObject;
+                bHoMObject = objAndRepr.Item1 as IBHoMObject;
                 int customMatIdx = defaultMatIdx;
                 if (bHoMObject != null)
                 {
