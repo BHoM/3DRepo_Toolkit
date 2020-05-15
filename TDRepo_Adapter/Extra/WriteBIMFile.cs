@@ -66,7 +66,6 @@ namespace BH.Adapter.TDRepo
             IBHoMObject bHoMObject = null;
             for (int i = 0; i < objectsToWrite.Count; i++)
             {
-
                 IObject obj = objectsToWrite[i];
 
                 Mesh meshRepresentation = null;
