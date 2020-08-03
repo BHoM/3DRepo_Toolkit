@@ -50,16 +50,19 @@ namespace BH.Adapter.TDRepo
 
         private static void NewRevision(string host, string apiKey, string teamspace, string modelId, string filePath)
         {
+            // Read the saved .bim file
             FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             byte[] data = new byte[fs.Length];
             fs.Read(data, 0, data.Length);
             fs.Close();
 
+            // Add the read data to the post request parameters
             Dictionary<string, object> postParameters = new Dictionary<string, object>();
             postParameters.Add("file", new FileParameter(data, filePath, "application/octet-stream"));
 
             Uri result = null;
 
+            // Endpoint for creating a new revision
             Uri.TryCreate($"{host}/{teamspace}/{modelId}/upload?key={apiKey}", UriKind.Absolute, out result);
 
             string uri = result.ToString();
