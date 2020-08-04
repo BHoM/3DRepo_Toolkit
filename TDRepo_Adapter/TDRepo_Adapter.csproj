@@ -81,6 +81,10 @@
       <HintPath>..\..\BHoM\Build\Graphics_oM.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Inspection_oM">
+      <HintPath>..\..\..\..\..\ProgramData\BHoM\Assemblies\Inspection_oM.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="LitJSON, Version=0.16.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\LitJson.0.16.0\lib\net45\LitJSON.dll</HintPath>
     </Reference>
@@ -137,9 +141,11 @@
   <ItemGroup>
     <Compile Include="AdapterActions\Push.cs" />
     <Compile Include="Convert\AdapterId.cs" />
+    <Compile Include="Convert\ToTDRepo\Issue.cs" />
     <Compile Include="Convert\ToTDRepo\Mesh.cs" />
     <Compile Include="Convert\ToTDRepo\MeshToGeom.cs" />
     <Compile Include="Extra\Commit.cs" />
+    <Compile Include="Extra\UploadAudits.cs" />
     <Compile Include="Extra\UploadBIM.cs" />
     <Compile Include="Extra\WriteOBJFile.cs" />
     <Compile Include="Extra\UploadOBJ.cs" />
