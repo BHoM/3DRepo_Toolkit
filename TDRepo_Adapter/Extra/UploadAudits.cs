@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This file is part of the Buildings and Habitats object Model (BHoM)
  * Copyright (c) 2015 - 2020, the respective contributors. All rights reserved.
  *
@@ -25,11 +25,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.Adapter;
-using BH.oM.Adapter;
+using BH.oM.Structure.Elements;
 using BH.oM.Base;
-using BH.oM.Reflection;
-using BH.oM.External.TDRepo.Commands;
+using BH.oM.Adapter;
 using BH.oM.External.TDRepo;
 using System.IO;
 using BH.oM.Inspection;
@@ -38,35 +36,20 @@ namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter
     {
-        public override List<object> Push(IEnumerable<object> objects, string tag = "", PushType pushType = PushType.AdapterDefault, ActionConfig actionConfig = null)
+        /***************************************************/
+        /**** Private methods                           ****/
+        /***************************************************/
+
+        private bool UploadAudits(IEnumerable<Audit> audits, PushConfig pushConfig)
         {
-            if (string.IsNullOrWhiteSpace(m_host) || string.IsNullOrEmpty(m_teamspace) || string.IsNullOrEmpty(m_userAPIKey) || string.IsNullOrEmpty(m_modelId))
-            {
-                BH.Engine.Reflection.Compute.RecordError("One or more of the needed parameters in the TDRepoAdapter is missing or invalid (modelId, userAPIkey, etc).");
-                return new List<object>();
-            }
+            // Write .BIM file and commit it.
+            List<IObject> objList = iObjs.ToList();
+            string BIMFilePath = WriteBIMFile(objList, pushConfig.Directory, pushConfig.FileName, pushConfig.RenderMeshOptions);
 
-            PushConfig pushConfig = actionConfig as PushConfig ?? new PushConfig();
+            iObjs = objList;
 
-            var iObjs = objects.OfType<IObject>();
-
-            if (iObjs.Count() != objects.Count())
-                BH.Engine.Reflection.Compute.RecordError("Push to 3DRepo currently supports only objects implementing BH.oM.IObject.");
-
-            // Separate Audits from the rest
-            IEnumerable<Audit> audits = iObjs.OfType<Audit>();
-            iObjs = iObjs.Except(audits);
-
-            if (pushConfig.PushBIMFormat)
-                UploadBIM(iObjs, pushConfig);
-            else
-                UploadOBJ(iObjs); // Upload using the (soon to be completely superseded) obj format
-
-            if (audits.Any())
-                UploadAudits(audits, pushConfig);
-
-            return iObjs.Cast<object>().ToList();
+            return Commit(BIMFilePath);
         }
-
     }
 }
+

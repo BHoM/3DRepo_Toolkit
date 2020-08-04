@@ -25,48 +25,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.Adapter;
-using BH.oM.Adapter;
-using BH.oM.Base;
-using BH.oM.Reflection;
-using BH.oM.External.TDRepo.Commands;
-using BH.oM.External.TDRepo;
-using System.IO;
 using BH.oM.Inspection;
+
+
 
 namespace BH.Adapter.TDRepo
 {
-    public partial class TDRepoAdapter
+    public static partial class Convert
     {
-        public override List<object> Push(IEnumerable<object> objects, string tag = "", PushType pushType = PushType.AdapterDefault, ActionConfig actionConfig = null)
+        public static BH.oM.External.TDRepo.TDRIssue FromBHoM(this Audit audit, int issueIdx = 0)
         {
-            if (string.IsNullOrWhiteSpace(m_host) || string.IsNullOrEmpty(m_teamspace) || string.IsNullOrEmpty(m_userAPIKey) || string.IsNullOrEmpty(m_modelId))
-            {
-                BH.Engine.Reflection.Compute.RecordError("One or more of the needed parameters in the TDRepoAdapter is missing or invalid (modelId, userAPIkey, etc).");
-                return new List<object>();
-            }
+            BH.oM.External.TDRepo.TDRIssue tdrIssue = new BH.oM.External.TDRepo.TDRIssue();
 
-            PushConfig pushConfig = actionConfig as PushConfig ?? new PushConfig();
+            Issue issue = audit.Issues.ElementAt(issueIdx); // proper selection/conversion is needed for multiple issues. Erik to check.
 
-            var iObjs = objects.OfType<IObject>();
+            tdrIssue.AssignedRoles.Add(issue.Assign); // check
+            tdrIssue.Description = issue.Description;
+            tdrIssue.Name = issue.Name;
+            tdrIssue.Status = issue.Status;
+            tdrIssue.Priority = issue.Priority;
+            tdrIssue.DueDate = audit.InspectionDate; // Check
+            tdrIssue.Position = new string[] {
+                issue.Position.X.ToString(),
+                issue.Position.Y.ToString(),
+                issue.Position.Z.ToString() }; // Check
 
-            if (iObjs.Count() != objects.Count())
-                BH.Engine.Reflection.Compute.RecordError("Push to 3DRepo currently supports only objects implementing BH.oM.IObject.");
-
-            // Separate Audits from the rest
-            IEnumerable<Audit> audits = iObjs.OfType<Audit>();
-            iObjs = iObjs.Except(audits);
-
-            if (pushConfig.PushBIMFormat)
-                UploadBIM(iObjs, pushConfig);
-            else
-                UploadOBJ(iObjs); // Upload using the (soon to be completely superseded) obj format
-
-            if (audits.Any())
-                UploadAudits(audits, pushConfig);
-
-            return iObjs.Cast<object>().ToList();
+            return tdrIssue;
         }
-
     }
 }
