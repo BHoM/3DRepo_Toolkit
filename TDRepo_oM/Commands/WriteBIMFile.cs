@@ -22,6 +22,7 @@
 
 using BH.oM.Adapter;
 using BH.oM.Base;
+using BH.oM.Graphics;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -38,6 +39,6 @@ namespace BH.oM.External.TDRepo.Commands
         public List<IObject> objectsToWrite { get; set; }
         public string Filepath { get; set; } = Path.Combine("C:\\temp", "BIMFileFormat");
         public string Filename { get; set; } = Guid.NewGuid().ToString();
-        public DisplayOptions DisplayOptions { get; set; } = new DisplayOptions();
+        public RenderMeshOptions DisplayOptions { get; set; } = new RenderMeshOptions();
     }
 }
