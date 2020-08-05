@@ -57,7 +57,7 @@ namespace BH.Adapter.TDRepo
             else
                 UploadOBJ(iObjs); // Upload using the (soon to be completely superseded) obj format
 
-            return new List<object>();
+            return iObjs.Cast<object>().ToList();
         }
 
     }

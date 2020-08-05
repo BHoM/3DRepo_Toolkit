@@ -42,7 +42,10 @@ namespace BH.Adapter.TDRepo
         private bool UploadBIM(IEnumerable<IObject> iObjs, PushConfig pushConfig)
         {
             // Write .BIM file and commit it.
-            string BIMFilePath = WriteBIMFile(iObjs.ToList(), pushConfig.Directory, pushConfig.FileName, pushConfig.DisplayOptions);
+            List<IObject> objList = iObjs.ToList();
+            string BIMFilePath = WriteBIMFile(objList, pushConfig.Directory, pushConfig.FileName, pushConfig.RenderMeshOptions);
+
+            iObjs = objList;
 
             return Commit(BIMFilePath);
         }

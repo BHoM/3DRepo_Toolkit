@@ -29,6 +29,7 @@ using BH.oM.Base;
 using BH.oM.Adapter;
 using System.ComponentModel;
 using System.IO;
+using BH.oM.Graphics;
 
 namespace BH.oM.External.TDRepo
 {
@@ -47,6 +48,6 @@ namespace BH.oM.External.TDRepo
         [Description("Toggles whether to delete or keep the .BIM file once it is uploaded.")]
         public bool KeepBIMFile { get; set; } = true;
 
-        public DisplayOptions DisplayOptions { get; set; } = new DisplayOptions();
+        public RenderMeshOptions RenderMeshOptions { get; set; } = new RenderMeshOptions();
     }
 }

@@ -12,6 +12,9 @@ namespace BH.Adapter.TDrepo
     {
         public static Geometry MeshToGeometry(this BH.oM.Geometry.Mesh mesh, int materialIdx = 1)
         {
+            if (mesh == null)
+                return null;
+
             // Make sure input mesh is triangle mesh
             mesh = BH.Engine.Geometry.Modify.Triangulate(mesh);
 

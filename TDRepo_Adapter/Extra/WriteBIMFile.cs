@@ -40,7 +40,7 @@ namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter : BHoMAdapter
     {
-        private static string WriteBIMFile(List<IObject> objectsToWrite, string directory = null, string fileName = null, DisplayOptions displayOptions = null)
+        private static string WriteBIMFile(List<IObject> objectsToWrite, string directory = null, string fileName = null, RenderMeshOptions renderMeshOptions = null)
         {
             // --------------------------------------------- //
             //                    Set-up                     //
@@ -54,8 +54,7 @@ namespace BH.Adapter.TDRepo
             fileName = fileName ?? Guid.NewGuid().ToString();
             string bimFilePath = Path.Combine(directory, fileName + ".bim");
 
-            displayOptions = displayOptions ?? new DisplayOptions();
-
+            renderMeshOptions = renderMeshOptions ?? new RenderMeshOptions();
 
             // --------------------------------------------- //
             //             Compute representation            //
@@ -64,40 +63,57 @@ namespace BH.Adapter.TDRepo
             List<Mesh> representationMeshes = new List<Mesh>();
             List<Tuple<IObject, Mesh>> objsAndRepresentations = new List<Tuple<IObject, Mesh>>();
 
-            foreach (IObject obj in objectsToWrite)
+
+            IBHoMObject bHoMObject = null;
+            for (int i = 0; i < objectsToWrite.Count; i++)
             {
+                IObject obj = objectsToWrite[i];
+
                 Mesh meshRepresentation = null;
 
                 // See if there is a custom BHoM mesh representation for that BHoMObject.
-                IBHoMObject bHoMObject = obj as IBHoMObject;
+                bHoMObject = obj as IBHoMObject;
                 RenderMesh renderMesh = null;
+
                 if (bHoMObject != null)
                 {
                     object renderMeshObj = null;
-                    bHoMObject.CustomData.TryGetValue(displayOptions.CustomRendermeshKey, out renderMeshObj);
-                    renderMesh = renderMeshObj as RenderMesh;
-                    meshRepresentation = renderMeshObj as Mesh;
+                    bHoMObject.CustomData.TryGetValue(renderMeshOptions.CustomRendermeshKey, out renderMeshObj);
 
-                    if (typeof(IEnumerable<object>).IsAssignableFrom(renderMeshObj.GetType()))
+                    if (renderMeshObj != null)
                     {
-                        List<object> objects = renderMeshObj as List<object>;
-                        List<RenderMesh> renderMeshes = objects.OfType<RenderMesh>().ToList();
-                        if (renderMeshes.Count > 0)
-                            renderMesh = JoinRenderMeshes(renderMeshes);
+                        renderMesh = renderMeshObj as RenderMesh;
+                        meshRepresentation = renderMeshObj as Mesh;
 
-                        List<Mesh> meshes = objects.OfType<Mesh>().ToList();
-                        if (meshes.Count > 0)
-                            meshRepresentation = JoinMeshes(meshes);
+                        if (typeof(IEnumerable<object>).IsAssignableFrom(renderMeshObj.GetType()))
+                        {
+                            List<object> objects = renderMeshObj as List<object>;
+                            List<RenderMesh> renderMeshes = objects.OfType<RenderMesh>().ToList();
+                            if (renderMeshes.Count > 0)
+                                renderMesh = JoinRenderMeshes(renderMeshes);
+
+                            List<Mesh> meshes = objects.OfType<Mesh>().ToList();
+                            if (meshes.Count > 0)
+                                meshRepresentation = JoinMeshes(meshes);
+                        }
                     }
                 }
 
-                if (renderMesh != null)
+                if (renderMesh == null && meshRepresentation == null)
+                    renderMesh = BH.Engine.Representation.Compute.IRenderMesh(obj, renderMeshOptions);
+
+                if (renderMesh != null) //convert to Mesh
                     meshRepresentation = new Mesh() { Faces = renderMesh.Faces, Vertices = renderMesh.Vertices.Select(v => new oM.Geometry.Point() { X = v.Point.X, Y = v.Point.Y, Z = v.Point.Z }).ToList() };
 
-                if (renderMesh == null && meshRepresentation == null)
-                    meshRepresentation = BH.Engine.External.TDRepo.Compute.IMeshRepresentation(obj, displayOptions);
-
                 representationMeshes.Add(meshRepresentation);
+
+                if (bHoMObject != null)
+                {
+                    // Add/update the RenderMesh in CustomData
+                    bHoMObject.CustomData["RenderMesh"] = renderMesh;
+                    obj = bHoMObject;
+                }
+
                 objsAndRepresentations.Add(new Tuple<IObject, Mesh>(obj, meshRepresentation));
             }
 
@@ -131,7 +147,7 @@ namespace BH.Adapter.TDRepo
                 Tuple<IObject, BH.oM.Geometry.Mesh> objAndRepr = objsAndRepresentations[i];
 
                 // Check if a colour has been specified in the BHoMObject's CustomData
-                IBHoMObject bHoMObject = objAndRepr.Item1 as IBHoMObject;
+                bHoMObject = objAndRepr.Item1 as IBHoMObject;
                 int customMatIdx = defaultMatIdx;
                 if (bHoMObject != null)
                 {
