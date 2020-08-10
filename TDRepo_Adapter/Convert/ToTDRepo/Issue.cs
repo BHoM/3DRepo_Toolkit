@@ -26,6 +26,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BH.oM.Inspection;
+using BH.Engine.External.TDRepo;
 
 
 
@@ -33,23 +34,31 @@ namespace BH.Adapter.TDRepo
 {
     public static partial class Convert
     {
-        public static BH.oM.External.TDRepo.TDRIssue FromBHoM(this Audit audit, int issueIdx = 0)
+        public static BH.oM.External.TDRepo.Issue FromBHoM(this Audit audit, int issueIdx = 0)
         {
-            BH.oM.External.TDRepo.TDRIssue tdrIssue = new BH.oM.External.TDRepo.TDRIssue();
+            BH.oM.External.TDRepo.Issue tdrIssue = new BH.oM.External.TDRepo.Issue();
 
-            Issue issue = audit.Issues.ElementAt(issueIdx); // proper selection/conversion is needed for multiple issues. Erik to check.
+            Issue issue = audit.Issues.First(); // TODO proper selection/conversion for multiple issues.
 
-            tdrIssue.AssignedRoles.Add(issue.Assign); // check
-            tdrIssue.Description = issue.Description;
+            // Pick and choose data from the BH.oM.Inspection.Audit and the BH.oM.Inspection.Issue
+            // to build the BH.oM.External.TDRepo.Issue, which can be then uploaded to 3DRepo.
             tdrIssue.Name = issue.Name;
+            tdrIssue.AssignedRoles.Add(issue.Assign); // check
             tdrIssue.Status = issue.Status;
             tdrIssue.Priority = issue.Priority;
-            tdrIssue.DueDate = audit.InspectionDate; // Check
+            tdrIssue.TopicType = ""; // TODO
+            tdrIssue.Viewpoint = new oM.External.TDRepo.Viewpoint()
+            {
+                Position = new string[] { issue.Position.X.ToString(), issue.Position.Y.ToString(), issue.Position.Z.ToString() },  // TODO now this is taking the same Position of the issue. Ideally to take the position of the media's viewpoint.
+                Screenshot = Compute.ReadToBase64(issue.Media.FirstOrDefault()) // TODO proper selection/conversion for multiple media.
+                // TODO all other properties of 3DRepo's Viewpoint are currently not in any BHoM object. 
+            };
+
             tdrIssue.Position = new string[] {
                 issue.Position.X.ToString(),
                 issue.Position.Y.ToString(),
                 issue.Position.Z.ToString() }; // Check
-
+            tdrIssue.Description = issue.Description;
             return tdrIssue;
         }
     }
