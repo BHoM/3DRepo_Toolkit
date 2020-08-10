@@ -42,13 +42,12 @@ namespace BH.Adapter.TDRepo
 
         private bool UploadAudits(IEnumerable<Audit> audits, PushConfig pushConfig)
         {
-            // Write .BIM file and commit it.
-            List<IObject> objList = iObjs.ToList();
-            string BIMFilePath = WriteBIMFile(objList, pushConfig.Directory, pushConfig.FileName, pushConfig.RenderMeshOptions);
+            //// Write .BIM file and commit it.
+            //List<IObject> objList = audits.ToList();
 
-            iObjs = objList;
+            //return Commit(BIMFilePath);
 
-            return Commit(BIMFilePath);
+            return true;
         }
     }
 }

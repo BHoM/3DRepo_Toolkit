@@ -102,6 +102,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compute\ReadToBinary.cs" />
     <Compile Include="Compute\FlatJson.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
