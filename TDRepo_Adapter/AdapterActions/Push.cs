@@ -53,17 +53,23 @@ namespace BH.Adapter.TDRepo
             if (iObjs.Count() != objects.Count())
                 BH.Engine.Reflection.Compute.RecordError("Push to 3DRepo currently supports only objects implementing BH.oM.IObject.");
 
-            // Separate Audits from the rest
+            // Separate Audits from the rest of the objects
             IEnumerable<Audit> audits = iObjs.OfType<Audit>();
             iObjs = iObjs.Except(audits);
 
-            if (pushConfig.PushBIMFormat)
-                UploadBIM(iObjs, pushConfig);
-            else
-                UploadOBJ(iObjs); // Upload using the (soon to be completely superseded) obj format
+            // Create and commit the objects
+            if (iObjs.Any())
+            {
+                string filePath = "";
+                if (pushConfig.PushBIMFormat)
+                    filePath = CreateBIMFile(iObjs, pushConfig);
+                else
+                    filePath = CreateOBJfile(iObjs); // Upload using the old obj format
+            }
 
+            // Create the audits/issues
             if (audits.Any())
-                UploadAudits(audits, pushConfig);
+                CreateIssues(audits, pushConfig);
 
             return iObjs.Cast<object>().ToList();
         }
