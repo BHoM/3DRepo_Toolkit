@@ -40,24 +40,40 @@ namespace BH.Adapter.TDRepo
 
             Issue issue = audit.Issues.First(); // TODO proper selection/conversion for multiple issues.
 
+            // Checks
+            if (string.IsNullOrWhiteSpace(issue.Name))
+            {
+                BH.Engine.Reflection.Compute.RecordError($"The {nameof(BH.oM.Inspection.Issue)} must be assigned a Name in order for the conversion to be possible.");
+                return null;
+            }
+
+            if (issue.Position == null)
+            {
+                BH.Engine.Reflection.Compute.RecordError($"The {nameof(BH.oM.Inspection.Issue)} must be assigned a position in order for the conversion to be possible.");
+                return null;
+            }
+
             // Pick and choose data from the BH.oM.Inspection.Audit and the BH.oM.Inspection.Issue
             // to build the BH.oM.External.TDRepo.Issue, which can be then uploaded to 3DRepo.
+
             tdrIssue.Name = issue.Name;
             tdrIssue.AssignedRoles.Add(issue.Assign); // check
             tdrIssue.Status = issue.Status;
             tdrIssue.Priority = issue.Priority;
-            tdrIssue.TopicType = ""; // TODO
+            tdrIssue.TopicType = issue.Type;
+            tdrIssue.TopicType = "for_information"; // TODO
+
             tdrIssue.Viewpoint = new oM.External.TDRepo.Viewpoint()
             {
-                Position = new string[] { issue.Position.X.ToString(), issue.Position.Y.ToString(), issue.Position.Z.ToString() },  // TODO now this is taking the same Position of the issue. Ideally to take the position of the media's viewpoint.
+                Position = new double[] { issue.Position.X, issue.Position.Y, issue.Position.Z },  // TODO now this is taking the same Position of the issue. Ideally to take the position of the media's viewpoint.
                 Screenshot = Compute.ReadToBase64(issue.Media.FirstOrDefault()) // TODO proper selection/conversion for multiple media.
-                // TODO all other properties of 3DRepo's Viewpoint are currently not in any BHoM object. 
+                                                                                // TODO all other properties of 3DRepo's Viewpoint are currently not in any BHoM object. 
             };
 
-            tdrIssue.Position = new string[] {
-                issue.Position.X.ToString(),
-                issue.Position.Y.ToString(),
-                issue.Position.Z.ToString() }; // Check
+            tdrIssue.Position = new double[] {
+                issue.Position.X,
+                issue.Position.Y,
+                issue.Position.Z }; // Check
             tdrIssue.Description = issue.Description;
             return tdrIssue;
         }

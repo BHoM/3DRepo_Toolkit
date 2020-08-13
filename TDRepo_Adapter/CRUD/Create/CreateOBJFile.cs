@@ -30,24 +30,32 @@ using BH.oM.Base;
 using BH.oM.Adapter;
 using BH.oM.External.TDRepo;
 using System.IO;
-using BH.oM.Inspection;
 
 namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter
     {
-        /***************************************************/
-        /**** Private methods                           ****/
-        /***************************************************/
-
-        private bool UploadAudits(IEnumerable<Audit> audits, PushConfig pushConfig)
+        public string CreateOBJfile(IEnumerable<IObject> objs, PushConfig pushConfig = null)
         {
-            //// Write .BIM file and commit it.
-            //List<IObject> objList = audits.ToList();
+            List<oM.Geometry.Mesh> meshes = objs.OfType<oM.Geometry.Mesh>().ToList();
 
-            //return Commit(BIMFilePath);
+            if (meshes.Count() != objs.Count())
+                BH.Engine.Reflection.Compute.RecordWarning($"The OBJ file format supports only Push of {typeof(oM.Geometry.Mesh).Name}.");
 
-            return true;
+            // Add to the scene
+            IEnumerable<TDR_Mesh> tdRepoMeshes = meshes.Where(tdRepoMesh => tdRepoMesh != null)
+                .Select(tdRepoMesh => BH.Adapter.TDRepo.Convert.FromBHoM(tdRepoMesh));
+
+            m_3DRepoMeshesForOBJexport.AddRange(tdRepoMeshes);
+
+            // Write OBJ file and commit it.
+            string OBJFilePath = WriteOBJFile();
+
+            // Commit the objects as serialised in the created OBJ file.
+            if (!string.IsNullOrWhiteSpace(OBJFilePath))
+                CommitNewRevision(OBJFilePath);
+
+            return OBJFilePath;
         }
     }
 }

@@ -35,11 +35,7 @@ namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter
     {
-        /***************************************************/
-        /**** Private methods                           ****/
-        /***************************************************/
-
-        private bool UploadBIM(IEnumerable<IObject> iObjs, PushConfig pushConfig)
+        public string CreateBIMFile(IEnumerable<IObject> iObjs, PushConfig pushConfig)
         {
             // Write .BIM file and commit it.
             List<IObject> objList = iObjs.ToList();
@@ -47,7 +43,11 @@ namespace BH.Adapter.TDRepo
 
             iObjs = objList;
 
-            return Commit(BIMFilePath);
+            // Commit the objects as serialised in the created BIM file.
+            if (!string.IsNullOrWhiteSpace(BIMFilePath))
+                CommitNewRevision(BIMFilePath);
+
+            return BIMFilePath;
         }
     }
 }

@@ -40,6 +40,10 @@ namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter : BHoMAdapter
     {
+        /***************************************************/
+        /**** Private methods                           ****/
+        /***************************************************/
+
         private static string WriteBIMFile(List<IObject> objectsToWrite, string directory = null, string fileName = null, RenderMeshOptions renderMeshOptions = null)
         {
             // --------------------------------------------- //

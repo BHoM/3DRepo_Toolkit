@@ -1,6 +1,6 @@
 ﻿/*
 * This file is part of the Buildings and Habitats object Model (BHoM)
-* Copyright (c) 2015 - 2019, the respective contributors. All rights reserved.
+* Copyright (c) 2015 - 2020, the respective contributors. All rights reserved.
 *
 * Each contributor holds copyright over their respective contributions.
 * The project versioning (Git) records all such contribution source information.
@@ -36,21 +36,14 @@ using BH.oM.External.TDRepo;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using BH.oM.Reflection.Attributes;
-using System.IO;
 
 namespace BH.Engine.External.TDRepo
 {
     public static partial class Compute
     {
-        [Description("Reads a file and returns its base64 representation.")]
-        public static string ReadToBase64(string filePath)
+        public static Guid CreateGuid()
         {
-            if (string.IsNullOrWhiteSpace(filePath))
-                return "";
-
-            byte[] imageArray = System.IO.File.ReadAllBytes(filePath);
-            string base64Representation = System.Convert.ToBase64String(imageArray);
-            return base64Representation;
+            return System.Guid.NewGuid();
         }
     }
 }
