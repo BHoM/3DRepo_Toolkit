@@ -11,31 +11,31 @@ namespace BH.oM.External.TDRepo
     public class Viewpoint: IObject // See https://3drepo.github.io/3drepo.io/#api-Issues-newIssue
     {
         [Description("The right vector of the viewpoint indicating the direction of right in relative coordinates.")]
-        public virtual string[] Right { get; set; }
+        public virtual double[] Right { get; set; }
 
         [Description("The up vector of the viewpoint indicating the direction of up in relative coordinates.")]
-        public virtual string[] Up { get; set; }
+        public virtual double[] Up { get; set; }
 
         [Description("The position vector indicates where in the world the viewpoint is positioned.")]
-        public virtual string[] Position { get; set; }
+        public virtual double[] Position { get; set; }
 
         [Description("The vector indicating where in the world the viewpoint is looking at.")]
-        public virtual string[] LookAt { get; set; }
+        public virtual double[] LookAt { get; set; }
 
         [Description("The vector indicating where is the viewpoint is looking at in relative coordinates.")]
-        public virtual string[] ViewDirection { get; set; }
+        public virtual double[] ViewDirection { get; set; }
 
         [Description("The vector indicating the near plane.")]
-        public virtual string NearPlane { get; set; }
+        public virtual double NearPlane { get; set; }
 
         [Description("The vector indicating the far plane.")]
-        public virtual string FarPlane { get; set; }
+        public virtual double FarPlane { get; set; }
 
         [Description("The angle of the field of view.")]
-        public virtual string FOV { get; set; }
+        public virtual double FOV { get; set; }
 
         [Description("The aspect ratio of the fustrum.")]
-        public virtual string AspectRatio { get; set; }
+        public virtual double AspectRatio { get; set; }
 
         [Description("If the issue is associated with one or more objects from the model this field has the value of a group id generated to hold those objects")]
         public virtual string HighlightedGroupId { get; set; }

@@ -25,9 +25,9 @@ namespace BH.oM.External.TDRepo
         public virtual string Priority { get; set; }
 
         [Description("Topic type of the issue. Its value has to be one of the defined topic_types for the model." +
-            "\nDefaults to `for_information`." +
+            "\nDefaults to `unassigned`." +
             "\nSee https://3drepo.github.io/3drepo.io/#api-Model-createModel for more details.")]
-        public virtual string TopicType { get; set; } = "for_information";
+        public virtual string TopicType { get; set; } = "unassigned";
 
         [Description("The viewpoint of the issue, defining the position of the camera and the screenshot for that position.")]
         public virtual Viewpoint Viewpoint { get; set; }
@@ -36,8 +36,6 @@ namespace BH.oM.External.TDRepo
         public virtual string Description { get; set; }
 
         [Description("The vector defining the pin of the issue (X, Y, Z).")]
-        public virtual string[] Position { get; set; }
-
-
+        public virtual double[] Position { get; set; }
     }
 }

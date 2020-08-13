@@ -29,56 +29,6 @@ namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter
     {
-        public bool Commit(string filePath)
-        {
-            bool success;
-
-            try
-            {
-                NewRevision(m_host, m_userAPIKey, m_teamspace, m_modelId, filePath);
-                success = true;
-            }
-            catch (System.Exception e)
-            {
-                BH.Engine.Reflection.Compute.RecordError($"Committing to server failed. Error:\n{e.Message}");
-                success = false;
-            }
-
-            m_3DRepoMeshesForOBJexport.Clear();
-            return success;
-        }
-
-        private static void NewRevision(string host, string apiKey, string teamspace, string modelId, string filePath)
-        {
-            // Read the saved .bim file
-            FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            byte[] data = new byte[fs.Length];
-            fs.Read(data, 0, data.Length);
-            fs.Close();
-
-            // Add the read data to the post request parameters
-            Dictionary<string, object> postParameters = new Dictionary<string, object>();
-            postParameters.Add("file", new FileParameter(data, filePath, "application/octet-stream"));
-
-            Uri result = null;
-
-            // Endpoint for creating a new revision
-            Uri.TryCreate($"{host}/{teamspace}/{modelId}/upload?key={apiKey}", UriKind.Absolute, out result);
-
-            string uri = result.ToString();
-
-            // Create request and receive response
-            HttpWebResponse webResponse = MultipartFormDataPost(uri, null, postParameters);
-
-            // Process response
-            StreamReader responseReader = new StreamReader(webResponse.GetResponseStream());
-            string fullResponse = responseReader.ReadToEnd();
-            webResponse.Close();
-
-            if (fullResponse.Contains("The remote server returned an error"))
-                throw new Exception(fullResponse);
-        }
-
         public static HttpWebResponse MultipartFormDataPost(string postUrl, string userAgent, Dictionary<string, object> postParameters, CookieContainer cookies = null)
         {
             string formDataBoundary = String.Format("----------{0:N}", Guid.NewGuid());
