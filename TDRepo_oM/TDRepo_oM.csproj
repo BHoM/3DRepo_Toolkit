@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\WriteBIMFile.cs" />
+    <Compile Include="Requests\IssueRequest.cs" />
     <Compile Include="ViewPoint.cs" />
     <Compile Include="Issue.cs" />
     <Compile Include="Material.cs" />

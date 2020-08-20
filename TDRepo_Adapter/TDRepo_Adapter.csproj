@@ -54,6 +54,10 @@
       <HintPath>C:\ProgramData\BHoM\Assemblies\BHoM_Engine.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Data_oM">
+      <HintPath>..\..\..\..\..\ProgramData\BHoM\Assemblies\Data_oM.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Dimensional_oM">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\ProgramData\BHoM\Assemblies\Dimensional_oM.dll</HintPath>
@@ -131,11 +135,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdapterActions\Pull.cs" />
     <Compile Include="AdapterActions\Push.cs" />
     <Compile Include="Convert\AdapterId.cs" />
     <Compile Include="Convert\ToTDRepo\Issue.cs" />
     <Compile Include="Convert\ToTDRepo\Mesh.cs" />
     <Compile Include="Convert\ToTDRepo\MeshToGeom.cs" />
+    <Compile Include="CRUD\Read\GetIssues.cs" />
     <Compile Include="CRUD\Create\CreateIssues.cs" />
     <Compile Include="Extra\MultipartFormDataPost.cs" />
     <Compile Include="Extra\CommitNewRevision.cs" />
