@@ -61,7 +61,6 @@ namespace BH.Adapter.TDRepo
             tdrIssue.Status = issue.Status;
             tdrIssue.Priority = issue.Priority;
             tdrIssue.TopicType = issue.Type;
-            tdrIssue.TopicType = "for_information"; // TODO
 
             tdrIssue.Viewpoint = new oM.External.TDRepo.Viewpoint()
             {
