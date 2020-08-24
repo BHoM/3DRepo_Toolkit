@@ -31,7 +31,7 @@ using System.ComponentModel;
 using System.IO;
 using BH.oM.Graphics;
 
-namespace BH.oM.External.TDRepo
+namespace BH.oM.Adapters.TDRepo
 {
     public class PushConfig : ActionConfig
     {
@@ -39,15 +39,21 @@ namespace BH.oM.External.TDRepo
             "If false, file export follows .obj convention (no material).")]
         public bool PushBIMFormat { get; set; } = true;
 
-        [Description("Directory where to save the .BIM file that is to be uploaded.")]
+        [Description("The .BIM file that is to be uploaded will be assembled at this location." +
+            "\n(In order to Push, a .BIM file is to be assembled with the input BHoMObjects)")]
         public string Directory { get; set; } = Path.Combine("C:\\temp", "3DRepoToolkitBIMFiles");
 
-        [Description("Name of the .BIM file that is to be uploaded.")]
+        [Description("The .BIM file that is to be uploaded will be assembled with this name." +
+            "\n(In order to Push, a .BIM file is to be assembled with the input BHoMObjects)")]
         public string FileName { get; set; } = Guid.NewGuid().ToString();
 
-        [Description("Toggles whether to delete or keep the .BIM file once it is uploaded.")]
+        [Description("Toggles whether to delete or keep the assembled .BIM file once it is uploaded.")]
         public bool KeepBIMFile { get; set; } = true;
 
+        [Description("Options for the computation of the Render Mesh, used to represent the objects in 3D repo.")]
         public RenderMeshOptions RenderMeshOptions { get; set; } = new RenderMeshOptions();
+
+        [Description("Directory where the media are stored.")]
+        public string MediaDirectory { get; set; }
     }
 }

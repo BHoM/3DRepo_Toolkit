@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BH.oM.External.TDRepo
+namespace BH.oM.Adapters.TDRepo
 {
     public class Viewpoint: IObject // See https://3drepo.github.io/3drepo.io/#api-Issues-newIssue
     {

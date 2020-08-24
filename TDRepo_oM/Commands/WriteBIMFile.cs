@@ -31,7 +31,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BH.oM.External.TDRepo.Commands
+namespace BH.oM.Adapters.TDRepo.Commands
 {
     [Description("")]
     public class WriteBIMFileCommand : IExecuteCommand

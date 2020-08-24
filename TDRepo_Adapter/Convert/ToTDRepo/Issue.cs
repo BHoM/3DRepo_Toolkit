@@ -26,7 +26,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BH.oM.Inspection;
-using BH.Engine.External.TDRepo;
+using BH.Engine.Adapters.TDRepo;
 
 
 
@@ -34,11 +34,9 @@ namespace BH.Adapter.TDRepo
 {
     public static partial class Convert
     {
-        public static BH.oM.External.TDRepo.Issue FromBHoM(this Audit audit, int issueIdx = 0)
+        public static BH.oM.Adapters.TDRepo.Issue FromBHoM(this Issue issue, string resourcesFolder = "", int issueIdx = 0)
         {
-            BH.oM.External.TDRepo.Issue tdrIssue = new BH.oM.External.TDRepo.Issue();
-
-            Issue issue = audit.Issues.First(); // TODO proper selection/conversion for multiple issues.
+            BH.oM.Adapters.TDRepo.Issue tdrIssue = new BH.oM.Adapters.TDRepo.Issue();
 
             // Checks
             if (string.IsNullOrWhiteSpace(issue.Name))
@@ -54,7 +52,7 @@ namespace BH.Adapter.TDRepo
             }
 
             // Pick and choose data from the BH.oM.Inspection.Audit and the BH.oM.Inspection.Issue
-            // to build the BH.oM.External.TDRepo.Issue, which can be then uploaded to 3DRepo.
+            // to build the BH.oM.Adapters.TDRepo.Issue, which can be then uploaded to 3DRepo.
 
             tdrIssue.Name = issue.Name;
             tdrIssue.AssignedRoles.Add(issue.Assign); // check
@@ -62,11 +60,13 @@ namespace BH.Adapter.TDRepo
             tdrIssue.Priority = issue.Priority;
             tdrIssue.TopicType = issue.Type;
 
-            tdrIssue.Viewpoint = new oM.External.TDRepo.Viewpoint()
+            // The first media item is picked as the screenshot.
+            string screenshotFilePath = !string.IsNullOrWhiteSpace(issue.Media.FirstOrDefault()) ? System.IO.Path.Combine(resourcesFolder ?? "C:\\temp\\", issue.Media.FirstOrDefault()) : null;
+            tdrIssue.Viewpoint = new oM.Adapters.TDRepo.Viewpoint()
             {
                 Position = new double[] { issue.Position.X, issue.Position.Y, issue.Position.Z },  // TODO now this is taking the same Position of the issue. Ideally to take the position of the media's viewpoint.
-                Screenshot = Compute.ReadToBase64(issue.Media.FirstOrDefault()) // TODO proper selection/conversion for multiple media.
-                                                                                // TODO all other properties of 3DRepo's Viewpoint are currently not in any BHoM object. 
+                Screenshot = Compute.ReadToBase64(screenshotFilePath)
+                // TODO all other properties of 3DRepo's Viewpoint are currently not in any BHoM object. 
             };
 
             tdrIssue.Position = new double[] {

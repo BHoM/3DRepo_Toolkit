@@ -32,7 +32,7 @@ using BH.Engine.Base;
 using BH.oM.Base;
 using RepoFileExporter;
 using RepoFileExporter.dataStructures;
-using BH.oM.External.TDRepo;
+using BH.oM.Adapters.TDRepo;
 using BH.oM.Geometry;
 using BH.oM.Graphics;
 
@@ -183,7 +183,7 @@ namespace BH.Adapter.TDRepo
                 string serialisedBHoMData = BH.Engine.Serialiser.Convert.ToJson(objAndRepr.Item1);
 
                 // Flatten the JSON in a Dictionary. Nested properties names are concatenated with fullstops.
-                Dictionary<string, object> flattenedObj = BH.Engine.External.TDRepo.Compute.FlattenJsonToDictionary(serialisedBHoMData);
+                Dictionary<string, object> flattenedObj = BH.Engine.Adapters.TDRepo.Compute.FlattenJsonToDictionary(serialisedBHoMData);
 
                 // For each entry in the flattened object, add a metadata with the value.
                 flattenedObj.ToList().ForEach(

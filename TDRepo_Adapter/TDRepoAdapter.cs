@@ -43,12 +43,12 @@ namespace BH.Adapter.TDRepo
         [Input("modelId", "Id of the model within the teamspace. Can be found on the Dashboard website by selecting 'Model Settings'.")]
         [Input("userAPIKey", "User API key to allow the upload through the 3D Repo Web API.\n" +
             "This must be generated per individual user from the Dashboard website: go in 'User Profile' to find it.")] // Also see https://www.youtube.com/watch?v=prio5r5zGGc or https://3drepo.github.io/3drepo.io/#api-User-generateApiKey
-        [Input("url", "Address of the web server.")]
-        public TDRepoAdapter(string teamspace = null, string modelId = null, string userAPIKey = null, string url = "https://api1.www.3drepo.io/api")
+        [Input("APIUrl", "Address of the API web server.")]
+        public TDRepoAdapter(string teamspace = null, string modelId = null, string userAPIKey = null, string APIUrl = "https://api1.www.3drepo.io/api")
         {
             m_AdapterSettings.DefaultPushType = oM.Adapter.PushType.CreateOnly;
 
-            if (string.IsNullOrWhiteSpace(teamspace) || string.IsNullOrWhiteSpace(modelId) || string.IsNullOrWhiteSpace(userAPIKey) || string.IsNullOrWhiteSpace(url))
+            if (string.IsNullOrWhiteSpace(teamspace) || string.IsNullOrWhiteSpace(modelId) || string.IsNullOrWhiteSpace(userAPIKey) || string.IsNullOrWhiteSpace(APIUrl))
             {
                 BH.Engine.Reflection.Compute.RecordWarning("Some of the required inputs to connect to the 3D Repo server are missing or invalid.\n" +
                     "You can still use the Adapter with the Execute action, which allows you to save a .BIM file that you can upload manually on 3DRepo.");
@@ -56,7 +56,7 @@ namespace BH.Adapter.TDRepo
             else
                 BH.Engine.Reflection.Compute.RecordNote($"Note: you should be using your own `userAPIKey`, see input description.\nSharing the user API Key is DANGEROUS.\nIf you didn't input your own key, you might be doing unauthorized changes.");
 
-            m_host = url;
+            m_host = APIUrl;
             m_userAPIKey = userAPIKey;
             m_teamspace = teamspace;
             m_modelId = modelId;
@@ -75,7 +75,7 @@ namespace BH.Adapter.TDRepo
         private string m_modelId;
         private static Encoding m_encoding = Encoding.UTF8;
 
-        List<BH.oM.External.TDRepo.TDR_Mesh> m_3DRepoMeshesForOBJexport = new List<BH.oM.External.TDRepo.TDR_Mesh>();
+        List<BH.oM.Adapters.TDRepo.TDR_Mesh> m_3DRepoMeshesForOBJexport = new List<BH.oM.Adapters.TDRepo.TDR_Mesh>();
 
 
         /***************************************************/

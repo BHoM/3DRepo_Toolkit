@@ -28,50 +28,99 @@ using System.Threading.Tasks;
 using BH.oM.Structure.Elements;
 using BH.oM.Base;
 using BH.oM.Adapter;
-using BH.oM.External.TDRepo;
+using BH.oM.Adapters.TDRepo;
 using System.IO;
 using BH.oM.Inspection;
 using System.Net.Http;
 using System.Net;
+using BH.Engine.Adapters.TDRepo;
 
 namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter
     {
-        public bool CreateIssues(IEnumerable<Audit> audits, PushConfig pushConfig)
+        bool m_MediaPathAlert = true;
+
+        public bool Create(IEnumerable<oM.Inspection.Issue> bhomIssues, PushConfig pushConfig)
         {
-            // Convert BHoM Audits to 3DRepo issues
-            List<BH.oM.External.TDRepo.Issue> issue = audits.Select(a => a.FromBHoM()).ToList();
+            bool success = true;
 
-            // Serialise the object. All property names must have the first letter lowercase for 3DRepo API.
-            var serializerSettings = new Newtonsoft.Json.JsonSerializerSettings();
-            serializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
-            string issue_serialised = Newtonsoft.Json.JsonConvert.SerializeObject(issue, serializerSettings);
+            string mediaDirectory = pushConfig.MediaDirectory;
 
-            // Remove unneded square brackets
-            issue_serialised = issue_serialised.Remove(0, 1);
-            issue_serialised = issue_serialised.Remove(issue_serialised.Length - 1, 1);
-           
-            // Endpoint for creating a new issue
-            Uri issueEndpoint = null;
-            Uri.TryCreate($"{m_host}/{m_teamspace}/{m_modelId}/issues?key={m_userAPIKey}", UriKind.Absolute, out issueEndpoint);
-
-            // POST request
-            HttpResponseMessage respMessage;
-            string fullResponse = "";
-            var httpContent = new StringContent(issue_serialised, Encoding.UTF8, "application/json");
-            using (var httpClient = new HttpClient())
+            if (m_MediaPathAlert && string.IsNullOrWhiteSpace(mediaDirectory))
             {
-                respMessage = httpClient.PostAsync(issueEndpoint, httpContent).Result;
+                BH.Engine.Reflection.Compute.RecordNote($"Media directory not specified in the `{nameof(PushConfig)}`. This defaults to 'C:\temp\'. " +
+                    $"\nTo specify a media directory, insert a `{nameof(PushConfig)}` into this Push component's `{nameof(ActionConfig)}` input.");
+                mediaDirectory = @"C:\temp\";
 
-                // Process response
-                fullResponse = respMessage.Content.ReadAsStringAsync().Result;
+                m_MediaPathAlert = false;
             }
 
-            if (!respMessage.IsSuccessStatusCode)
-                BH.Engine.Reflection.Compute.RecordError($"The server returned a {respMessage.StatusCode} Error:\n" + fullResponse);
-    
-            return true;
+            var serializerSettings = new Newtonsoft.Json.JsonSerializerSettings();
+            serializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
+
+            foreach (oM.Inspection.Issue bhomIssue in bhomIssues)
+            {
+                // Convert BHoM Audits to 3DRepo issues.
+                // NOTE: ONLY THE FIRST ISSUE OF THE AUDIT IS CONVERTED. 
+                BH.oM.Adapters.TDRepo.Issue issue = bhomIssue.FromBHoM(mediaDirectory);
+
+                // Serialise the object. All property names must have the first letter lowercase for 3DRepo API.
+                string issue_serialised = Newtonsoft.Json.JsonConvert.SerializeObject(issue, serializerSettings);
+
+                // Endpoint for creating a new issue
+                string issueEndpoint = $"{m_host}/{m_teamspace}/{m_modelId}/issues?key={m_userAPIKey}";
+
+                // POST request
+                HttpResponseMessage respMessage;
+                string fullResponse = "";
+                var httpContent = new StringContent(issue_serialised, Encoding.UTF8, "application/json");
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    respMessage = httpClient.PostAsync(issueEndpoint, httpContent).Result;
+
+                    // Process response
+                    fullResponse = respMessage.Content.ReadAsStringAsync().Result;
+                }
+
+                // Deserialise the response. 
+                serializerSettings.ContractResolver = new IssueContractResolver();
+                BH.oM.Adapters.TDRepo.Issue issue_deserial = Newtonsoft.Json.JsonConvert.DeserializeObject<BH.oM.Adapters.TDRepo.Issue>(fullResponse, serializerSettings);
+
+                if (!respMessage.IsSuccessStatusCode)
+                {
+                    BH.Engine.Reflection.Compute.RecordError($"The server returned a {respMessage.StatusCode} Error:\n" + fullResponse);
+                    success = false;
+                }
+
+                // Assign the CreatedIssue Id to the Audit.
+                // NOTE: ONLY THE FIRST ISSUE OF THE AUDIT IS CREATED (SEE THE CONVERT)
+                string issueId = issue_deserial.Id;
+                bhomIssue.CustomData[Convert.AdapterIdName] = issueId;
+
+                // If there is more than one Media per each issue,
+                // the media needs to be attached as a "Resource" of the issue.
+                // This requires a MultipartFormData request. See https://3drepo.github.io/3drepo.io/#api-Issues-attachResource
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    string issueResourceEndpoint = $"{m_host}/{m_teamspace}/{m_modelId}/issue/{issueId}/resources?key={m_userAPIKey}";
+
+                    var requestContent = new MultipartFormDataContent();
+
+                    foreach (var mediaPath in bhomIssue.Media)
+                    {
+                        string resourcePath = System.IO.Path.Combine(mediaDirectory ?? "C:\\temp\\", bhomIssue.Media.FirstOrDefault());
+
+                        var imageContent = new ByteArrayContent(Compute.ReadToByte(resourcePath));
+                        imageContent.Headers.ContentType =
+                            System.Net.Http.Headers.MediaTypeHeaderValue.Parse("image/jpeg");
+
+                        requestContent.Add(imageContent, "image", "image.jpg");
+                    }
+                }
+            }
+
+            return success;
         }
     }
 }

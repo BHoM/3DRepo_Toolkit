@@ -1,4 +1,4 @@
-﻿using BH.oM.External.TDRepo;
+﻿using BH.oM.Adapters.TDRepo;
 using RepoFileExporter.dataStructures;
 using System;
 using System.Collections.Generic;

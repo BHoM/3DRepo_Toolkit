@@ -32,12 +32,12 @@ using System.Reflection;
 using BH.oM.Geometry;
 using BH.Engine.Base;
 using System.ComponentModel;
-using BH.oM.External.TDRepo;
+using BH.oM.Adapters.TDRepo;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using BH.oM.Reflection.Attributes;
 
-namespace BH.Engine.External.TDRepo
+namespace BH.Engine.Adapters.TDRepo
 {
     public static partial class Compute
     {
