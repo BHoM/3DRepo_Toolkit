@@ -7,7 +7,7 @@
     <ProjectGuid>{A70835F4-6498-4F3B-B7BA-5BC87F36AB4C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BH.oM.External.TDRepo</RootNamespace>
+    <RootNamespace>BH.oM.Adapters.TDRepo</RootNamespace>
     <AssemblyName>TDRepo_oM</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -40,6 +40,10 @@
       <HintPath>..\..\BHoM\Build\BHoM.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Data_oM">
+      <HintPath>..\..\..\..\..\ProgramData\BHoM\Assemblies\Data_oM.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Graphics_oM">
       <HintPath>..\..\BHoM\Build\Graphics_oM.dll</HintPath>
       <Private>False</Private>
@@ -55,6 +59,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\WriteBIMFile.cs" />
+    <Compile Include="Requests\ITeamSpaceRequest.cs" />
+    <Compile Include="Requests\IModelIdRequest.cs" />
+    <Compile Include="Requests\IUserAPIKeyRequest.cs" />
+    <Compile Include="Requests\RevisionRequest.cs" />
+    <Compile Include="Revision.cs" />
     <Compile Include="Requests\IssueRequest.cs" />
     <Compile Include="ViewPoint.cs" />
     <Compile Include="Issue.cs" />

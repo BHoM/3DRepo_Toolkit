@@ -23,7 +23,7 @@
 using BH.oM.Adapter;
 using BH.oM.Base;
 using BH.oM.Data.Requests;
-using BH.oM.External.TDRepo.Requests;
+using BH.oM.Adapters.TDRepo.Requests;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,6 +33,10 @@ namespace BH.Adapter.TDRepo
     {
         public override IEnumerable<object> Pull(IRequest request, PullType pullType = PullType.AdapterDefault, ActionConfig actionConfig = null)
         {
+            RevisionRequest rr = request as RevisionRequest;
+            if (rr != null)
+                return GetRevisions(rr).OfType<object>();
+
             IssueRequest ir = request as IssueRequest;
             if (ir != null)
             {
