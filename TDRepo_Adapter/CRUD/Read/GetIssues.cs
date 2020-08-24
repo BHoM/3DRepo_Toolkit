@@ -33,12 +33,13 @@ using System.IO;
 using BH.oM.Adapters.TDRepo.Requests;
 using System.Net.Http;
 using Newtonsoft.Json.Serialization;
+using BH.Engine.Adapters.TDRepo;
 
 namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter
     {
-        public List<Issue> GetIssues(IssueRequest ir, bool enableMessages = true)
+        public List<Issue> GetIssues(IssueRequest ir, PullConfig pullConfig, bool enableMessages = true)
         {
             string modelId = ir.ModelId ?? m_modelId;
             string teamsSpace = ir.TeamSpace ?? m_teamspace;
@@ -70,8 +71,6 @@ namespace BH.Adapter.TDRepo
                     BH.Engine.Reflection.Compute.RecordNote($"Getting all of the {nameof(Issue)}s attached to RevisionId {revisionId} \nfrom the 3DRepo Model `{modelId}` in the Teamspace `{teamsSpace}`.");
             }
 
-        
-
             if (!string.IsNullOrWhiteSpace(ir.UserAPIKey))
                 endpoint += $"?key={ir.UserAPIKey}";
             else if (!string.IsNullOrWhiteSpace(m_userAPIKey))
@@ -90,12 +89,7 @@ namespace BH.Adapter.TDRepo
 
             if (!respMessage.IsSuccessStatusCode)
             {
-                System.Text.RegularExpressions.Regex oRegex = new System.Text.RegularExpressions.Regex(".*?<body.*?>(.*?)</body>.*?", System.Text.RegularExpressions.RegexOptions.Multiline);
-                string htmlTagPattern = "<.*?>";
-                fullResponse = oRegex.Replace(fullResponse, string.Empty);
-                fullResponse = System.Text.RegularExpressions.Regex.Replace(fullResponse, htmlTagPattern, string.Empty);
-                fullResponse = System.Text.RegularExpressions.Regex.Replace(fullResponse, @"^\s+$[\r\n]*", "", System.Text.RegularExpressions.RegexOptions.Multiline);
-                fullResponse = fullResponse.Replace("&nbsp;", string.Empty);
+                fullResponse = fullResponse.GetResponseBody();
 
                 BH.Engine.Reflection.Compute.RecordError($"The server returned a {respMessage.StatusCode} Error:\n" + fullResponse);
                 return new List<Issue>();
@@ -105,14 +99,25 @@ namespace BH.Adapter.TDRepo
             var serializerSettings = new Newtonsoft.Json.JsonSerializerSettings();
             serializerSettings.ContractResolver = new IssueContractResolver();
 
-            List<Issue> revisions_deserialised = new List<Issue>();
+            List<Issue> issues_deserialised = new List<Issue>();
 
-            if (singleIssue)
-                revisions_deserialised.Add(Newtonsoft.Json.JsonConvert.DeserializeObject<Issue>(fullResponse, serializerSettings));
+            try
+            {
+                if (singleIssue)
+                    issues_deserialised.Add(Newtonsoft.Json.JsonConvert.DeserializeObject<Issue>(fullResponse, serializerSettings));
                 else
-                revisions_deserialised = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Issue>>(fullResponse, serializerSettings);
+                    issues_deserialised = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Issue>>(fullResponse, serializerSettings);
+            }
+            catch (Exception e)
+            {
+                BH.Engine.Reflection.Compute.RecordError(e.Message);
+            }
 
-            return revisions_deserialised;
+            // TODO: Save any Resource attached to the issues on disk.
+            //List<string> base64resources = issues_deserialised.Select(i => i.Viewpoint.ViewDirection)
+
+
+            return issues_deserialised;
         }
 
         public class IssueContractResolver : DefaultContractResolver

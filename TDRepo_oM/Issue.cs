@@ -40,7 +40,7 @@ namespace BH.oM.Adapters.TDRepo
         public virtual double[] Position { get; set; }
 
         [Description("Comments attached to the Issue.")]
-        public virtual List<string> Comments { get; set; }
+        public virtual List<Comment> Comments { get; set; }
 
         [Description("The GUID of the Issue on 3DRepo. This is assigned by the server.")]
         public virtual string Id { get; set; } = null;

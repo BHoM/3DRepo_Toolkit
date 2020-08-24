@@ -1,5 +1,6 @@
 ﻿using BH.oM.Base;
 using BH.oM.Data.Requests;
+using BH.oM.Inspection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,10 +11,10 @@ using System.Threading.Tasks;
 namespace BH.oM.Adapters.TDRepo.Requests
 {
     [Description("Retrieves issues.")] // See https://3drepo.github.io/3drepo.io/#api-Issues-newIssue
-    public class IssueRequest : IUserAPIKeyRequest, ITeamSpaceRequest, IModelIdRequest 
+    public class AuditRequest : IUserAPIKeyRequest, ITeamSpaceRequest, IModelIdRequest
     {
-        [Description("If nothing is specified, query all the Issues.")]
-        public virtual string IssueId { get; set; } = null;
+        [Description("Audit whose information you wish to Pull from 3DRepo.")]
+        public virtual Audit Audit { get; set; } = null;
 
         [Description("If nothing is specified, takes the latest revision from the Model.")]
         public virtual string RevisionId { get; set; } = null;
