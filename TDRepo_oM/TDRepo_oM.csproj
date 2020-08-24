@@ -48,6 +48,10 @@
       <HintPath>..\..\BHoM\Build\Graphics_oM.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Inspection_oM">
+      <HintPath>..\..\..\..\..\ProgramData\BHoM\Assemblies\Inspection_oM.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -59,6 +63,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\WriteBIMFile.cs" />
+    <Compile Include="Comment.cs" />
+    <Compile Include="Configs\PullConfig.cs" />
+    <Compile Include="Requests\AuditRequest.cs" />
     <Compile Include="Requests\ITeamSpaceRequest.cs" />
     <Compile Include="Requests\IModelIdRequest.cs" />
     <Compile Include="Requests\IUserAPIKeyRequest.cs" />

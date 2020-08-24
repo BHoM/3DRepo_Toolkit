@@ -53,6 +53,7 @@ namespace BH.Adapter.TDRepo
                 BH.Engine.Reflection.Compute.RecordError($"Push to 3DRepo currently supports only objects implementing {nameof(IObject)}.");
 
             List<object> createdObjects = new List<object>();
+
             PushConfig pushConfig = actionConfig as PushConfig ?? new PushConfig();
 
             // Separate Audits and Issues from the rest of the objects. Those have to be created last.
@@ -78,7 +79,7 @@ namespace BH.Adapter.TDRepo
             if (audits.Any() && Create(audits, pushConfig))
                 createdObjects.AddRange(audits);
 
-            if (issues.Any() && Create(issues, null, pushConfig))
+            if (issues.Any() && Create(issues, pushConfig))
                 createdObjects.AddRange(issues);
 
             return createdObjects;

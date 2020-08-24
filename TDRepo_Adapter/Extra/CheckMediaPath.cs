@@ -20,33 +20,29 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BH.oM.Structure.Elements;
-using BH.oM.Base;
 using BH.oM.Adapter;
 using BH.oM.Adapters.TDRepo;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
-using BH.oM.Inspection;
-using System.Net.Http;
 using System.Net;
 
 namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter
     {
-        public bool Create(IEnumerable<Audit> audits, PushConfig pushConfig)
+        bool m_MediaPathAlert = true; // this flag is reset at every Push.
+
+        public void CheckMediaPath(PushConfig pushconfig)
         {
-            bool success = true;
+            if (m_MediaPathAlert && string.IsNullOrWhiteSpace(pushconfig.MediaDirectory))
+            {
+                BH.Engine.Reflection.Compute.RecordNote($"Media directory not specified in the `{nameof(PushConfig)}`. This defaults to {new PushConfig().MediaDirectory}. " +
+                    $"\nTo specify a media directory, insert a `{nameof(PushConfig)}` into this Push component's `{nameof(ActionConfig)}` input.");
 
-            foreach (Audit audit in audits)
-                success &= Create(audit.Issues, pushConfig, audit);
-
-            return success;
+                m_MediaPathAlert = false;
+            }
         }
     }
 }
-

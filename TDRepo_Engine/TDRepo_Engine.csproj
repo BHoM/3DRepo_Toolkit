@@ -103,14 +103,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compute\CreateGuid.cs" />
-    <Compile Include="Compute\ReadToBinary.cs" />
+    <Compile Include="Compute\ReadToBase64.cs" />
+    <Compile Include="Query\GetResponseBody.cs" />
+    <Compile Include="Compute\ReadToByteArray.cs" />
     <Compile Include="Compute\FlatJson.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Create\" />
     <Folder Include="Modify\" />
-    <Folder Include="Query\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TDRepo_oM\TDRepo_oM.csproj">

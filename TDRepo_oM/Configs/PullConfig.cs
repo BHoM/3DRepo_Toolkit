@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of the Buildings and Habitats object Model (BHoM)
  * Copyright (c) 2015 - 2020, the respective contributors. All rights reserved.
  *
@@ -25,28 +25,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.oM.Structure.Elements;
 using BH.oM.Base;
 using BH.oM.Adapter;
-using BH.oM.Adapters.TDRepo;
+using System.ComponentModel;
 using System.IO;
-using BH.oM.Inspection;
-using System.Net.Http;
-using System.Net;
+using BH.oM.Graphics;
 
-namespace BH.Adapter.TDRepo
+namespace BH.oM.Adapters.TDRepo
 {
-    public partial class TDRepoAdapter
+    public class PullConfig : ActionConfig
     {
-        public bool Create(IEnumerable<Audit> audits, PushConfig pushConfig)
-        {
-            bool success = true;
+        [Description("Whether to download any attached Resource from 3DRepo. This can be slow if large files are involved.")]
+        public virtual bool DownloadResources { get; set; } = true;
 
-            foreach (Audit audit in audits)
-                success &= Create(audit.Issues, pushConfig, audit);
-
-            return success;
-        }
+        [Description("Resources will be downloaded in this directory.")]
+        public virtual string ResourceDownloadDirectory { get; set; } = @"C:\temp\3DRepo_Toolkit-Media";
     }
 }
-
