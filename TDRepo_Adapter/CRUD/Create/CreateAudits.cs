@@ -41,9 +41,10 @@ namespace BH.Adapter.TDRepo
         public bool Create(IEnumerable<Audit> audits, PushConfig pushConfig)
         {
             bool success = true;
+            pushConfig = pushConfig ?? new PushConfig();
 
             foreach (Audit audit in audits)
-                Create(audit.Issues, pushConfig);
+                Create(audit.Issues, audit, pushConfig);
 
             return success;
         }

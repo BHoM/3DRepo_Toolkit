@@ -142,6 +142,7 @@
     <Compile Include="Convert\ToTDRepo\Mesh.cs" />
     <Compile Include="Convert\ToTDRepo\MeshToGeom.cs" />
     <Compile Include="CRUD\Create\CreateAudits.cs" />
+    <Compile Include="CRUD\Update\AttachResources.cs" />
     <Compile Include="CRUD\Read\GetRevisions.cs" />
     <Compile Include="CRUD\Read\GetIssues.cs" />
     <Compile Include="CRUD\Create\CreateIssues.cs" />
