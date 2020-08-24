@@ -29,7 +29,7 @@ using BH.Adapter;
 using BH.oM.Adapter;
 using BH.oM.Base;
 using BH.oM.Reflection;
-using BH.oM.External.TDRepo.Commands;
+using BH.oM.Adapters.TDRepo.Commands;
 
 namespace BH.Adapter.TDRepo
 {

@@ -26,7 +26,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BH.oM.External.TDRepo
+namespace BH.oM.Adapters.TDRepo
 {
     public class TDR_Face {
         public int[] indices;

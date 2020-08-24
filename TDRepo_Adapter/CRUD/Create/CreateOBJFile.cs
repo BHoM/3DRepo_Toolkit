@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 using BH.oM.Structure.Elements;
 using BH.oM.Base;
 using BH.oM.Adapter;
-using BH.oM.External.TDRepo;
+using BH.oM.Adapters.TDRepo;
 using System.IO;
 
 namespace BH.Adapter.TDRepo

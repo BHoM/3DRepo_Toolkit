@@ -9,16 +9,13 @@ using System.Threading.Tasks;
 
 namespace BH.oM.Adapters.TDRepo.Requests
 {
-    [Description("Retrieves issues.")] // See https://3drepo.github.io/3drepo.io/#api-Issues-newIssue
-    public class IssueRequest : IUserAPIKeyRequest, ITeamSpaceRequest, IModelIdRequest 
+    [Description("Retrieves Revisions.")] // See https://3drepo.github.io/3drepo.io/#api-Issues-newIssue
+    public class RevisionRequest : IUserAPIKeyRequest, ITeamSpaceRequest, IModelIdRequest  
     {
-        [Description("If nothing is specified, query all the Issues.")]
-        public string IssueId { get; set; } = null;
+        [Description("If nothing is specified, query all the revisions.")]
+        public List<string> RevisionId { get; set; } = new List<string>();
 
-        [Description("If nothing is specified, takes the latest revision from the Model.")]
-        public string RevisionId { get; set; } = null;
-
-        [Description("If nothing is specified, takes the one specified in the Adapter. Otherwise, this takes precedence.")]
+        [Description("If nothing is specified, takes the one specified in the Adapter.")]
         public string ModelId { get; set; } = null;
 
         [Description("If nothing is specified, takes the one specified in the Adapter. Otherwise, this takes precedence.")]
@@ -28,3 +25,4 @@ namespace BH.oM.Adapters.TDRepo.Requests
         public string UserAPIKey { get; set; } = null;
     }
 }
+

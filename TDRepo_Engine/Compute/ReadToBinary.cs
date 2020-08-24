@@ -32,13 +32,13 @@ using System.Reflection;
 using BH.oM.Geometry;
 using BH.Engine.Base;
 using System.ComponentModel;
-using BH.oM.External.TDRepo;
+using BH.oM.Adapters.TDRepo;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using BH.oM.Reflection.Attributes;
 using System.IO;
 
-namespace BH.Engine.External.TDRepo
+namespace BH.Engine.Adapters.TDRepo
 {
     public static partial class Compute
     {
@@ -51,6 +51,15 @@ namespace BH.Engine.External.TDRepo
             byte[] imageArray = System.IO.File.ReadAllBytes(filePath);
             string base64Representation = System.Convert.ToBase64String(imageArray);
             return base64Representation;
+        }
+
+        [Description("Reads a file and returns its bytearray representation.")]
+        public static byte[] ReadToByte(this string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+                return new byte[] { };
+
+            return System.IO.File.ReadAllBytes(filePath);
         }
     }
 }

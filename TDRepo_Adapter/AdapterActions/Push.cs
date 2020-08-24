@@ -29,8 +29,8 @@ using BH.Adapter;
 using BH.oM.Adapter;
 using BH.oM.Base;
 using BH.oM.Reflection;
-using BH.oM.External.TDRepo.Commands;
-using BH.oM.External.TDRepo;
+using BH.oM.Adapters.TDRepo.Commands;
+using BH.oM.Adapters.TDRepo;
 using System.IO;
 using BH.oM.Inspection;
 
@@ -46,16 +46,19 @@ namespace BH.Adapter.TDRepo
                 return new List<object>();
             }
 
+            IEnumerable<IObject> iObjs = objects.OfType<IObject>();
+            if (iObjs.Count() != objects.Count())
+                BH.Engine.Reflection.Compute.RecordError($"Push to 3DRepo currently supports only objects implementing {nameof(IObject)}.");
+
+            List<object> createdObjects = new List<object>();
             PushConfig pushConfig = actionConfig as PushConfig ?? new PushConfig();
 
-            var iObjs = objects.OfType<IObject>();
+            // Separate Audits and Issues from the rest of the objects. Those have to be created last.
+            IEnumerable<oM.Inspection.Audit> audits = iObjs.OfType<oM.Inspection.Audit>();
+            IEnumerable<oM.Inspection.Issue> issues = iObjs.OfType<oM.Inspection.Issue>();
 
-            if (iObjs.Count() != objects.Count())
-                BH.Engine.Reflection.Compute.RecordError("Push to 3DRepo currently supports only objects implementing BH.oM.IObject.");
-
-            // Separate Audits from the rest of the objects
-            IEnumerable<Audit> audits = iObjs.OfType<Audit>();
             iObjs = iObjs.Except(audits);
+            iObjs = iObjs.Except(issues);
 
             // Create and commit the objects
             if (iObjs.Any())
@@ -65,14 +68,18 @@ namespace BH.Adapter.TDRepo
                     filePath = CreateBIMFile(iObjs, pushConfig);
                 else
                     filePath = CreateOBJfile(iObjs); // Upload using the old obj format
+
+                createdObjects.AddRange(iObjs);
             }
 
             // Create the audits/issues
-            if (audits.Any())
-                CreateIssues(audits, pushConfig);
+            if (audits.Any() && Create(audits, pushConfig))
+                createdObjects.AddRange(audits);
 
-            return iObjs.Cast<object>().ToList();
+            if (issues.Any() && Create(issues, pushConfig))
+                createdObjects.AddRange(issues);
+
+            return createdObjects;
         }
-
     }
 }
