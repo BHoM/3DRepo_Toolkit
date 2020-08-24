@@ -34,63 +34,75 @@ using BH.oM.Inspection;
 using System.Net.Http;
 using System.Net;
 using BH.Engine.Adapters.TDRepo;
+using System.Net.Http.Headers;
 
 namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter
     {
-        public bool AttachResources(oM.Inspection.Issue bhomIssue, string tdrepoIssueId, PushConfig pushConfig = null)
+        public bool AttachResources(oM.Inspection.Issue bhomIssue, string tdrepoIssueId, PushConfig pushConfig, bool raiseErrors = true)
         {
             bool success = true;
-            pushConfig = pushConfig ?? new PushConfig();
-
-            string mediaDirectory = pushConfig.MediaDirectory;
-
-            if (m_MediaPathAlert && string.IsNullOrWhiteSpace(mediaDirectory))
-            {
-                BH.Engine.Reflection.Compute.RecordNote($"Media directory not specified in the `{nameof(PushConfig)}`. This defaults to 'C:\temp\'. " +
-                    $"\nTo specify a media directory, insert a `{nameof(PushConfig)}` into this Push component's `{nameof(ActionConfig)}` input.");
-                mediaDirectory = @"C:\temp\";
-
-                m_MediaPathAlert = false;
-            }
-
+            CheckMediaPath(pushConfig);
 
             // // - The media needs to be attached as a "Resource" of the issue.
             // // - This requires a MultipartFormData request. See https://3drepo.github.io/3drepo.io/#api-Issues-attachResource
             //if (bhomIssue.Media.Count > 1) // actually, let's do this for all resources, including the first one that was used as issue screenshot.
             using (HttpClient httpClient = new HttpClient())
+            {
+                string issueResourceEndpoint = $"{m_host}/{m_teamspace}/{m_modelId}/issues/{tdrepoIssueId}/resources?key={m_userAPIKey}";
+
+
+                foreach (string mediaPath in bhomIssue.Media)
                 {
-                    string issueResourceEndpoint = $"{m_host}/{m_teamspace}/{m_modelId}/issue/{tdrepoIssueId}/resources?key={m_userAPIKey}";
+                    // Remember that BHoMIssues have media attached as a partial file path.
+                    string fullMediaPath = System.IO.Path.Combine(pushConfig.MediaDirectory ?? "C:\\temp\\", bhomIssue.Media.FirstOrDefault());
 
+                    StreamContent imageContent = null;
+                    MultipartFormDataContent mpcontent = null;
+                    HttpResponseMessage respMessage = null;
+                    var f = System.IO.File.OpenRead(fullMediaPath);
 
-                    foreach (string mediaPath in bhomIssue.Media)
+                    imageContent = new StreamContent(f);
+                    mpcontent = new MultipartFormDataContent();
+                    imageContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+                    mpcontent.Add(imageContent);
+
+                    // POST request
+                    try
                     {
-                        // Remember that BHoMIssues have media attached as a partial file path.
-                        string fullMediaPath = System.IO.Path.Combine(mediaDirectory ?? "C:\\temp\\", bhomIssue.Media.FirstOrDefault());
+                        respMessage = httpClient.PostAsync(issueResourceEndpoint, mpcontent).Result;
+                    }
+                    catch (AggregateException e)
+                    {
+                        string errors = $"Error(s) attaching multiple resources (media) for issue `{tdrepoIssueId}` named `{bhomIssue.Name}`:";
 
-                        var imageContent = new ByteArrayContent(Compute.ReadToByte(fullMediaPath));
-                        imageContent.Headers.ContentType =
-                            System.Net.Http.Headers.MediaTypeHeaderValue.Parse("image/jpeg");
+                        foreach (var innerException in e.Flatten().InnerExceptions)
+                            errors += $"\n\t{innerException.Message}\n{innerException.InnerException}";
 
-                        var requestContent = new MultipartFormDataContent();
-                        requestContent.Add(imageContent, "image", "image.jpg");
+                        if (raiseErrors)
+                            BH.Engine.Reflection.Compute.RecordError(errors);
 
-                        // POST request
-                        HttpResponseMessage respMessage = httpClient.PostAsync(issueResourceEndpoint, requestContent).Result;
+                        return false;
+                    }
+                    finally
+                    {
+                        f.Close();
+                    }
 
-                        // Process response
-                        string fullResponse = respMessage.Content.ReadAsStringAsync().Result;
+                    // Process response
+                    string fullResponse = respMessage?.Content.ReadAsStringAsync().Result;
 
-                        if (!respMessage.IsSuccessStatusCode)
-                        {
-                            BH.Engine.Reflection.Compute.RecordWarning($"While attaching multiple resources (media) for issue `{tdrepoIssueId}` named `{bhomIssue.Name}`," +
-                                $"\nthe server returned a {respMessage.StatusCode} error for media {mediaPath}:\n" + fullResponse);
-                            success = false;
-                        }
+                    if (respMessage != null && !respMessage.IsSuccessStatusCode)
+                    {
+                        fullResponse = fullResponse.GetResponseBody();
+
+                        BH.Engine.Reflection.Compute.RecordWarning($"While attaching multiple resources (media) for issue `{tdrepoIssueId}` named `{bhomIssue.Name}`," +
+                            $"\nthe server returned a '{respMessage.StatusCode}' error for media `{mediaPath}`:\n ==>" + fullResponse);
+                        success = false;
                     }
                 }
-
+            }
 
             return success;
         }

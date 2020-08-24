@@ -39,23 +39,13 @@ namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter
     {
-        bool m_MediaPathAlert = true;
 
-        public bool Create(IEnumerable<oM.Inspection.Issue> bhomIssues, Audit parentAudit = null, PushConfig pushConfig = null)
+        public bool Create(IEnumerable<oM.Inspection.Issue> bhomIssues, PushConfig pushConfig, Audit parentAudit = null)
         {
             bool success = true;
-            pushConfig = pushConfig ?? new PushConfig();
 
             string mediaDirectory = pushConfig.MediaDirectory;
-
-            if (m_MediaPathAlert && string.IsNullOrWhiteSpace(mediaDirectory))
-            {
-                BH.Engine.Reflection.Compute.RecordNote($"Media directory not specified in the `{nameof(PushConfig)}`. This defaults to 'C:\temp\'. " +
-                    $"\nTo specify a media directory, insert a `{nameof(PushConfig)}` into this Push component's `{nameof(ActionConfig)}` input.");
-                mediaDirectory = @"C:\temp\";
-
-                m_MediaPathAlert = false;
-            }
+            CheckMediaPath(pushConfig);
 
             var serializerSettings = new Newtonsoft.Json.JsonSerializerSettings();
             serializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
@@ -63,10 +53,9 @@ namespace BH.Adapter.TDRepo
             foreach (oM.Inspection.Issue bhomIssue in bhomIssues)
             {
                 // Convert BHoM Audits to 3DRepo issues.
-                // NOTE: ONLY THE FIRST ISSUE OF THE AUDIT IS CONVERTED. 
                 BH.oM.Adapters.TDRepo.Issue issue = bhomIssue.FromBHoM(parentAudit, mediaDirectory);
 
-                // Serialise the object. All property names must have the first letter lowercase for 3DRepo API.
+                // Serialise the object. All property names must have the first letter lowercase for 3DRepo API, hence the need for serialiserSettings.
                 string issue_serialised = Newtonsoft.Json.JsonConvert.SerializeObject(issue, serializerSettings);
 
                 // Endpoint for creating a new issue
@@ -90,17 +79,23 @@ namespace BH.Adapter.TDRepo
 
                 if (!respMessage.IsSuccessStatusCode)
                 {
+                    fullResponse = fullResponse.GetResponseBody();
+
                     BH.Engine.Reflection.Compute.RecordError($"The server returned a {respMessage.StatusCode} Error:\n" + fullResponse);
                     success = false;
                 }
 
                 // Assign the CreatedIssue Id to the Audit.
-                // NOTE: ONLY THE FIRST ISSUE OF THE AUDIT IS CREATED (SEE THE CONVERT)
                 string issueId = issue_deserial.Id;
                 bhomIssue.CustomData[Convert.AdapterIdName] = issueId;
 
-                // Media attachment (resources) requires a separate endpoint
-                AttachResources(bhomIssue, issueId, pushConfig);
+                // Try attaching the media (resources) with its dedicated endpoint.
+                if (!AttachResources(bhomIssue, issueId, pushConfig, false))
+                {
+                    // (As this seems to systematically fail)
+                    // In case of failure, use 3DRepo's workaround to post Resources in the Comments to the issue.
+                    CommentIssue(bhomIssue, issueId, pushConfig);
+                }
             }
 
             return success;

@@ -40,26 +40,30 @@ using System.IO;
 
 namespace BH.Engine.Adapters.TDRepo
 {
-    public static partial class Compute
+    public static partial class Query
     {
-        [Description("Reads a file and returns its base64 representation.")]
-        public static string ReadToBase64(string filePath)
+        [Description("Returns the Body text of an HTTP response message's Result.")]
+        public static string GetResponseBody(this string respMessageResult)
         {
-            if (string.IsNullOrWhiteSpace(filePath))
-                return "";
+            string parsedMessage = "";
 
-            byte[] imageArray = System.IO.File.ReadAllBytes(filePath);
-            string base64Representation = System.Convert.ToBase64String(imageArray);
-            return base64Representation;
-        }
+            bool includeTitle = false;
+            if (!includeTitle)
+            {
+                string startTag = "<title>";
+                string endTag = "</title>";
+                int startIndex = respMessageResult.IndexOf(startTag) + startTag.Length;
+                parsedMessage = respMessageResult.Remove(startIndex, respMessageResult.IndexOf(endTag) - startIndex);
+            }
 
-        [Description("Reads a file and returns its bytearray representation.")]
-        public static byte[] ReadToByte(this string filePath)
-        {
-            if (string.IsNullOrWhiteSpace(filePath))
-                return new byte[] { };
+            System.Text.RegularExpressions.Regex oRegex = new System.Text.RegularExpressions.Regex(".*?<body.*?>(.*?)</body>.*?", System.Text.RegularExpressions.RegexOptions.Multiline);
+            string htmlTagPattern = "<.*?>";
+            parsedMessage = oRegex.Replace(parsedMessage, string.Empty);
+            parsedMessage = System.Text.RegularExpressions.Regex.Replace(parsedMessage, htmlTagPattern, string.Empty);
+            parsedMessage = System.Text.RegularExpressions.Regex.Replace(parsedMessage, @"^\s+$[\r\n]*", "", System.Text.RegularExpressions.RegexOptions.Multiline);
+            parsedMessage = parsedMessage.Replace("&nbsp;", string.Empty);
 
-            return System.IO.File.ReadAllBytes(filePath);
+            return parsedMessage;
         }
     }
 }

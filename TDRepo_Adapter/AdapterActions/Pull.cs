@@ -26,6 +26,7 @@ using BH.oM.Data.Requests;
 using BH.oM.Adapters.TDRepo.Requests;
 using System.Collections.Generic;
 using System.Linq;
+using BH.oM.Adapters.TDRepo;
 
 namespace BH.Adapter.TDRepo
 {
@@ -33,15 +34,15 @@ namespace BH.Adapter.TDRepo
     {
         public override IEnumerable<object> Pull(IRequest request, PullType pullType = PullType.AdapterDefault, ActionConfig actionConfig = null)
         {
+            PullConfig pullConfig = actionConfig as PullConfig ?? new PullConfig();
+
             RevisionRequest rr = request as RevisionRequest;
             if (rr != null)
                 return GetRevisions(rr).OfType<object>();
 
             IssueRequest ir = request as IssueRequest;
             if (ir != null)
-            {
-                return GetIssues(ir).OfType<object>();
-            }
+                return GetIssues(ir, pullConfig).OfType<object>();
 
             BH.Engine.Reflection.Compute.RecordWarning($"The specified request is not compatible with {this.GetType().Name}.");
             return new List<object>();
