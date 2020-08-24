@@ -34,7 +34,7 @@ namespace BH.Adapter.TDRepo
 {
     public static partial class Convert
     {
-        public static BH.oM.Adapters.TDRepo.Issue FromBHoM(this Issue issue, string resourcesFolder = "", int issueIdx = 0)
+        public static BH.oM.Adapters.TDRepo.Issue FromBHoM(this Issue issue, Audit parentAudit = null, string resourcesFolder = "", int issueIdx = 0)
         {
             BH.oM.Adapters.TDRepo.Issue tdrIssue = new BH.oM.Adapters.TDRepo.Issue();
 
@@ -55,6 +55,8 @@ namespace BH.Adapter.TDRepo
             // to build the BH.oM.Adapters.TDRepo.Issue, which can be then uploaded to 3DRepo.
 
             tdrIssue.Name = issue.Name;
+            tdrIssue.Created = (parentAudit?.IssueDateUtc.Ticks ?? 0) == 0 ? tdrIssue.Created : parentAudit.IssueDateUtc.Ticks;
+
             tdrIssue.AssignedRoles.Add(issue.Assign); // check
             tdrIssue.Status = issue.Status;
             tdrIssue.Priority = issue.Priority;

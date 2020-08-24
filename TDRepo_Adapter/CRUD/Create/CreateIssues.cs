@@ -41,9 +41,10 @@ namespace BH.Adapter.TDRepo
     {
         bool m_MediaPathAlert = true;
 
-        public bool Create(IEnumerable<oM.Inspection.Issue> bhomIssues, PushConfig pushConfig)
+        public bool Create(IEnumerable<oM.Inspection.Issue> bhomIssues, Audit parentAudit = null, PushConfig pushConfig = null)
         {
             bool success = true;
+            pushConfig = pushConfig ?? new PushConfig();
 
             string mediaDirectory = pushConfig.MediaDirectory;
 
@@ -63,7 +64,7 @@ namespace BH.Adapter.TDRepo
             {
                 // Convert BHoM Audits to 3DRepo issues.
                 // NOTE: ONLY THE FIRST ISSUE OF THE AUDIT IS CONVERTED. 
-                BH.oM.Adapters.TDRepo.Issue issue = bhomIssue.FromBHoM(mediaDirectory);
+                BH.oM.Adapters.TDRepo.Issue issue = bhomIssue.FromBHoM(parentAudit, mediaDirectory);
 
                 // Serialise the object. All property names must have the first letter lowercase for 3DRepo API.
                 string issue_serialised = Newtonsoft.Json.JsonConvert.SerializeObject(issue, serializerSettings);
@@ -98,26 +99,8 @@ namespace BH.Adapter.TDRepo
                 string issueId = issue_deserial.Id;
                 bhomIssue.CustomData[Convert.AdapterIdName] = issueId;
 
-                // If there is more than one Media per each issue,
-                // the media needs to be attached as a "Resource" of the issue.
-                // This requires a MultipartFormData request. See https://3drepo.github.io/3drepo.io/#api-Issues-attachResource
-                using (HttpClient httpClient = new HttpClient())
-                {
-                    string issueResourceEndpoint = $"{m_host}/{m_teamspace}/{m_modelId}/issue/{issueId}/resources?key={m_userAPIKey}";
-
-                    var requestContent = new MultipartFormDataContent();
-
-                    foreach (var mediaPath in bhomIssue.Media)
-                    {
-                        string resourcePath = System.IO.Path.Combine(mediaDirectory ?? "C:\\temp\\", bhomIssue.Media.FirstOrDefault());
-
-                        var imageContent = new ByteArrayContent(Compute.ReadToByte(resourcePath));
-                        imageContent.Headers.ContentType =
-                            System.Net.Http.Headers.MediaTypeHeaderValue.Parse("image/jpeg");
-
-                        requestContent.Add(imageContent, "image", "image.jpg");
-                    }
-                }
+                // Media attachment (resources) requires a separate endpoint
+                AttachResources(bhomIssue, issueId, pushConfig);
             }
 
             return success;

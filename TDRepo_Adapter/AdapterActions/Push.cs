@@ -46,6 +46,8 @@ namespace BH.Adapter.TDRepo
                 return new List<object>();
             }
 
+            m_MediaPathAlert = true;
+
             IEnumerable<IObject> iObjs = objects.OfType<IObject>();
             if (iObjs.Count() != objects.Count())
                 BH.Engine.Reflection.Compute.RecordError($"Push to 3DRepo currently supports only objects implementing {nameof(IObject)}.");
@@ -76,7 +78,7 @@ namespace BH.Adapter.TDRepo
             if (audits.Any() && Create(audits, pushConfig))
                 createdObjects.AddRange(audits);
 
-            if (issues.Any() && Create(issues, pushConfig))
+            if (issues.Any() && Create(issues, null, pushConfig))
                 createdObjects.AddRange(issues);
 
             return createdObjects;
