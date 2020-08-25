@@ -53,7 +53,7 @@ namespace BH.Adapter.TDRepo
             foreach (oM.Inspection.Issue bhomIssue in bhomIssues)
             {
                 // Convert BHoM Audits to 3DRepo issues.
-                BH.oM.Adapters.TDRepo.Issue issue = bhomIssue.FromBHoM(parentAudit, mediaDirectory);
+                BH.oM.Adapters.TDRepo.Issue issue = bhomIssue.ToTDRepo(parentAudit, mediaDirectory);
 
                 // Serialise the object. All property names must have the first letter lowercase for 3DRepo API, hence the need for serialiserSettings.
                 string issue_serialised = Newtonsoft.Json.JsonConvert.SerializeObject(issue, serializerSettings);

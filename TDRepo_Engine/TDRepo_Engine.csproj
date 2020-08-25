@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compute\CreateGuid.cs" />
+    <Compile Include="Compute\WriteToByteArray.cs" />
     <Compile Include="Compute\ReadToBase64.cs" />
     <Compile Include="Query\GetResponseBody.cs" />
     <Compile Include="Compute\ReadToByteArray.cs" />

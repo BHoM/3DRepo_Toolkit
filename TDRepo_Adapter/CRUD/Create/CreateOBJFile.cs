@@ -44,7 +44,7 @@ namespace BH.Adapter.TDRepo
 
             // Add to the scene
             IEnumerable<TDR_Mesh> tdRepoMeshes = meshes.Where(tdRepoMesh => tdRepoMesh != null)
-                .Select(tdRepoMesh => BH.Adapter.TDRepo.Convert.FromBHoM(tdRepoMesh));
+                .Select(tdRepoMesh => BH.Adapter.TDRepo.Convert.ToTDRepo(tdRepoMesh));
 
             m_3DRepoMeshesForOBJexport.AddRange(tdRepoMeshes);
 
