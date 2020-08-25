@@ -39,10 +39,10 @@ namespace BH.Adapter.TDRepo
 {
     public partial class TDRepoAdapter
     {
-        public List<Issue> GetIssues(IssueRequest ir, PullConfig pullConfig, bool enableMessages = true)
+        public List<Issue> GetIssues(IssueRequest ir, PullConfig pullConfig, bool enableMessages = true, Dictionary<Issue, List<string>> mediaFileNames = null)
         {
-            string modelId = ir.ModelId ?? m_modelId;
-            string teamsSpace = ir.TeamSpace ?? m_teamspace;
+            string modelId = ir?.ModelId ?? m_modelId;
+            string teamsSpace = ir?.TeamSpace ?? m_teamspace;
 
             string endpoint = "";
 
@@ -95,7 +95,7 @@ namespace BH.Adapter.TDRepo
                 return new List<Issue>();
             }
 
-            // Deserialise the object. 
+            // Deserialise the object.
             var serializerSettings = new Newtonsoft.Json.JsonSerializerSettings();
             serializerSettings.ContractResolver = new IssueContractResolver();
 
@@ -113,9 +113,38 @@ namespace BH.Adapter.TDRepo
                 BH.Engine.Reflection.Compute.RecordError(e.Message);
             }
 
-            // TODO: Save any Resource attached to the issues on disk.
-            //List<string> base64resources = issues_deserialised.Select(i => i.Viewpoint.ViewDirection)
+            if (pullConfig.DownloadResources)
+            {
+                // Attempt the pull of the resources.
+                foreach (Issue issue in issues_deserialised)
+                {
+                    // NOTE: Currently Resources are stored as Comments attached to the issue.
+                    // Pull the resources from the Comments.
+                    if (issue.Comments.Count() != 0)
+                    {
+                        // Dictionary whose Key is filename (fullPath), Value is the base64 string representation.
+                        Dictionary<string, string> base64resources = new Dictionary<string, string>();
 
+                        // Get the Base64 string image, as it should be attached to the `Comments` property of the pulled Issues.
+                        // Store it in the above dictionary.
+                        base64resources =
+                            issue.Comments
+                            .ToDictionary(c => Path.Combine(pullConfig.ResourceDownloadDirectory, c.comment ?? ""), c => c.viewpoint?.Screenshot);
+
+                        // TODO: Apparently, the actual image is not pulled (`Comments` property is empty) when using the GET Issue endpoint.
+                        // There must be another endpoint/way to pull the image that was posted in the Comments.
+                        // Otherwise, the rest of the code should work fine as it is.
+
+                        // Save the pulled resource to file. If the base64 string is missing, it will simply create an empty file.
+                        base64resources.ToList().ForEach(kv => Compute.WriteToByteArray(kv.Value, kv.Key, false));
+
+                        // Store the pulled images Filenames in the resources. 
+                        // This allows to pass this information to the Convert method, see the Pull.
+                        if (mediaFileNames != null)
+                            mediaFileNames[issue] = issue.Comments.Select(c => c.comment).ToList(); 
+                    }
+                }
+            }
 
             return issues_deserialised;
         }

@@ -22,11 +22,13 @@
 
 using BH.oM.Adapter;
 using BH.oM.Base;
+using BH.Engine.Base;
 using BH.oM.Data.Requests;
 using BH.oM.Adapters.TDRepo.Requests;
 using System.Collections.Generic;
 using System.Linq;
 using BH.oM.Adapters.TDRepo;
+using BH.oM.Inspection;
 
 namespace BH.Adapter.TDRepo
 {
@@ -43,6 +45,46 @@ namespace BH.Adapter.TDRepo
             IssueRequest ir = request as IssueRequest;
             if (ir != null)
                 return GetIssues(ir, pullConfig).OfType<object>();
+
+            AuditRequest ar = request as AuditRequest;
+            if (ar != null)
+            {
+                if (ar.Audit == null)
+                {
+                    BH.Engine.Reflection.Compute.RecordWarning("Please specify the Audit whose Issues you want to pull from 3DRepo in the request.");
+                    return null;
+                }
+
+                ir = new IssueRequest()
+                {
+                    ModelId = ar.ModelId,
+                    RevisionId = ar.RevisionId,
+                    TeamSpace = ar.TeamSpace,
+                    UserAPIKey = ar.UserAPIKey
+                };
+
+                Audit audit = ar.Audit.DeepClone();
+
+                // The conversion between 3DRepo issues and BHoM Issues
+                // will need to be passed any Pulled media file Name, if they were pulled with the Issues.
+                Dictionary<oM.Adapters.TDRepo.Issue, List<string>> mediaFilenames_perIssue = new Dictionary<oM.Adapters.TDRepo.Issue, List<string>>();
+                List<oM.Adapters.TDRepo.Issue> pulledIssues = GetIssues(ir, pullConfig,true, mediaFilenames_perIssue);
+
+                // Replace the specified BHoM Audit Issues with the pulled ones, 
+                // in order to enable comparison.
+                audit.Issues = new List<oM.Inspection.Issue>();
+
+                foreach (var pulledIssue in pulledIssues)
+                {
+                    List<string> mediaFilenames = new List<string>();
+                    mediaFilenames_perIssue.TryGetValue(pulledIssue, out mediaFilenames);
+                    
+                    audit.Issues.Add(Convert.FromTDRepo(pulledIssue, mediaFilenames));
+                }
+
+                // Return the Audit with the Pulled issues from 3DRepo.
+                return new List<object>() { audit };
+            }
 
             BH.Engine.Reflection.Compute.RecordWarning($"The specified request is not compatible with {this.GetType().Name}.");
             return new List<object>();

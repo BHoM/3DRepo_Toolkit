@@ -37,7 +37,7 @@ namespace BH.Adapter.TDRepo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public static BH.oM.Adapters.TDRepo.TDR_Mesh FromBHoM(BH.oM.Geometry.Mesh mesh)
+        public static BH.oM.Adapters.TDRepo.TDR_Mesh ToTDRepo(BH.oM.Geometry.Mesh mesh)
         {
             var faces = mesh.Faces.Select(face =>
                 new BH.oM.Adapters.TDRepo.TDR_Face(new int[]{ face.A, face.B, face.C, face.D })

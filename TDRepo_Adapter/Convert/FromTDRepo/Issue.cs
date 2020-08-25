@@ -34,9 +34,9 @@ namespace BH.Adapter.TDRepo
 {
     public static partial class Convert
     {
-        public static BH.oM.Adapters.TDRepo.Issue ToTDRepo(this Issue issue, Audit parentAudit = null, string resourcesFolder = "", int issueIdx = 0)
+        public static BH.oM.Inspection.Issue FromTDRepo(this BH.oM.Adapters.TDRepo.Issue issue, List<string> mediaFileNames = null)
         {
-            BH.oM.Adapters.TDRepo.Issue tdrIssue = new BH.oM.Adapters.TDRepo.Issue();
+            BH.oM.Inspection.Issue bhomIssue = new BH.oM.Inspection.Issue();
 
             // Checks
             if (string.IsNullOrWhiteSpace(issue.Name))
@@ -52,31 +52,36 @@ namespace BH.Adapter.TDRepo
             }
 
             // Pick and choose data from the BH.oM.Inspection.Audit and the BH.oM.Inspection.Issue
-            // to build the BH.oM.Adapters.TDRepo.Issue, which can be then uploaded to 3DRepo.
+            bhomIssue.Name = issue.Name;
+            // TODO: Create date is stored in BHOM Audit
+            bhomIssue.Assign = string.Concat(issue.AssignedRoles); // TODO: check
+            bhomIssue.Status = issue.Status;
+            bhomIssue.Priority = issue.Priority;
+            bhomIssue.Type = issue.TopicType;
+            bhomIssue.Comments = issue.Comments.Select(c => 
+                new Comment()
+                {
+                    Message = c.comment,
+                    Owner = c.owner,
+                    CommentDate = c.created.ToString()
+                })
+                .ToList();
 
-            tdrIssue.Name = issue.Name;
-            tdrIssue.Created = (parentAudit?.IssueDateUtc.Ticks ?? 0) == 0 ? tdrIssue.Created : parentAudit.IssueDateUtc.Ticks;
+            if (mediaFileNames != null)
+              bhomIssue.Media = mediaFileNames;
 
-            tdrIssue.AssignedRoles.Add(issue.Assign); // TODO: check
-            tdrIssue.Status = issue.Status;
-            tdrIssue.Priority = issue.Priority;
-            tdrIssue.TopicType = issue.Type;
-
-            // The first media item is picked as the screenshot.
-            string screenshotFilePath = !string.IsNullOrWhiteSpace(issue.Media.FirstOrDefault()) ? System.IO.Path.Combine(resourcesFolder ?? "C:\\temp\\", issue.Media.FirstOrDefault()) : null;
-            tdrIssue.Viewpoint = new oM.Adapters.TDRepo.Viewpoint()
+            bhomIssue.Position = new oM.Geometry.Point()
             {
-                Position = new double[] { issue.Position.X, issue.Position.Y, issue.Position.Z },  // TODO now this is taking the same Position of the issue. Ideally to take the position of the media's viewpoint.
-                Screenshot = Compute.ReadToBase64(screenshotFilePath)
-                // TODO all other properties of 3DRepo's Viewpoint are currently not in any BHoM object. 
+                X = issue.Position[0],
+                Y = issue.Position[1],
+                Z = issue.Position[2]
             };
 
-            tdrIssue.Position = new double[] {
-                issue.Position.X,
-                issue.Position.Y,
-                issue.Position.Z }; // Check
-            tdrIssue.Description = issue.Description + $"\nParentAuditId: {parentAudit.BHoM_Guid}";
-            return tdrIssue;
+            string toFind = "\nParentAuditId: ";
+            int pos = issue.Description.IndexOf(toFind) + toFind.Length;
+            bhomIssue.Description = issue.Description.Remove(pos);
+
+            return bhomIssue;
         }
     }
 }
