@@ -55,6 +55,7 @@ namespace BH.Adapter.TDRepo
             // to build the BH.oM.Adapters.TDRepo.Issue, which can be then uploaded to 3DRepo.
 
             tdrIssue.Name = issue.Name;
+            // TODO: To be replaced by issue property
             tdrIssue.Created = (parentAudit?.IssueDateUtc.Ticks ?? 0) == 0 ? tdrIssue.Created : parentAudit.IssueDateUtc.Ticks;
 
             tdrIssue.AssignedRoles.Add(issue.Assign); // TODO: check
@@ -66,15 +67,19 @@ namespace BH.Adapter.TDRepo
             string screenshotFilePath = !string.IsNullOrWhiteSpace(issue.Media.FirstOrDefault()) ? System.IO.Path.Combine(resourcesFolder ?? "C:\\temp\\", issue.Media.FirstOrDefault()) : null;
             tdrIssue.Viewpoint = new oM.Adapters.TDRepo.Viewpoint()
             {
-                Position = new double[] { issue.Position.X, issue.Position.Y, issue.Position.Z },  // TODO now this is taking the same Position of the issue. Ideally to take the position of the media's viewpoint.
+                Position = new double[] { issue.Position.X, issue.Position.Y, issue.Position.Z },  // TODO: now this is taking the same Position of the issue. Ideally to take the position of the media's viewpoint.
                 Screenshot = Compute.ReadToBase64(screenshotFilePath)
-                // TODO all other properties of 3DRepo's Viewpoint are currently not in any BHoM object. 
+                // TODO: all other properties of 3DRepo's Viewpoint are currently not in any BHoM object. 
             };
 
             tdrIssue.Position = new double[] {
                 issue.Position.X,
                 issue.Position.Y,
-                issue.Position.Z }; // Check
+                issue.Position.Z };
+
+            // The description is where the ParentAuditId is stored currently. 
+            // This is needed to map the issue back to the Parent Audit when a Pull with an AuditRequest is done.
+            // TODO: look into mapping issues from Audit to TDRepoIssues
             tdrIssue.Description = issue.Description + $"\nParentAuditId: {parentAudit.BHoM_Guid}";
             return tdrIssue;
         }

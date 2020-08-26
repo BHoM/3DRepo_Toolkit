@@ -118,22 +118,22 @@ namespace BH.Adapter.TDRepo
                 // Attempt the pull of the resources.
                 foreach (Issue issue in issues_deserialised)
                 {
-                    // NOTE: Currently Resources are stored as Comments attached to the issue.
+                    // Currently Resources are stored as Comments attached to the issue.
                     // Pull the resources from the Comments.
                     if (issue.Comments.Count() != 0)
                     {
                         // Dictionary whose Key is filename (fullPath), Value is the base64 string representation.
                         Dictionary<string, string> base64resources = new Dictionary<string, string>();
 
+                        // TODO: Apparently, the actual image is not pulled (`Comments` property is empty) when using the GET Issue endpoint.
+                        // There must be another endpoint/way to pull the image that was posted in the Comments (SEE BELOW)
+
+                        // TODO: Add getVIewpoint endpoint to get image from the Viewpoint. https://3drepo.github.io/3drepo.io/#api-Viewpoints-findViewpoint
                         // Get the Base64 string image, as it should be attached to the `Comments` property of the pulled Issues.
                         // Store it in the above dictionary.
                         base64resources =
                             issue.Comments
                             .ToDictionary(c => Path.Combine(pullConfig.ResourceDownloadDirectory, c.comment ?? ""), c => c.viewpoint?.Screenshot);
-
-                        // TODO: Apparently, the actual image is not pulled (`Comments` property is empty) when using the GET Issue endpoint.
-                        // There must be another endpoint/way to pull the image that was posted in the Comments.
-                        // Otherwise, the rest of the code should work fine as it is.
 
                         // Save the pulled resource to file. If the base64 string is missing, it will simply create an empty file.
                         base64resources.ToList().ForEach(kv => Compute.WriteToByteArray(kv.Value, kv.Key, false));
