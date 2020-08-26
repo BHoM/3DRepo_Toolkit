@@ -65,6 +65,8 @@ namespace BH.Adapter.TDRepo
 
                     imageContent = new StreamContent(f);
                     mpcontent = new MultipartFormDataContent();
+                    
+                    // TODO: Check if the header is correct
                     imageContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
                     mpcontent.Add(imageContent);
 
