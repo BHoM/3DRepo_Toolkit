@@ -30,26 +30,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Adapter_oM, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Adapter_oM">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\BHoM_Adapter\Build\Adapter_oM.dll</HintPath>
+      <HintPath>C:\ProgramData\BHoM\Assemblies\Adapter_oM.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="BHoM, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="BHoM">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\BHoM\Build\BHoM.dll</HintPath>
+      <HintPath>C:\ProgramData\BHoM\Assemblies\BHoM.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Data_oM">
-      <HintPath>..\..\..\..\..\ProgramData\BHoM\Assemblies\Data_oM.dll</HintPath>
+      <HintPath>C:\ProgramData\BHoM\Assemblies\Data_oM.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Graphics_oM">
-      <HintPath>..\..\BHoM\Build\Graphics_oM.dll</HintPath>
+      <HintPath>C:\ProgramData\BHoM\Assemblies\Graphics_oM.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Inspection_oM">
-      <HintPath>..\..\..\..\..\ProgramData\BHoM\Assemblies\Inspection_oM.dll</HintPath>
+      <HintPath>C:\ProgramData\BHoM\Assemblies\Inspection_oM.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
