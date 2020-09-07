@@ -25,7 +25,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.oM.Structure.Elements;
 using BH.oM.Base;
 using BH.oM.Adapter;
 using BH.oM.Adapters.TDRepo;
