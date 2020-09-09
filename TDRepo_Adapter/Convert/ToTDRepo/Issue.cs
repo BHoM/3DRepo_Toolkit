@@ -55,9 +55,7 @@ namespace BH.Adapter.TDRepo
             // to build the BH.oM.Adapters.TDRepo.Issue, which can be then uploaded to 3DRepo.
 
             tdrIssue.Name = issue.Name;
-            // TODO: To be replaced by issue property
-            tdrIssue.Created = (parentAudit?.IssueDateUtc.Ticks ?? 0) == 0 ? tdrIssue.Created : parentAudit.IssueDateUtc.Ticks;
-
+            tdrIssue.Created = issue.DateCreated.Ticks;
             tdrIssue.AssignedRoles.Add(issue.Assign); // TODO: check
             tdrIssue.Status = issue.Status;
             tdrIssue.Priority = issue.Priority;
