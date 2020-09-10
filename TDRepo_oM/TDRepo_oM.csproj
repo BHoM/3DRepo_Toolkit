@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\WriteBIMFile.cs" />
+    <Compile Include="Action.cs" />
     <Compile Include="Comment.cs" />
     <Compile Include="Configs\PullConfig.cs" />
     <Compile Include="Requests\AuditRequest.cs" />
