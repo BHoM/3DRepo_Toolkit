@@ -59,7 +59,7 @@ namespace BH.Engine.Adapters.TDRepo
             catch (Exception e)
             {
                 if (enableError)
-                    throw e;
+                    BH.Engine.Reflection.Compute.RecordWarning($"Error: {e.Message}.");
             }
 
             return base64Representation;
