@@ -15,5 +15,6 @@ namespace BH.oM.Adapters.TDRepo
         public string owner { get; set; }
         public string comment { get; set; }
         public Viewpoint viewpoint { get; set; }
+        public Action action { get; set; }
     }
 }
