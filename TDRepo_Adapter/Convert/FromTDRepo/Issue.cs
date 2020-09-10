@@ -28,8 +28,6 @@ using System.Threading.Tasks;
 using BH.oM.Inspection;
 using BH.Engine.Adapters.TDRepo;
 
-
-
 namespace BH.Adapter.TDRepo
 {
     public static partial class Convert
@@ -54,16 +52,16 @@ namespace BH.Adapter.TDRepo
             // Pick and choose data from the BH.oM.Inspection.Audit and the BH.oM.Inspection.Issue
             bhomIssue.Name = issue.Name;
             // TODO: Create date is stored in BHOM Audit
-            bhomIssue.Assign = string.Concat(issue.AssignedRoles); // TODO: check
+            bhomIssue.Assign = issue.AssignedRoles; // TODO: check
             bhomIssue.Status = issue.Status;
             bhomIssue.Priority = issue.Priority;
             bhomIssue.Type = issue.TopicType;
-            bhomIssue.Comments = issue.Comments.Select(c => 
+            bhomIssue.Comments = issue.Comments.Select(c =>
                 new Comment()
                 {
                     Message = string.IsNullOrWhiteSpace(c.comment) ? $"{c.action.property} changed from `{(string.IsNullOrWhiteSpace(c.action.from) ? "<empty>" : c.action.from)}` to `{c.action.to}`." : c.comment,
                     Owner = c.owner,
-                    CommentDate = c.created.ToString()
+                    CommentDate = DateTime.Parse(c.created.ToString())
                 })
                 .ToList();
 

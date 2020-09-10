@@ -56,7 +56,7 @@ namespace BH.Adapter.TDRepo
 
             tdrIssue.Name = issue.Name;
             tdrIssue.Created = issue.DateCreated.Ticks;
-            tdrIssue.AssignedRoles.Add(issue.Assign); // TODO: check
+            tdrIssue.AssignedRoles.AddRange(issue.Assign); // TODO: check
             tdrIssue.Status = issue.Status;
             tdrIssue.Priority = issue.Priority;
             tdrIssue.TopicType = issue.Type;
