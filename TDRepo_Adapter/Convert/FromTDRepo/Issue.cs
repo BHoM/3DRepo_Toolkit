@@ -61,7 +61,7 @@ namespace BH.Adapter.TDRepo
             bhomIssue.Comments = issue.Comments.Select(c => 
                 new Comment()
                 {
-                    Message = c.comment,
+                    Message = string.IsNullOrWhiteSpace(c.comment) ? $"{c.action.property} changed from `{(string.IsNullOrWhiteSpace(c.action.from) ? "<empty>" : c.action.from)}` to `{c.action.to}`." : c.comment,
                     Owner = c.owner,
                     CommentDate = c.created.ToString()
                 })
