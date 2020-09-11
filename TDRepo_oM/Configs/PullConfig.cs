@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of the Buildings and Habitats object Model (BHoM)
  * Copyright (c) 2015 - 2020, the respective contributors. All rights reserved.
  *
@@ -25,31 +25,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.oM.Geometry;
-using BH.oM.Adapters.TDRepo;
+using BH.oM.Base;
+using BH.oM.Adapter;
+using System.ComponentModel;
+using System.IO;
+using BH.oM.Graphics;
 
-namespace BH.Adapter.TDRepo
+namespace BH.oM.Adapters.TDRepo
 {
-    public static partial class Convert
+    public class PullConfig : ActionConfig
     {
-        /***************************************************/
-        /**** Public Methods                            ****/
-        /***************************************************/
+        [Description("Whether to download any attached Resource from 3DRepo. This can be slow if large files are involved.")]
+        public virtual bool DownloadResources { get; set; } = true;
 
-        public static BH.oM.Adapters.TDRepo.TDR_Mesh ToTDRepo(BH.oM.Geometry.Mesh mesh)
-        {
-            var faces = mesh.Faces.Select(face =>
-                new BH.oM.Adapters.TDRepo.TDR_Face(new int[]{ face.A, face.B, face.C, face.D })
-            );
-
-            var points = mesh.Vertices.Select(vertex =>
-                new BH.oM.Adapters.TDRepo.TDR_Point(vertex.X, vertex.Y, vertex.Z)
-            );
-
-            return new BH.oM.Adapters.TDRepo.TDR_Mesh("Mesh", points.ToArray(), faces.ToArray());
-        }
-
-        /***************************************************/
+        [Description("Resources will be downloaded in this directory.")]
+        public virtual string ResourceDownloadDirectory { get; set; } = @"C:\temp\3DRepo_Toolkit-Media";
     }
 }
-

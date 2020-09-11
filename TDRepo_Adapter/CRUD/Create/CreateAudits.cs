@@ -25,31 +25,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.oM.Geometry;
+using BH.oM.Base;
+using BH.oM.Adapter;
 using BH.oM.Adapters.TDRepo;
+using System.IO;
+using BH.oM.Inspection;
+using System.Net.Http;
+using System.Net;
 
 namespace BH.Adapter.TDRepo
 {
-    public static partial class Convert
+    public partial class TDRepoAdapter
     {
-        /***************************************************/
-        /**** Public Methods                            ****/
-        /***************************************************/
-
-        public static BH.oM.Adapters.TDRepo.TDR_Mesh ToTDRepo(BH.oM.Geometry.Mesh mesh)
+        public bool Create(IEnumerable<Audit> audits, PushConfig pushConfig)
         {
-            var faces = mesh.Faces.Select(face =>
-                new BH.oM.Adapters.TDRepo.TDR_Face(new int[]{ face.A, face.B, face.C, face.D })
-            );
+            bool success = true;
 
-            var points = mesh.Vertices.Select(vertex =>
-                new BH.oM.Adapters.TDRepo.TDR_Point(vertex.X, vertex.Y, vertex.Z)
-            );
+            foreach (Audit audit in audits)
+                success &= Create(audit.Issues, pushConfig, audit);
 
-            return new BH.oM.Adapters.TDRepo.TDR_Mesh("Mesh", points.ToArray(), faces.ToArray());
+            return success;
         }
-
-        /***************************************************/
     }
 }
 

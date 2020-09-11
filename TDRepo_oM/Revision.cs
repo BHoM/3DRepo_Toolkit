@@ -20,36 +20,38 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
+using BH.oM.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.oM.Geometry;
-using BH.oM.Adapters.TDRepo;
 
-namespace BH.Adapter.TDRepo
+namespace BH.oM.Adapters.TDRepo
 {
-    public static partial class Convert
+    public class Revision : BHoMObject
     {
+        public virtual string Id { get; set; }
+        public virtual string Author { get; set; }
+        public virtual DateTime TimeStampUTC { get; set; }
+        public override string Name { get; set; }
+        public virtual string Branch { get; set; } = "master";
+        public virtual string FileType { get; set; } = "BIM";
+
         /***************************************************/
-        /**** Public Methods                            ****/
+        /**** Implicit cast                             ****/
         /***************************************************/
 
-        public static BH.oM.Adapters.TDRepo.TDR_Mesh ToTDRepo(BH.oM.Geometry.Mesh mesh)
+        public static implicit operator Revision(string revisionId)
         {
-            var faces = mesh.Faces.Select(face =>
-                new BH.oM.Adapters.TDRepo.TDR_Face(new int[]{ face.A, face.B, face.C, face.D })
-            );
-
-            var points = mesh.Vertices.Select(vertex =>
-                new BH.oM.Adapters.TDRepo.TDR_Point(vertex.X, vertex.Y, vertex.Z)
-            );
-
-            return new BH.oM.Adapters.TDRepo.TDR_Mesh("Mesh", points.ToArray(), faces.ToArray());
+            return new Revision()
+            {
+                Id = revisionId,
+                Author = Environment.UserDomainName + Environment.UserName,
+                TimeStampUTC = DateTime.UtcNow,
+                Name = revisionId,
+            };
         }
-
-        /***************************************************/
     }
 }
 

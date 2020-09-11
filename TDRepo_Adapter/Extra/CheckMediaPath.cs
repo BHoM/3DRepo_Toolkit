@@ -20,36 +20,29 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
+using BH.oM.Adapter;
+using BH.oM.Adapters.TDRepo;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BH.oM.Geometry;
-using BH.oM.Adapters.TDRepo;
+using System.ComponentModel;
+using System.IO;
+using System.Net;
 
 namespace BH.Adapter.TDRepo
 {
-    public static partial class Convert
+    public partial class TDRepoAdapter
     {
-        /***************************************************/
-        /**** Public Methods                            ****/
-        /***************************************************/
+        bool m_MediaPathAlert = true; // this flag is reset at every Push.
 
-        public static BH.oM.Adapters.TDRepo.TDR_Mesh ToTDRepo(BH.oM.Geometry.Mesh mesh)
+        public void CheckMediaPath(PushConfig pushconfig)
         {
-            var faces = mesh.Faces.Select(face =>
-                new BH.oM.Adapters.TDRepo.TDR_Face(new int[]{ face.A, face.B, face.C, face.D })
-            );
+            if (m_MediaPathAlert && string.IsNullOrWhiteSpace(pushconfig.MediaDirectory))
+            {
+                BH.Engine.Reflection.Compute.RecordNote($"Media directory not specified in the `{nameof(PushConfig)}`. This defaults to {new PushConfig().MediaDirectory}. " +
+                    $"\nTo specify a media directory, insert a `{nameof(PushConfig)}` into this Push component's `{nameof(ActionConfig)}` input.");
 
-            var points = mesh.Vertices.Select(vertex =>
-                new BH.oM.Adapters.TDRepo.TDR_Point(vertex.X, vertex.Y, vertex.Z)
-            );
-
-            return new BH.oM.Adapters.TDRepo.TDR_Mesh("Mesh", points.ToArray(), faces.ToArray());
+                m_MediaPathAlert = false;
+            }
         }
-
-        /***************************************************/
     }
 }
-

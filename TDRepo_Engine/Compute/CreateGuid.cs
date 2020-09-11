@@ -1,6 +1,6 @@
 ﻿/*
 * This file is part of the Buildings and Habitats object Model (BHoM)
-* Copyright (c) 2015 - 2019, the respective contributors. All rights reserved.
+* Copyright (c) 2015 - 2020, the respective contributors. All rights reserved.
 *
 * Each contributor holds copyright over their respective contributions.
 * The project versioning (Git) records all such contribution source information.
@@ -41,46 +41,9 @@ namespace BH.Engine.Adapters.TDRepo
 {
     public static partial class Compute
     {
-        [Description("Flattens a json string into a Dictionary<string, object>. All the nested values in the json are flattened at the top level of the dictionary.")]
-        [Input("json", "Json string with a collection of values.")]
-        [Output("A Dictionary with all the values from the json flattened at the same level.")]
-        public static Dictionary<string, object> FlattenJsonToDictionary(string json)
+        public static Guid CreateGuid()
         {
-            Dictionary<string, object> dict = new Dictionary<string, object>();
-            JToken token = JToken.Parse(json);
-            FillDictionaryFromJToken(dict, token, "");
-            return dict;
-        }
-
-        private static void FillDictionaryFromJToken(Dictionary<string, object> dict, JToken token, string prefix)
-        {
-            switch (token.Type)
-            {
-                case JTokenType.Object:
-                    foreach (JProperty prop in token.Children<JProperty>())
-                    {
-                        FillDictionaryFromJToken(dict, prop.Value, Join(prefix, prop.Name));
-                    }
-                    break;
-
-                case JTokenType.Array:
-                    int index = 0;
-                    foreach (JToken value in token.Children())
-                    {
-                        FillDictionaryFromJToken(dict, value, Join(prefix, index.ToString()));
-                        index++;
-                    }
-                    break;
-
-                default:
-                    dict.Add(prefix, ((JValue)token).Value);
-                    break;
-            }
-        }
-
-        private static string Join(string prefix, string name)
-        {
-            return (string.IsNullOrEmpty(prefix) ? name : prefix + "." + name);
+            return System.Guid.NewGuid();
         }
     }
 }

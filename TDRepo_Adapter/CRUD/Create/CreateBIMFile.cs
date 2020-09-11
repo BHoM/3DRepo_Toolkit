@@ -25,31 +25,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BH.oM.Geometry;
+using BH.oM.Base;
+using BH.oM.Adapter;
 using BH.oM.Adapters.TDRepo;
+using System.IO;
 
 namespace BH.Adapter.TDRepo
 {
-    public static partial class Convert
+    public partial class TDRepoAdapter
     {
-        /***************************************************/
-        /**** Public Methods                            ****/
-        /***************************************************/
-
-        public static BH.oM.Adapters.TDRepo.TDR_Mesh ToTDRepo(BH.oM.Geometry.Mesh mesh)
+        public string CreateBIMFile(IEnumerable<IObject> iObjs, PushConfig pushConfig)
         {
-            var faces = mesh.Faces.Select(face =>
-                new BH.oM.Adapters.TDRepo.TDR_Face(new int[]{ face.A, face.B, face.C, face.D })
-            );
+            // Write .BIM file and commit it.
+            List<IObject> objList = iObjs.ToList();
+            string BIMFilePath = WriteBIMFile(objList, pushConfig.Directory, pushConfig.FileName, pushConfig.RenderMeshOptions);
 
-            var points = mesh.Vertices.Select(vertex =>
-                new BH.oM.Adapters.TDRepo.TDR_Point(vertex.X, vertex.Y, vertex.Z)
-            );
+            iObjs = objList;
 
-            return new BH.oM.Adapters.TDRepo.TDR_Mesh("Mesh", points.ToArray(), faces.ToArray());
+            // Commit the objects as serialised in the created BIM file.
+            if (!string.IsNullOrWhiteSpace(BIMFilePath))
+                CommitNewRevision(BIMFilePath);
+
+            return BIMFilePath;
         }
-
-        /***************************************************/
     }
 }
 

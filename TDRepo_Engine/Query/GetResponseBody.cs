@@ -36,51 +36,34 @@ using BH.oM.Adapters.TDRepo;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using BH.oM.Reflection.Attributes;
+using System.IO;
 
 namespace BH.Engine.Adapters.TDRepo
 {
-    public static partial class Compute
+    public static partial class Query
     {
-        [Description("Flattens a json string into a Dictionary<string, object>. All the nested values in the json are flattened at the top level of the dictionary.")]
-        [Input("json", "Json string with a collection of values.")]
-        [Output("A Dictionary with all the values from the json flattened at the same level.")]
-        public static Dictionary<string, object> FlattenJsonToDictionary(string json)
+        [Description("Returns the Body text of an HTTP response message's Result.")]
+        public static string GetResponseBody(this string respMessageResult)
         {
-            Dictionary<string, object> dict = new Dictionary<string, object>();
-            JToken token = JToken.Parse(json);
-            FillDictionaryFromJToken(dict, token, "");
-            return dict;
-        }
+            string parsedMessage = "";
 
-        private static void FillDictionaryFromJToken(Dictionary<string, object> dict, JToken token, string prefix)
-        {
-            switch (token.Type)
+            bool includeTitle = false;
+            if (!includeTitle)
             {
-                case JTokenType.Object:
-                    foreach (JProperty prop in token.Children<JProperty>())
-                    {
-                        FillDictionaryFromJToken(dict, prop.Value, Join(prefix, prop.Name));
-                    }
-                    break;
-
-                case JTokenType.Array:
-                    int index = 0;
-                    foreach (JToken value in token.Children())
-                    {
-                        FillDictionaryFromJToken(dict, value, Join(prefix, index.ToString()));
-                        index++;
-                    }
-                    break;
-
-                default:
-                    dict.Add(prefix, ((JValue)token).Value);
-                    break;
+                string startTag = "<title>";
+                string endTag = "</title>";
+                int startIndex = respMessageResult.IndexOf(startTag) + startTag.Length;
+                parsedMessage = respMessageResult.Remove(startIndex, respMessageResult.IndexOf(endTag) - startIndex);
             }
-        }
 
-        private static string Join(string prefix, string name)
-        {
-            return (string.IsNullOrEmpty(prefix) ? name : prefix + "." + name);
+            System.Text.RegularExpressions.Regex oRegex = new System.Text.RegularExpressions.Regex(".*?<body.*?>(.*?)</body>.*?", System.Text.RegularExpressions.RegexOptions.Multiline);
+            string htmlTagPattern = "<.*?>";
+            parsedMessage = oRegex.Replace(parsedMessage, string.Empty);
+            parsedMessage = System.Text.RegularExpressions.Regex.Replace(parsedMessage, htmlTagPattern, string.Empty);
+            parsedMessage = System.Text.RegularExpressions.Regex.Replace(parsedMessage, @"^\s+$[\r\n]*", "", System.Text.RegularExpressions.RegexOptions.Multiline);
+            parsedMessage = parsedMessage.Replace("&nbsp;", string.Empty);
+
+            return parsedMessage;
         }
     }
 }

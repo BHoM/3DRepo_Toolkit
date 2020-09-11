@@ -36,51 +36,43 @@ using BH.oM.Adapters.TDRepo;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using BH.oM.Reflection.Attributes;
+using System.IO;
 
 namespace BH.Engine.Adapters.TDRepo
 {
     public static partial class Compute
     {
-        [Description("Flattens a json string into a Dictionary<string, object>. All the nested values in the json are flattened at the top level of the dictionary.")]
-        [Input("json", "Json string with a collection of values.")]
-        [Output("A Dictionary with all the values from the json flattened at the same level.")]
-        public static Dictionary<string, object> FlattenJsonToDictionary(string json)
+        [Description("Writes a Base64 String into a file.")]
+        public static bool WriteToByteArray(string base64string, string fileFullPath, bool enableError = true)
         {
-            Dictionary<string, object> dict = new Dictionary<string, object>();
-            JToken token = JToken.Parse(json);
-            FillDictionaryFromJToken(dict, token, "");
-            return dict;
-        }
+            if (string.IsNullOrWhiteSpace(fileFullPath))
+                return false;
 
-        private static void FillDictionaryFromJToken(Dictionary<string, object> dict, JToken token, string prefix)
-        {
-            switch (token.Type)
+            byte[] imageArray = new byte[] { };
+
+            try
             {
-                case JTokenType.Object:
-                    foreach (JProperty prop in token.Children<JProperty>())
-                    {
-                        FillDictionaryFromJToken(dict, prop.Value, Join(prefix, prop.Name));
-                    }
-                    break;
-
-                case JTokenType.Array:
-                    int index = 0;
-                    foreach (JToken value in token.Children())
-                    {
-                        FillDictionaryFromJToken(dict, value, Join(prefix, index.ToString()));
-                        index++;
-                    }
-                    break;
-
-                default:
-                    dict.Add(prefix, ((JValue)token).Value);
-                    break;
+                imageArray = System.Convert.FromBase64String(base64string);
             }
-        }
+            catch (Exception e)
+            {
+                if (enableError)
+                    throw e;
+            }
 
-        private static string Join(string prefix, string name)
-        {
-            return (string.IsNullOrEmpty(prefix) ? name : prefix + "." + name);
+            try
+            {
+                System.IO.Directory.CreateDirectory(Path.GetDirectoryName(fileFullPath));
+                System.IO.File.WriteAllBytes(fileFullPath, imageArray);
+
+            }
+            catch (Exception e)
+            {
+                if (enableError)
+                    throw e;
+            }
+
+            return true;
         }
     }
 }
