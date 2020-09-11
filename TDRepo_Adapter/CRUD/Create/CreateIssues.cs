@@ -93,6 +93,7 @@ namespace BH.Adapter.TDRepo
                 {
                     // (As this seems to systematically fail)
                     // In case of failure, use 3DRepo's workaround to post Resources in the Comments to the issue.
+                    BH.Engine.Reflection.Compute.RecordWarning("Failed attaching Media to the 3DRepo Issue's Resources.\nTrying adding Media as Comments to the Issue on 3DRepo.");
                     CommentIssue(bhomIssue, issueId, pushConfig);
                 }
             }
