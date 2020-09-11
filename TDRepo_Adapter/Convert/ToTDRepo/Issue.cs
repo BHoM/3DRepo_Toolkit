@@ -75,11 +75,13 @@ namespace BH.Adapter.TDRepo
                 bhomIssue.Position.Y,
                 bhomIssue.Position.Z };
 
+            tdrIssue.Description = bhomIssue.Description;
+
             // The description is where the ParentAuditId is stored currently. 
             // This is needed to map the issue back to the Parent Audit when a Pull with an AuditRequest is done.
             // TODO: look into mapping issues from Audit to TDRepoIssues
             if (parentAudit != null)
-                tdrIssue.Description = bhomIssue.Description + $"\nParentAuditId: {parentAudit.BHoM_Guid}";
+                tdrIssue.Description += $"\nParentAuditId: {parentAudit.BHoM_Guid}";
             return tdrIssue;
         }
     }
