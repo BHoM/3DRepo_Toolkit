@@ -42,6 +42,10 @@ namespace BH.Adapter.TDRepo
         public bool AttachResources(oM.Inspection.Issue bhomIssue, string tdrepoIssueId, PushConfig pushConfig, bool raiseErrors = true)
         {
             bool success = true;
+
+            if (!bhomIssue.Media?.Any() ?? true)
+                return true;
+
             CheckMediaPath(pushConfig);
 
             // // - The media needs to be attached as a "Resource" of the issue.
@@ -56,20 +60,14 @@ namespace BH.Adapter.TDRepo
                 {
                     // Remember that BHoMIssues have media attached as a partial file path.
                     string fullMediaPath = System.IO.Path.Combine(pushConfig.MediaDirectory ?? "C:\\temp\\", bhomIssue.Media.FirstOrDefault());
-
-                    StreamContent imageContent = null;
-                    MultipartFormDataContent mpcontent = null;
-                    HttpResponseMessage respMessage = null;
                     var f = System.IO.File.OpenRead(fullMediaPath);
 
-                    imageContent = new StreamContent(f);
-                    mpcontent = new MultipartFormDataContent();
-                    
-                    // TODO: Check if the header is correct
-                    imageContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
-                    mpcontent.Add(imageContent);
+                    StreamContent imageContent = new StreamContent(f);
+                    MultipartFormDataContent mpcontent = new MultipartFormDataContent();
+                    mpcontent.Add(imageContent, "file", mediaPath);
 
                     // POST request
+                    HttpResponseMessage respMessage = null;
                     try
                     {
                         respMessage = httpClient.PostAsync(issueResourceEndpoint, mpcontent).Result;
