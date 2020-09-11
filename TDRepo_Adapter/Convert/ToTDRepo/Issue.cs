@@ -62,7 +62,7 @@ namespace BH.Adapter.TDRepo
             tdrIssue.TopicType = issue.Type;
 
             // The first media item is picked as the screenshot.
-            string screenshotFilePath = !string.IsNullOrWhiteSpace(issue.Media.FirstOrDefault()) ? System.IO.Path.Combine(resourcesFolder ?? "C:\\temp\\", issue.Media.FirstOrDefault()) : null;
+            string screenshotFilePath = !string.IsNullOrWhiteSpace(issue?.Media?.FirstOrDefault()) ? System.IO.Path.Combine(resourcesFolder ?? "C:\\temp\\", issue.Media.FirstOrDefault()) : null;
             tdrIssue.Viewpoint = new oM.Adapters.TDRepo.Viewpoint()
             {
                 Position = new double[] { issue.Position.X, issue.Position.Y, issue.Position.Z },  // TODO: now this is taking the same Position of the issue. Ideally to take the position of the media's viewpoint.
