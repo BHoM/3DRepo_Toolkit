@@ -50,16 +50,14 @@ namespace BH.Adapter.TDRepo
 
             // // - The media needs to be attached as a "Resource" of the issue.
             // // - This requires a MultipartFormData request. See https://3drepo.github.io/3drepo.io/#api-Issues-attachResource
-            //if (bhomIssue.Media.Count > 1) // actually, let's do this for all resources, including the first one that was used as issue screenshot.
             using (HttpClient httpClient = new HttpClient())
             {
                 string issueResourceEndpoint = $"{m_host}/{m_teamspace}/{m_modelId}/issues/{tdrepoIssueId}/resources?key={m_userAPIKey}";
 
-
                 foreach (string mediaPath in bhomIssue.Media)
                 {
                     // Remember that BHoMIssues have media attached as a partial file path.
-                    string fullMediaPath = System.IO.Path.Combine(pushConfig.MediaDirectory ?? "C:\\temp\\", bhomIssue.Media.FirstOrDefault());
+                    string fullMediaPath = System.IO.Path.Combine(pushConfig.MediaDirectory ?? "C:\\temp\\", mediaPath);
                     var f = System.IO.File.OpenRead(fullMediaPath);
 
                     StreamContent imageContent = new StreamContent(f);
