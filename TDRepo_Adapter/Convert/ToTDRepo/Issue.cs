@@ -34,18 +34,18 @@ namespace BH.Adapter.TDRepo
 {
     public static partial class Convert
     {
-        public static BH.oM.Adapters.TDRepo.Issue ToTDRepo(this Issue issue, Audit parentAudit = null, string resourcesFolder = "", int issueIdx = 0)
+        public static BH.oM.Adapters.TDRepo.Issue ToTDRepo(this Issue bhomIssue, Audit parentAudit = null, string resourcesFolder = "", int issueIdx = 0)
         {
             BH.oM.Adapters.TDRepo.Issue tdrIssue = new BH.oM.Adapters.TDRepo.Issue();
 
             // Checks
-            if (string.IsNullOrWhiteSpace(issue.Name))
+            if (string.IsNullOrWhiteSpace(bhomIssue.Name))
             {
                 BH.Engine.Reflection.Compute.RecordError($"The {nameof(BH.oM.Inspection.Issue)} must be assigned a Name in order for the conversion to be possible.");
                 return null;
             }
 
-            if (issue.Position == null)
+            if (bhomIssue.Position == null)
             {
                 BH.Engine.Reflection.Compute.RecordError($"The {nameof(BH.oM.Inspection.Issue)} must be assigned a position in order for the conversion to be possible.");
                 return null;
@@ -54,31 +54,32 @@ namespace BH.Adapter.TDRepo
             // Pick and choose data from the BH.oM.Inspection.Audit and the BH.oM.Inspection.Issue
             // to build the BH.oM.Adapters.TDRepo.Issue, which can be then uploaded to 3DRepo.
 
-            tdrIssue.Name = issue.Name;
-            tdrIssue.Created = issue.DateCreated.Ticks;
-            tdrIssue.AssignedRoles.AddRange(issue.Assign); // TODO: check
-            tdrIssue.Status = issue.Status;
-            tdrIssue.Priority = issue.Priority;
-            tdrIssue.TopicType = issue.Type;
+            tdrIssue.Name = bhomIssue.Name;
+            tdrIssue.Created = bhomIssue.DateCreated.Ticks;
+            tdrIssue.AssignedRoles.AddRange(bhomIssue.Assign); // TODO: check
+            tdrIssue.Status = bhomIssue.Status;
+            tdrIssue.Priority = bhomIssue.Priority;
+            tdrIssue.TopicType = bhomIssue.Type;
 
             // The first media item is picked as the screenshot.
-            string screenshotFilePath = !string.IsNullOrWhiteSpace(issue?.Media?.FirstOrDefault()) ? System.IO.Path.Combine(resourcesFolder ?? "C:\\temp\\", issue.Media.FirstOrDefault()) : null;
+            string screenshotFilePath = !string.IsNullOrWhiteSpace(bhomIssue?.Media?.FirstOrDefault()) ? System.IO.Path.Combine(resourcesFolder ?? "C:\\temp\\", bhomIssue.Media.FirstOrDefault()) : null;
             tdrIssue.Viewpoint = new oM.Adapters.TDRepo.Viewpoint()
             {
-                Position = new double[] { issue.Position.X, issue.Position.Y, issue.Position.Z },  // TODO: now this is taking the same Position of the issue. Ideally to take the position of the media's viewpoint.
+                Position = new double[] { bhomIssue.Position.X, bhomIssue.Position.Y, bhomIssue.Position.Z },  // TODO: now this is taking the same Position of the issue. Ideally to take the position of the media's viewpoint.
                 Screenshot = Compute.ReadToBase64(screenshotFilePath)
                 // TODO: all other properties of 3DRepo's Viewpoint are currently not in any BHoM object. 
             };
 
             tdrIssue.Position = new double[] {
-                issue.Position.X,
-                issue.Position.Y,
-                issue.Position.Z };
+                bhomIssue.Position.X,
+                bhomIssue.Position.Y,
+                bhomIssue.Position.Z };
 
             // The description is where the ParentAuditId is stored currently. 
             // This is needed to map the issue back to the Parent Audit when a Pull with an AuditRequest is done.
             // TODO: look into mapping issues from Audit to TDRepoIssues
-            tdrIssue.Description = issue.Description + $"\nParentAuditId: {parentAudit.BHoM_Guid}";
+            if (parentAudit != null)
+                tdrIssue.Description = bhomIssue.Description + $"\nParentAuditId: {parentAudit.BHoM_Guid}";
             return tdrIssue;
         }
     }
