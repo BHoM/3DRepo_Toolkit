@@ -42,6 +42,9 @@ namespace BH.oM.Adapters.TDRepo
         [Description("Comments attached to the Issue.")]
         public virtual List<Comment> Comments { get; set; }
 
+        [Description("Resources attached to the Issue")]
+        public virtual List<Resource> Resources { get; set; }
+
         [Description("The GUID of the Issue on 3DRepo. This is assigned by the server.")]
         public virtual string Id { get; set; } = null;
 
