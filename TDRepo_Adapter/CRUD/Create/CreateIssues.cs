@@ -46,15 +46,14 @@ namespace BH.Adapter.TDRepo
             string mediaDirectory = pushConfig.MediaDirectory;
             CheckMediaPath(pushConfig);
 
-            var serializerSettings = new Newtonsoft.Json.JsonSerializerSettings();
-            serializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
-
             foreach (oM.Inspection.Issue bhomIssue in bhomIssues)
             {
                 // Convert BHoM Audits to 3DRepo issues.
                 BH.oM.Adapters.TDRepo.Issue issue = bhomIssue.ToTDRepo(parentAudit, mediaDirectory);
 
                 // Serialise the object. All property names must have the first letter lowercase for 3DRepo API, hence the need for serialiserSettings.
+                var serializerSettings = new Newtonsoft.Json.JsonSerializerSettings();
+                serializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
                 string issue_serialised = Newtonsoft.Json.JsonConvert.SerializeObject(issue, serializerSettings);
 
                 // Endpoint for creating a new issue

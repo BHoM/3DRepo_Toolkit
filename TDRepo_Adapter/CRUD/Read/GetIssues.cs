@@ -252,7 +252,7 @@ namespace BH.Adapter.TDRepo
                     {nameof(Issue.Priority), "priority"},
                     {nameof(Issue.TopicType), "topic_type"},
                     {nameof(Issue.Viewpoint), "viewpoint"},
-                    {nameof(Issue.Description), "desc"},
+                    {nameof(Issue.Desc), "desc"},
                     {nameof(Issue.Position), "position"},
                     {nameof(Issue.Comments), "comments"},
                     {nameof(Issue.Id), "_id"},

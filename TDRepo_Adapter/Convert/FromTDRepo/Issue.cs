@@ -77,8 +77,8 @@ namespace BH.Adapter.TDRepo
             };
 
             string toFind = "\nParentAuditId: ";
-            int pos = issue.Description.IndexOf(toFind) + toFind.Length;
-            bhomIssue.Description = issue.Description.Remove(pos);
+            int pos = issue.Desc.IndexOf(toFind) + toFind.Length;
+            bhomIssue.Description = issue.Desc.Remove(pos);
 
             return bhomIssue;
         }

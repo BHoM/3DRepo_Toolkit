@@ -67,7 +67,7 @@ namespace BH.Adapter.TDRepo
             {
                 Position = new double[] { bhomIssue.Position.X, bhomIssue.Position.Y, bhomIssue.Position.Z },  // TODO: now this is taking the same Position of the issue. Ideally to take the position of the media's viewpoint.
                 Screenshot = Compute.ReadToBase64(screenshotFilePath)
-                // TODO: all other properties of 3DRepo's Viewpoint are currently not in any BHoM object. 
+                // Note: all other properties of the 3DRepo's Viewpoint object are not currently supported by BHoM, and therefore are not populated.
             };
 
             tdrIssue.Position = new double[] {
@@ -75,13 +75,13 @@ namespace BH.Adapter.TDRepo
                 bhomIssue.Position.Y,
                 bhomIssue.Position.Z };
 
-            tdrIssue.Description = bhomIssue.Description;
+            tdrIssue.Desc = bhomIssue.Description;
 
             // The description is where the ParentAuditId is stored currently. 
             // This is needed to map the issue back to the Parent Audit when a Pull with an AuditRequest is done.
             // TODO: look into mapping issues from Audit to TDRepoIssues
             if (parentAudit != null)
-                tdrIssue.Description += $"\nParentAuditId: {parentAudit.BHoM_Guid}";
+                tdrIssue.Desc += $"\nParentAuditId: {parentAudit.BHoM_Guid}";
             return tdrIssue;
         }
     }
