@@ -63,6 +63,8 @@ namespace BH.Adapter.TDRepo
                     StreamContent imageContent = new StreamContent(f);
                     MultipartFormDataContent mpcontent = new MultipartFormDataContent();
                     mpcontent.Add(imageContent, "file", mediaPath);
+                    StringContent nameContent = new StringContent(Path.GetFileNameWithoutExtension(mediaPath));
+                    mpcontent.Add(nameContent, "names");
 
                     // POST request
                     HttpResponseMessage respMessage = null;
