@@ -65,7 +65,9 @@ namespace BH.Adapter.TDRepo
                 if (enableMessages)
                     BH.Engine.Reflection.Compute.RecordNote($"Getting {nameof(Issue)} with id {ir.IssueId} \nfrom the 3DRepo Model `{modelId}` in the Teamspace `{teamsSpace}`.");
 
-                allIssues.Add(GetIssue(ir.IssueId, teamsSpace, modelId, userAPIkey));
+                Issue issue = GetIssue(ir.IssueId, teamsSpace, modelId, userAPIkey);
+
+                allIssues.Add(issue);
             }
             else
             {
@@ -87,7 +89,7 @@ namespace BH.Adapter.TDRepo
                 foreach (Issue issue in allIssues)
                 {
                     // Get any resource (image) attached in the Comments.
-                    if (issue.Comments?.Any() ?? false)
+                    if (issue?.Comments?.Any() ?? false)
                     {
                         // Dictionary whose Key is filename (fullPath), Value is the base64 string representation.
                         Dictionary<string, string> base64resources = new Dictionary<string, string>();
@@ -181,11 +183,19 @@ namespace BH.Adapter.TDRepo
                 endpoint += $"?key={userAPIkey}";
 
             // GET request
-            HttpResponseMessage respMessage;
+            HttpResponseMessage respMessage = null;
             string fullResponse = "";
             using (var httpClient = new HttpClient())
             {
-                respMessage = httpClient.GetAsync(endpoint).Result;
+                try
+                {
+                    respMessage = httpClient.GetAsync(endpoint).Result;
+                }
+                catch (Exception e)
+                {
+                    BH.Engine.Reflection.Compute.RecordError($"Error while pulling all issues belonging to model {modelId}, revision {revisionId}:\n {e.Message}.");
+                    return new List<Issue>();
+                }
 
                 // Process response
                 fullResponse = respMessage.Content.ReadAsStringAsync().Result;
