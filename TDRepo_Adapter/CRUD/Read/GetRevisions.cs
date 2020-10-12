@@ -49,7 +49,7 @@ namespace BH.Adapter.TDRepo
             else if (!string.IsNullOrWhiteSpace(m_userAPIKey))
                 endpoint += $"?key={m_userAPIKey}";
 
-            // POST request
+            // GET request
             HttpResponseMessage respMessage;
             string fullResponse = "";
             using (var httpClient = new HttpClient())
