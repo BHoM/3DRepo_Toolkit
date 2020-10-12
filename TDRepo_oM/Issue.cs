@@ -34,7 +34,7 @@ namespace BH.oM.Adapters.TDRepo
         public virtual Viewpoint Viewpoint { get; set; }
 
         [Description("The description of the created issue.")]
-        public virtual string Description { get; set; }
+        public virtual string Desc { get; set; } // `desc` is the json property name required by 3DRepo when creating issues
 
         [Description("The vector defining the pin of the issue (X, Y, Z).")]
         public virtual double[] Position { get; set; }
