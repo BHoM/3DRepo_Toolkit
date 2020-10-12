@@ -12,7 +12,7 @@ namespace BH.oM.Adapters.TDRepo
     {
         public string _id { get; set; }
         public string name { get; set; }
-        public int createdAt { get; set; }
+        public double createdAt { get; set; }
         public int size { get; set; }
     }
 }
