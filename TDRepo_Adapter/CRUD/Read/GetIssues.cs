@@ -55,7 +55,6 @@ namespace BH.Adapter.TDRepo
             else if (!string.IsNullOrWhiteSpace(m_userAPIKey))
                 userAPIkey += m_userAPIKey;
 
-            string endpoint = "";
 
             bool singleIssue = !string.IsNullOrWhiteSpace(ir.IssueId);
             if (singleIssue)
@@ -88,30 +87,47 @@ namespace BH.Adapter.TDRepo
                 // Attempt the pull of the resources.
                 foreach (Issue issue in allIssues)
                 {
-                    // Get any resource (image) attached in the Comments.
-                    if (issue?.Comments?.Any() ?? false)
+                    // Dictionary whose Key is filename (fullPath), Value is the base64 string representation.
+                    Dictionary<string, string> base64resources = new Dictionary<string, string>();
+
+                    // Get all resources files. https://3drepo.github.io/3drepo.io/#api-Resources-getResource
+                    foreach (var resource in issue.Resources)
                     {
-                        // Dictionary whose Key is filename (fullPath), Value is the base64 string representation.
-                        Dictionary<string, string> base64resources = new Dictionary<string, string>();
+                        string endpoint = $"https://api1.www.3drepo.io/api/{teamsSpace}/{modelId}/resources/{resource._id}?key={userAPIkey}";
+                        // GET request
+                        HttpResponseMessage respMessage;
+                        byte[] fullResponse = null; 
+                        using (var httpClient = new HttpClient())
+                        {
+                            respMessage = httpClient.GetAsync(endpoint).Result;
+
+                            // Process response
+                            fullResponse = respMessage.Content.ReadAsByteArrayAsync().Result;
+                            string base64 = System.Convert.ToBase64String(fullResponse);
+                            base64resources.Add(Path.Combine(pullConfig.ResourceDownloadDirectory, resource.name), base64);
+
+                        }
+                    }
+
+                    // Get resources (image) attached in the Comments, if any. (TODO)
+                    foreach (var comment in issue?.Comments)
+                    {
+                        var screenshot = comment.viewpoint?.Screenshot;
+                        if (screenshot != null)
+                            base64resources.Add(Path.Combine(pullConfig.ResourceDownloadDirectory, comment.comment), screenshot);
 
                         // TODO: Apparently, the actual image is not pulled (`Comments` property is empty) when using the GET Issue endpoint.
-                        // There must be another endpoint/way to pull the image that was posted in the Comments (SEE BELOW)
-
-                        // TODO: Add getVIewpoint endpoint to get image from the Viewpoint. https://3drepo.github.io/3drepo.io/#api-Viewpoints-findViewpoint
-                        // Get the Base64 string image, as it should be attached to the `Comments` property of the pulled Issues.
-                        // Store it in the above dictionary.
-                        base64resources =
-                            issue.Comments
-                            .ToDictionary(c => Path.Combine(pullConfig.ResourceDownloadDirectory, c.comment ?? ""), c => c.viewpoint?.Screenshot);
-
-                        // Save the pulled resource to file. If the base64 string is missing, it will simply create an empty file.
-                        base64resources.ToList().ForEach(kv => Compute.WriteToByteArray(kv.Value, kv.Key, false));
-
-                        // Store the pulled images Filenames in the resources. 
-                        // This allows to pass this information to the Convert method, see the Pull.
-                        if (mediaFileNames != null)
-                            mediaFileNames[issue] = issue.Comments.Select(c => c.comment).ToList();
+                        // There is another endpoint/way to pull the image that was posted in the Comments:
+                        // `getViewpoint` endpoint is to be used to get image from the Viewpoint. https://3drepo.github.io/3drepo.io/#api-Viewpoints-findViewpoint
                     }
+
+                    // Save the pulled resource to file. If the base64 string is missing, it will simply create an empty file.
+                    base64resources.ToList().ForEach(kv => Compute.WriteToByteArray(kv.Value, kv.Key, false));
+
+                    // Store the pulled images Filenames in the resources. 
+                    // This allows to pass this information to the Convert method, see the Pull.
+                    if (mediaFileNames != null)
+                        mediaFileNames[issue] = issue.Comments.Select(c => c.comment).ToList();
                 }
             }
 
@@ -230,7 +246,7 @@ namespace BH.Adapter.TDRepo
             // Fetch each full Issue individually. These will include all the needed info.
             foreach (var issue in issues_MinimalInfo_deserialised)
             {
-                allIssues.Add(GetIssue(issue.Id, teamsSpace,modelId,userAPIkey));
+                allIssues.Add(GetIssue(issue.Id, teamsSpace, modelId, userAPIkey));
             }
 
             return allIssues;
