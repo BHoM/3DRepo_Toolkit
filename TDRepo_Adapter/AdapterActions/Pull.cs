@@ -77,9 +77,12 @@ namespace BH.Adapter.TDRepo
                 foreach (var pulledIssue in pulledIssues)
                 {
                     List<string> mediaFilenames = new List<string>();
-                    mediaFilenames_perIssue.TryGetValue(pulledIssue, out mediaFilenames);
-                    
-                    audit.Issues.Add(Convert.FromTDRepo(pulledIssue, mediaFilenames));
+                    if (pulledIssue != null)
+                    {
+                        mediaFilenames_perIssue.TryGetValue(pulledIssue, out mediaFilenames);
+
+                        audit.Issues.Add(Convert.FromTDRepo(pulledIssue, mediaFilenames));
+                    }
                 }
 
                 // Return the Audit with the Pulled issues from 3DRepo.
