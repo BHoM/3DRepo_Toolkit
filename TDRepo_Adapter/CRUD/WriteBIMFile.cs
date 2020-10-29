@@ -35,6 +35,7 @@ using RepoFileExporter.dataStructures;
 using BH.oM.Adapters.TDRepo;
 using BH.oM.Geometry;
 using BH.oM.Graphics;
+using BH.Engine.Representation;
 
 namespace BH.Adapter.TDRepo
 {
@@ -79,28 +80,7 @@ namespace BH.Adapter.TDRepo
                 RenderMesh renderMesh = null;
 
                 if (bHoMObject != null)
-                {
-                    object renderMeshObj = null;
-                    bHoMObject.CustomData.TryGetValue(renderMeshOptions.CustomRendermeshKey, out renderMeshObj);
-
-                    if (renderMeshObj != null)
-                    {
-                        renderMesh = renderMeshObj as RenderMesh;
-                        meshRepresentation = renderMeshObj as Mesh;
-
-                        if (typeof(IEnumerable<object>).IsAssignableFrom(renderMeshObj.GetType()))
-                        {
-                            List<object> objects = renderMeshObj as List<object>;
-                            List<RenderMesh> renderMeshes = objects.OfType<RenderMesh>().ToList();
-                            if (renderMeshes.Count > 0)
-                                renderMesh = JoinRenderMeshes(renderMeshes);
-
-                            List<Mesh> meshes = objects.OfType<Mesh>().ToList();
-                            if (meshes.Count > 0)
-                                meshRepresentation = JoinMeshes(meshes);
-                        }
-                    }
-                }
+                    bHoMObject.TryGetRendermesh(out renderMesh);
 
                 if (renderMesh == null && meshRepresentation == null)
                     renderMesh = BH.Engine.Representation.Compute.IRenderMesh(obj, renderMeshOptions);
@@ -112,8 +92,8 @@ namespace BH.Adapter.TDRepo
 
                 if (bHoMObject != null)
                 {
-                    // Add/update the RenderMesh in CustomData
-                    bHoMObject.CustomData["RenderMesh"] = renderMesh;
+                    // Add/update the RenderMesh in the BHoMObject
+                    bHoMObject.ISetRendermesh(meshRepresentation);
                     obj = bHoMObject;
                 }
 
@@ -149,18 +129,15 @@ namespace BH.Adapter.TDRepo
                 BH.oM.Geometry.Mesh m = representationMeshes[i];
                 Tuple<IObject, BH.oM.Geometry.Mesh> objAndRepr = objsAndRepresentations[i];
 
-                // Check if a colour has been specified in the BHoMObject's CustomData
+                // Check if a colour has been specified in the BHoMObject's Fragment
                 bHoMObject = objAndRepr.Item1 as IBHoMObject;
                 int customMatIdx = defaultMatIdx;
                 if (bHoMObject != null)
                 {
-                    object colour = null;
-                    bHoMObject.CustomData.TryGetValue("Colour", out colour);
+                    Color? colour = bHoMObject.FindFragment<ColourFragment>()?.Colour;
 
-                    if (colour is System.Drawing.Color)
+                    if (colour != null)
                     {
-                        //int[] colArr = colour.ToString().Split(',').Select(s => Int32.Parse(s)).ToArray();
-
                         Color col = (Color)colour;
 
                         float r = (float)col.R / 255;

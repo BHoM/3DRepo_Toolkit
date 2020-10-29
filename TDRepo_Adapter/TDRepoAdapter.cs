@@ -26,6 +26,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BH.Adapter;
+using BH.oM.Adapters.TDRepo;
 using BH.oM.Base;
 using BH.oM.Reflection.Attributes;
 
@@ -61,7 +62,7 @@ namespace BH.Adapter.TDRepo
             m_teamspace = teamspace;
             m_modelId = modelId;
 
-            AdapterIdName = Convert.AdapterIdName;   //Set the "AdapterId" to "SoftwareName_id". Generally stored as a constant string in the convert class in the SoftwareName_Engine
+            AdapterIdFragmentType = typeof(TDRepoId); 
         }
 
 
