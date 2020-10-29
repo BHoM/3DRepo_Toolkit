@@ -72,6 +72,7 @@
     <Compile Include="Requests\IModelIdRequest.cs" />
     <Compile Include="Requests\IUserAPIKeyRequest.cs" />
     <Compile Include="Requests\RevisionRequest.cs" />
+    <Compile Include="TDRepoId.cs" />
     <Compile Include="Revision.cs" />
     <Compile Include="Requests\IssueRequest.cs" />
     <Compile Include="ViewPoint.cs" />

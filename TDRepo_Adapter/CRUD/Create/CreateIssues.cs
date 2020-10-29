@@ -33,6 +33,7 @@ using BH.oM.Inspection;
 using System.Net.Http;
 using System.Net;
 using BH.Engine.Adapters.TDRepo;
+using BH.Engine.Adapter;
 
 namespace BH.Adapter.TDRepo
 {
@@ -85,7 +86,7 @@ namespace BH.Adapter.TDRepo
 
                 // Assign the CreatedIssue Id to the Audit.
                 string issueId = issue_deserial.Id;
-                bhomIssue.CustomData[Convert.AdapterIdName] = issueId;
+                SetAdapterId(bhomIssue, issueId);
 
                 // Try attaching the media (resources) with its dedicated endpoint.
                 if (!AttachResources(bhomIssue, issueId, pushConfig, false))
