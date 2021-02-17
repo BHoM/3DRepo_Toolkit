@@ -34,7 +34,7 @@ namespace BH.Adapter.TDRepo
 {
     public static partial class Convert
     {
-        public static BH.oM.Adapters.TDRepo.Issue ToTDRepo(this Issue bhomIssue, Audit parentAudit = null, string resourcesFolder = "", int issueIdx = 0)
+        public static BH.oM.Adapters.TDRepo.Issue ToTDRepo(this Issue bhomIssue, string resourcesFolder = "")
         {
             BH.oM.Adapters.TDRepo.Issue tdrIssue = new BH.oM.Adapters.TDRepo.Issue();
 
@@ -77,11 +77,8 @@ namespace BH.Adapter.TDRepo
 
             tdrIssue.Desc = bhomIssue.Description;
 
-            // The description is where the ParentAuditId is stored currently. 
-            // This is needed to map the issue back to the Parent Audit when a Pull with an AuditRequest is done.
-            // TODO: look into mapping issues from Audit to TDRepoIssues
-            if (parentAudit != null)
-                tdrIssue.Desc += $"\nParentAuditId: {parentAudit.BHoM_Guid}";
+            tdrIssue.Desc += $"\nParentAuditId: {bhomIssue.AuditID}";
+
             return tdrIssue;
         }
     }
