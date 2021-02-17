@@ -75,10 +75,7 @@ namespace BH.Adapter.TDRepo
                 createdObjects.AddRange(iObjs);
             }
 
-            // Create the audits/issues
-            if (audits.Any() && Create(audits, pushConfig))
-                createdObjects.AddRange(audits);
-
+            // Create the issues
             if (issues.Any() && Create(issues, pushConfig))
                 createdObjects.AddRange(issues);
 

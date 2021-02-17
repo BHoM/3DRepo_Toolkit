@@ -70,21 +70,6 @@ namespace BH.Adapter.TDRepo
                 Dictionary<oM.Adapters.TDRepo.Issue, List<string>> mediaFilenames_perIssue = new Dictionary<oM.Adapters.TDRepo.Issue, List<string>>();
                 List<oM.Adapters.TDRepo.Issue> pulledIssues = GetIssues(ir, pullConfig,true, mediaFilenames_perIssue);
 
-                // Replace the specified BHoM Audit Issues with the pulled ones, 
-                // in order to enable comparison.
-                audit.Issues = new List<oM.Inspection.Issue>();
-
-                foreach (var pulledIssue in pulledIssues)
-                {
-                    List<string> mediaFilenames = new List<string>();
-                    if (pulledIssue != null)
-                    {
-                        mediaFilenames_perIssue.TryGetValue(pulledIssue, out mediaFilenames);
-
-                        audit.Issues.Add(Convert.FromTDRepo(pulledIssue, mediaFilenames));
-                    }
-                }
-
                 // Return the Audit with the Pulled issues from 3DRepo.
                 return new List<object>() { audit };
             }

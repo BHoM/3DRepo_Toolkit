@@ -40,7 +40,7 @@ namespace BH.Adapter.TDRepo
     public partial class TDRepoAdapter
     {
 
-        public bool Create(IEnumerable<oM.Inspection.Issue> bhomIssues, PushConfig pushConfig, Audit parentAudit = null)
+        public bool Create(IEnumerable<oM.Inspection.Issue> bhomIssues, PushConfig pushConfig)
         {
             bool success = true;
 
@@ -50,7 +50,7 @@ namespace BH.Adapter.TDRepo
             foreach (oM.Inspection.Issue bhomIssue in bhomIssues)
             {
                 // Convert BHoM Audits to 3DRepo issues.
-                BH.oM.Adapters.TDRepo.Issue issue = bhomIssue.ToTDRepo(parentAudit, mediaDirectory);
+                BH.oM.Adapters.TDRepo.Issue issue = bhomIssue.ToTDRepo(mediaDirectory);
 
                 // Serialise the object. All property names must have the first letter lowercase for 3DRepo API, hence the need for serialiserSettings.
                 var serializerSettings = new Newtonsoft.Json.JsonSerializerSettings();
