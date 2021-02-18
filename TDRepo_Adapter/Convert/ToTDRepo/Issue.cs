@@ -51,11 +51,15 @@ namespace BH.Adapter.TDRepo
                 return null;
             }
 
-            // Pick and choose data from the BH.oM.Inspection.Audit and the BH.oM.Inspection.Issue
+            //TDRepo uses UNIX time, needs converted value from UTC
+            DateTimeOffset UTCdt = bhomIssue.DateCreated;
+            long dateCreatedUNIX = UTCdt.ToUnixTimeMilliseconds();
+
+            // Pick and choose data from the BH.oM.Inspection.Issue
             // to build the BH.oM.Adapters.TDRepo.Issue, which can be then uploaded to 3DRepo.
 
             tdrIssue.Name = bhomIssue.Name;
-            tdrIssue.Created = bhomIssue.DateCreated.Ticks;
+            tdrIssue.Created = dateCreatedUNIX; 
             tdrIssue.AssignedRoles.AddRange(bhomIssue.Assign); // TODO: check
             tdrIssue.Status = bhomIssue.Status;
             tdrIssue.Priority = bhomIssue.Priority;
