@@ -162,8 +162,6 @@ namespace BH.Adapter.TDRepo
 
             if (!respMessage.IsSuccessStatusCode)
             {
-                fullResponse = fullResponse.GetResponseBody();
-
                 BH.Engine.Reflection.Compute.RecordError($"The server returned a {respMessage.StatusCode} Error:\n" + fullResponse);
                 return null;
             }
