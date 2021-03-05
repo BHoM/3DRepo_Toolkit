@@ -49,11 +49,16 @@ namespace BH.Adapter.TDRepo
                 return null;
             }
 
+            //TDRepo uses UNIX time, need to convert to UTC
+            DateTime issueDtCreated = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            issueDtCreated = issueDtCreated.AddMilliseconds(System.Convert.ToDouble(issue.Created)).ToLocalTime();
 
-            // Pick and choose data from the BH.oM.Inspection.Audit and the BH.oM.Inspection.Issue
+            // Pick and choose data from the BH.oM.Adapters.TDRepo.Issue
+            // to build the BH.oM.Inspection.Issue.
+            bhomIssue.DateCreated = issueDtCreated;
             bhomIssue.Name = issue.Name;
-            // TODO: Create date is stored in BHOM Audit
-            bhomIssue.Assign = issue.AssignedRoles; // TODO: check
+            bhomIssue.IssueNumber = issue.Name;
+            bhomIssue.Assign = issue.AssignedRoles;
             bhomIssue.Status = issue.Status;
             bhomIssue.Priority = issue.Priority;
             bhomIssue.Type = issue.TopicType;
@@ -69,16 +74,20 @@ namespace BH.Adapter.TDRepo
             if (mediaFileNames != null)
               bhomIssue.Media = mediaFileNames;
 
-            bhomIssue.Position = new oM.Geometry.Point()
+            if (issue.Position.Length > 0)
             {
-                X = issue.Position[0],
-                Y = issue.Position[1],
-                Z = issue.Position[2]
-            };
+                bhomIssue.Position = new oM.Geometry.Point()
+                {
+                    X = issue.Position[0],
+                    Y = issue.Position[1],
+                    Z = issue.Position[2]
+                };
+            }
 
             string toFind = "\nParentAuditId: ";
             int pos = issue.Desc.IndexOf(toFind) + toFind.Length;
-            bhomIssue.Description = issue.Desc.Remove(pos);
+            bhomIssue.Description = issue.Desc.Substring(0, issue.Desc.IndexOf(toFind));
+            bhomIssue.AuditID = issue.Desc.Substring(pos);
 
             return bhomIssue;
         }

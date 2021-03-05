@@ -60,7 +60,7 @@ namespace BH.Adapter.TDRepo
 
             tdrIssue.Name = bhomIssue.Name;
             tdrIssue.Created = dateCreatedUNIX; 
-            tdrIssue.AssignedRoles.AddRange(bhomIssue.Assign); // TODO: check
+            tdrIssue.AssignedRoles.AddRange(bhomIssue.Assign);
             tdrIssue.Status = bhomIssue.Status;
             tdrIssue.Priority = bhomIssue.Priority;
             tdrIssue.TopicType = bhomIssue.Type;
