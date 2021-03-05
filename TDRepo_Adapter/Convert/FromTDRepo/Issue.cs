@@ -85,9 +85,15 @@ namespace BH.Adapter.TDRepo
             }
 
             string toFind = "\nParentAuditId: ";
-            int pos = issue.Desc.IndexOf(toFind) + toFind.Length;
-            bhomIssue.Description = issue.Desc.Substring(0, issue.Desc.IndexOf(toFind));
-            bhomIssue.AuditID = issue.Desc.Substring(pos);
+            int startPos = issue.Desc.Length;
+            int endPos = issue.Desc.Length;
+            if (issue.Desc.IndexOf(toFind) != -1)
+            {
+                startPos = issue.Desc.IndexOf(toFind);
+                endPos = startPos + toFind.Length;
+            }
+            bhomIssue.Description = issue.Desc.Substring(0, startPos);
+            bhomIssue.AuditID = issue.Desc.Substring(endPos);
 
             return bhomIssue;
         }
