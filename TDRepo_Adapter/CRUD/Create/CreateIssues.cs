@@ -54,7 +54,7 @@ namespace BH.Adapter.TDRepo
 
                 // Serialise the object. All property names must have the first letter lowercase for 3DRepo API, hence the need for serialiserSettings.
                 var serializerSettings = new Newtonsoft.Json.JsonSerializerSettings();
-                serializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
+                serializerSettings.ContractResolver = new IssueContractResolver(); ;
                 string issue_serialised = Newtonsoft.Json.JsonConvert.SerializeObject(issue, serializerSettings);
 
                 // Endpoint for creating a new issue

@@ -262,6 +262,7 @@ namespace BH.Adapter.TDRepo
                 {
                     {nameof(Issue.Name), "name"},
                     {nameof(Issue.AssignedRoles), "assigned_roles"},
+                    {nameof(Issue.DueDate), "due_date" },
                     {nameof(Issue.Status), "status"},
                     {nameof(Issue.Priority), "priority"},
                     {nameof(Issue.TopicType), "topic_type"},
@@ -279,6 +280,16 @@ namespace BH.Adapter.TDRepo
             {
                 string resolvedName = null;
                 var resolved = this.PropertyMappings.TryGetValue(propertyName, out resolvedName);
+                if (!resolved)
+                { 
+                    resolvedName = this.PropertyMappings
+                    .FirstOrDefault(x => x.Value == propertyName)
+                    .Key;
+                    if (resolvedName != null)
+                    {
+                        resolved = true;
+                    }
+                }
                 return (resolved) ? resolvedName : base.ResolvePropertyName(propertyName);
             }
         }
