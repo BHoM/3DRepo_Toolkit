@@ -42,9 +42,10 @@ namespace BH.Adapter.TDRepo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public List<Issue> GetIssues(IssueRequest ir, PullConfig pullConfig, bool enableMessages = true, Dictionary<Issue, List<string>> mediaFileNames = null)
+        public List<oM.Inspection.Issue> GetIssues(IssueRequest ir, PullConfig pullConfig, bool enableMessages = true, Dictionary<Issue, List<string>> mediaFileNames = null)
         {
             List<Issue> allIssues = new List<Issue>();
+            List<oM.Inspection.Issue> allBHoMIssues = new List<oM.Inspection.Issue>();
 
             string modelId = ir?.ModelId ?? m_modelId;
             string teamsSpace = ir?.TeamSpace ?? m_teamspace;
@@ -131,7 +132,19 @@ namespace BH.Adapter.TDRepo
                 }
             }
 
-            return allIssues;
+            foreach (Issue issue in allIssues)
+            {
+                List<string> fileNames = new List<string>();
+                if (issue.Resources != null)
+                {
+                    fileNames = issue.Resources.Select(x => x.name).ToList();
+                }
+
+                oM.Inspection.Issue bhomIssue = issue.FromTDRepo(fileNames);
+                allBHoMIssues.Add(bhomIssue);
+            }
+
+            return allBHoMIssues;
         }
 
         /***************************************************/

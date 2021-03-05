@@ -68,7 +68,7 @@ namespace BH.Adapter.TDRepo
                 // The conversion between 3DRepo issues and BHoM Issues
                 // will need to be passed any Pulled media file Name, if they were pulled with the Issues.
                 Dictionary<oM.Adapters.TDRepo.Issue, List<string>> mediaFilenames_perIssue = new Dictionary<oM.Adapters.TDRepo.Issue, List<string>>();
-                List<oM.Adapters.TDRepo.Issue> pulledIssues = GetIssues(ir, pullConfig,true, mediaFilenames_perIssue);
+                List<oM.Inspection.Issue> pulledIssues = GetIssues(ir, pullConfig,true, mediaFilenames_perIssue);
 
                 // Return the Audit with the Pulled issues from 3DRepo.
                 return new List<object>() { audit };

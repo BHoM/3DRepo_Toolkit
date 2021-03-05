@@ -20,13 +20,13 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using BH.oM.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BH.oM.Base;
 
 namespace BH.oM.Adapters.TDRepo
 {
@@ -76,8 +76,8 @@ namespace BH.oM.Adapters.TDRepo
         [Description("The GUID of the Revision hosting the Issue on 3DRepo. This is assigned by the server.")]
         public virtual string RevisionId { get; set; } = null;
 
-        [Description("DateTime of the created issue, in UTC ticks. When null, this is assigned by the server.")]
-        public virtual long? Created { get; set; } = DateTime.UtcNow.Ticks;
+        [Description("DateTime of the created issue, in UNIX format. When null, this is assigned by the server.")]
+        public virtual long? Created { get; set; } = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
     }
 }
