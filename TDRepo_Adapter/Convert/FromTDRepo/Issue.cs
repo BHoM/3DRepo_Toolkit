@@ -39,13 +39,13 @@ namespace BH.Adapter.TDRepo
             // Checks
             if (string.IsNullOrWhiteSpace(issue.Name))
             {
-                BH.Engine.Reflection.Compute.RecordError($"The {nameof(BH.oM.Inspection.Issue)} must be assigned a Name in order for the conversion to be possible.");
+                BH.Engine.Base.Compute.RecordError($"The {nameof(BH.oM.Inspection.Issue)} must be assigned a Name in order for the conversion to be possible.");
                 return null;
             }
 
             if (issue.Position == null)
             {
-                BH.Engine.Reflection.Compute.RecordError($"The {nameof(BH.oM.Inspection.Issue)} must be assigned a position in order for the conversion to be possible.");
+                BH.Engine.Base.Compute.RecordError($"The {nameof(BH.oM.Inspection.Issue)} must be assigned a position in order for the conversion to be possible.");
                 return null;
             }
 

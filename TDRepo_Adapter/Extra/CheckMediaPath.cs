@@ -38,7 +38,7 @@ namespace BH.Adapter.TDRepo
         {
             if (m_MediaPathAlert && string.IsNullOrWhiteSpace(pushconfig.MediaDirectory))
             {
-                BH.Engine.Reflection.Compute.RecordNote($"Media directory not specified in the `{nameof(PushConfig)}`. This defaults to {new PushConfig().MediaDirectory}. " +
+                BH.Engine.Base.Compute.RecordNote($"Media directory not specified in the `{nameof(PushConfig)}`. This defaults to {new PushConfig().MediaDirectory}. " +
                     $"\nTo specify a media directory, insert a `{nameof(PushConfig)}` into this Push component's `{nameof(ActionConfig)}` input.");
 
                 m_MediaPathAlert = false;

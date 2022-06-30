@@ -80,7 +80,7 @@ namespace BH.Adapter.TDRepo
                             errors += $"\n\t{innerException.Message}\n{innerException.InnerException}";
 
                         if (raiseErrors)
-                            BH.Engine.Reflection.Compute.RecordError(errors);
+                            BH.Engine.Base.Compute.RecordError(errors);
 
                         return false;
                     }
@@ -96,7 +96,7 @@ namespace BH.Adapter.TDRepo
                     {
                         fullResponse = fullResponse.GetResponseBody();
 
-                        BH.Engine.Reflection.Compute.RecordWarning($"While attaching multiple resources (media) for issue `{tdrepoIssueId}` named `{bhomIssue.Name}`," +
+                        BH.Engine.Base.Compute.RecordWarning($"While attaching multiple resources (media) for issue `{tdrepoIssueId}` named `{bhomIssue.Name}`," +
                             $"\nthe server returned a '{respMessage.StatusCode}' error for media `{mediaPath}`:\n ==>" + fullResponse);
                         success = false;
                     }

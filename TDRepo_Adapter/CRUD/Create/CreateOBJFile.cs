@@ -39,7 +39,7 @@ namespace BH.Adapter.TDRepo
             List<oM.Geometry.Mesh> meshes = objs.OfType<oM.Geometry.Mesh>().ToList();
 
             if (meshes.Count() != objs.Count())
-                BH.Engine.Reflection.Compute.RecordWarning($"The OBJ file format supports only Push of {typeof(oM.Geometry.Mesh).Name}.");
+                BH.Engine.Base.Compute.RecordWarning($"The OBJ file format supports only Push of {typeof(oM.Geometry.Mesh).Name}.");
 
             // Add to the scene
             IEnumerable<TDR_Mesh> tdRepoMeshes = meshes.Where(tdRepoMesh => tdRepoMesh != null)

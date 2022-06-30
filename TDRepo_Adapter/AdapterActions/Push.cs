@@ -28,7 +28,6 @@ using System.Threading.Tasks;
 using BH.Adapter;
 using BH.oM.Adapter;
 using BH.oM.Base;
-using BH.oM.Reflection;
 using BH.oM.Adapters.TDRepo.Commands;
 using BH.oM.Adapters.TDRepo;
 using System.IO;
@@ -42,7 +41,7 @@ namespace BH.Adapter.TDRepo
         {
             if (string.IsNullOrWhiteSpace(m_host) || string.IsNullOrEmpty(m_teamspace) || string.IsNullOrEmpty(m_userAPIKey) || string.IsNullOrEmpty(m_modelId))
             {
-                BH.Engine.Reflection.Compute.RecordError("One or more of the needed parameters in the TDRepoAdapter is missing or invalid (modelId, userAPIkey, etc).");
+                BH.Engine.Base.Compute.RecordError("One or more of the needed parameters in the TDRepoAdapter is missing or invalid (modelId, userAPIkey, etc).");
                 return new List<object>();
             }
 
@@ -50,7 +49,7 @@ namespace BH.Adapter.TDRepo
 
             IEnumerable<IObject> iObjs = objects.OfType<IObject>();
             if (iObjs.Count() != objects.Count())
-                BH.Engine.Reflection.Compute.RecordError($"Push to 3DRepo currently supports only objects implementing {nameof(IObject)}.");
+                BH.Engine.Base.Compute.RecordError($"Push to 3DRepo currently supports only objects implementing {nameof(IObject)}.");
 
             List<object> createdObjects = new List<object>();
 

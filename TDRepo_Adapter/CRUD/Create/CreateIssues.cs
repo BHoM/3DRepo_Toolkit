@@ -80,7 +80,7 @@ namespace BH.Adapter.TDRepo
                 {
                     fullResponse = fullResponse.GetResponseBody();
 
-                    BH.Engine.Reflection.Compute.RecordError($"The server returned a {respMessage.StatusCode} Error:\n" + fullResponse);
+                    BH.Engine.Base.Compute.RecordError($"The server returned a {respMessage.StatusCode} Error:\n" + fullResponse);
                     success = false;
                 }
 
@@ -93,7 +93,7 @@ namespace BH.Adapter.TDRepo
                 {
                     // (As this seems to systematically fail)
                     // In case of failure, use 3DRepo's workaround to post Resources in the Comments to the issue.
-                    BH.Engine.Reflection.Compute.RecordWarning("Failed attaching Media to the 3DRepo Issue's Resources.\nTrying adding Media as Comments to the Issue on 3DRepo.");
+                    BH.Engine.Base.Compute.RecordWarning("Failed attaching Media to the 3DRepo Issue's Resources.\nTrying adding Media as Comments to the Issue on 3DRepo.");
                     CommentIssue(bhomIssue, issueId, pushConfig);
                 }
             }

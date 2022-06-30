@@ -194,7 +194,7 @@ namespace BH.Adapter.TDRepo
 
         private static RenderMesh JoinRenderMeshes(List<RenderMesh> renderMeshes)
         {
-            List<Vertex> vertices = new List<Vertex>();
+            List<RenderPoint> vertices = new List<RenderPoint>();
             List<Face> faces = new List<Face>();
 
             vertices.AddRange(renderMeshes[0].Vertices);

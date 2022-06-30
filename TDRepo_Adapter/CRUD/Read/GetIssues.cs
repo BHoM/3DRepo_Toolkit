@@ -63,7 +63,7 @@ namespace BH.Adapter.TDRepo
                 // Get the Issue corresponding to the specified IssueId. 
 
                 if (enableMessages)
-                    BH.Engine.Reflection.Compute.RecordNote($"Getting {nameof(Issue)} with id {ir.IssueId} \nfrom the 3DRepo Model `{modelId}` in the Teamspace `{teamsSpace}`.");
+                    BH.Engine.Base.Compute.RecordNote($"Getting {nameof(Issue)} with id {ir.IssueId} \nfrom the 3DRepo Model `{modelId}` in the Teamspace `{teamsSpace}`.");
 
                 Issue issue = GetIssue(ir.IssueId, teamsSpace, modelId, userAPIkey);
 
@@ -78,7 +78,7 @@ namespace BH.Adapter.TDRepo
                 string revisionId = ir.RevisionId ?? GetRevisions(new RevisionRequest(), false).First().Id;
 
                 if (enableMessages)
-                    BH.Engine.Reflection.Compute.RecordNote($"Getting all of the {nameof(Issue)}s attached to RevisionId {revisionId} \nfrom the 3DRepo Model `{modelId}` in the Teamspace `{teamsSpace}`.");
+                    BH.Engine.Base.Compute.RecordNote($"Getting all of the {nameof(Issue)}s attached to RevisionId {revisionId} \nfrom the 3DRepo Model `{modelId}` in the Teamspace `{teamsSpace}`.");
 
                 allIssues = GetAllIssues(teamsSpace, modelId, revisionId, userAPIkey);
             }
@@ -175,7 +175,7 @@ namespace BH.Adapter.TDRepo
 
             if (!respMessage.IsSuccessStatusCode)
             {
-                BH.Engine.Reflection.Compute.RecordError($"The server returned a {respMessage.StatusCode} Error:\n" + fullResponse);
+                BH.Engine.Base.Compute.RecordError($"The server returned a {respMessage.StatusCode} Error:\n" + fullResponse);
                 return null;
             }
 
@@ -189,7 +189,7 @@ namespace BH.Adapter.TDRepo
             }
             catch (Exception e)
             {
-                BH.Engine.Reflection.Compute.RecordError(e.Message);
+                BH.Engine.Base.Compute.RecordError(e.Message);
             }
 
             return issue;
@@ -220,7 +220,7 @@ namespace BH.Adapter.TDRepo
                 }
                 catch (Exception e)
                 {
-                    BH.Engine.Reflection.Compute.RecordError($"Error while pulling all issues belonging to model {modelId}, revision {revisionId}:\n {e.Message}.");
+                    BH.Engine.Base.Compute.RecordError($"Error while pulling all issues belonging to model {modelId}, revision {revisionId}:\n {e.Message}.");
                     return new List<Issue>();
                 }
 
@@ -232,7 +232,7 @@ namespace BH.Adapter.TDRepo
             {
                 fullResponse = fullResponse.GetResponseBody();
 
-                BH.Engine.Reflection.Compute.RecordError($"The server returned a {respMessage.StatusCode} Error:\n" + fullResponse);
+                BH.Engine.Base.Compute.RecordError($"The server returned a {respMessage.StatusCode} Error:\n" + fullResponse);
                 return new List<Issue>();
             }
 
@@ -251,7 +251,7 @@ namespace BH.Adapter.TDRepo
             }
             catch (Exception e)
             {
-                BH.Engine.Reflection.Compute.RecordError(e.Message);
+                BH.Engine.Base.Compute.RecordError(e.Message);
             }
 
             // Fetch each full Issue individually. These will include all the needed info.
