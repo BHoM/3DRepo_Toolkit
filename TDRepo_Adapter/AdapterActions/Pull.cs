@@ -51,7 +51,7 @@ namespace BH.Adapter.TDRepo
             {
                 if (ar.Audit == null)
                 {
-                    BH.Engine.Reflection.Compute.RecordWarning("Please specify the Audit whose Issues you want to pull from 3DRepo in the request.");
+                    BH.Engine.Base.Compute.RecordWarning("Please specify the Audit whose Issues you want to pull from 3DRepo in the request.");
                     return null;
                 }
 
@@ -74,7 +74,7 @@ namespace BH.Adapter.TDRepo
                 return new List<object>() { audit };
             }
 
-            BH.Engine.Reflection.Compute.RecordWarning($"The specified request is not compatible with {this.GetType().Name}.");
+            BH.Engine.Base.Compute.RecordWarning($"The specified request is not compatible with {this.GetType().Name}.");
             return new List<object>();
         }
     }

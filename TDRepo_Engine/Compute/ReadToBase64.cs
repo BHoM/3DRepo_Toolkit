@@ -35,7 +35,7 @@ using System.ComponentModel;
 using BH.oM.Adapters.TDRepo;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using BH.oM.Reflection.Attributes;
+using BH.oM.Base.Attributes;
 using System.IO;
 
 namespace BH.Engine.Adapters.TDRepo
@@ -59,7 +59,7 @@ namespace BH.Engine.Adapters.TDRepo
             catch (Exception e)
             {
                 if (enableError)
-                    BH.Engine.Reflection.Compute.RecordWarning($"Error: {e.Message}.");
+                    BH.Engine.Base.Compute.RecordWarning($"Error: {e.Message}.");
             }
 
             return base64Representation;

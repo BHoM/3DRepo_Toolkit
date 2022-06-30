@@ -42,7 +42,7 @@ namespace BH.Adapter.TDRepo
             }
             catch (System.Exception e)
             {
-                BH.Engine.Reflection.Compute.RecordError($"Committing to server failed. Error:\n{e.Message}");
+                BH.Engine.Base.Compute.RecordError($"Committing to server failed. Error:\n{e.Message}");
                 success = false;
             }
 

@@ -88,7 +88,7 @@ namespace BH.Adapter.TDRepo
                 {
                     fullResponse = fullResponse.GetResponseBody();
 
-                    BH.Engine.Reflection.Compute.RecordWarning($"While attaching Comments for issue `{tdrepoIssueId}` named `{issueName}`," +
+                    BH.Engine.Base.Compute.RecordWarning($"While attaching Comments for issue `{tdrepoIssueId}` named `{issueName}`," +
                         $"\nthe server returned a '{respMessage.StatusCode}':\n\t" + fullResponse);
                     success = false;
                 }

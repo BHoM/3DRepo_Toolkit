@@ -35,7 +35,7 @@ using System.ComponentModel;
 using BH.oM.Adapters.TDRepo;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using BH.oM.Reflection.Attributes;
+using BH.oM.Base.Attributes;
 using System.IO;
 
 namespace BH.Engine.Adapters.TDRepo

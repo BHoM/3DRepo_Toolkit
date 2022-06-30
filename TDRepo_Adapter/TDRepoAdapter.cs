@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 using BH.Adapter;
 using BH.oM.Adapters.TDRepo;
 using BH.oM.Base;
-using BH.oM.Reflection.Attributes;
+using BH.oM.Base.Attributes;
 
 namespace BH.Adapter.TDRepo
 {
@@ -51,11 +51,11 @@ namespace BH.Adapter.TDRepo
 
             if (string.IsNullOrWhiteSpace(teamspace) || string.IsNullOrWhiteSpace(modelId) || string.IsNullOrWhiteSpace(userAPIKey) || string.IsNullOrWhiteSpace(APIUrl))
             {
-                BH.Engine.Reflection.Compute.RecordWarning("Some of the required inputs to connect to the 3D Repo server are missing or invalid.\n" +
+                BH.Engine.Base.Compute.RecordWarning("Some of the required inputs to connect to the 3D Repo server are missing or invalid.\n" +
                     "You can still use the Adapter with the Execute action, which allows you to save a .BIM file that you can upload manually on 3DRepo.");
             }
             else
-                BH.Engine.Reflection.Compute.RecordNote($"Note: you should be using your own `userAPIKey`, see input description.\nSharing the user API Key is DANGEROUS.\nIf you didn't input your own key, you might be doing unauthorized changes.");
+                BH.Engine.Base.Compute.RecordNote($"Note: you should be using your own `userAPIKey`, see input description.\nSharing the user API Key is DANGEROUS.\nIf you didn't input your own key, you might be doing unauthorized changes.");
 
             m_host = APIUrl;
             m_userAPIKey = userAPIKey;

@@ -75,7 +75,7 @@ namespace BH.Adapter.TDRepo
             }
 
             if (enableMessages)
-                BH.Engine.Reflection.Compute.RecordNote($"Returning {nameof(Revision)}s \nfrom the 3DRepo Model `{modelId}` in the Teamspace `{teamsSpace}`.");
+                BH.Engine.Base.Compute.RecordNote($"Returning {nameof(Revision)}s \nfrom the 3DRepo Model `{modelId}` in the Teamspace `{teamsSpace}`.");
 
             return revisions_deserialised;
         }
